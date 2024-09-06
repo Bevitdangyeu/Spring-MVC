@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDTO {
-//	private int productId;
+	private int productId;
 	private String productName;
 	private int categoryId;
 	private String categoryName;
@@ -13,14 +13,15 @@ public class ProductDTO {
 	private float prince;
 	private String image;
 //	private String image;
+	private List<Integer> ids=new ArrayList<Integer>();
 	private List<String> listImage=new ArrayList<String>();
 	private List<Integer> ListProduct=new ArrayList<Integer>();
-/*	public int getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 	public void setProductId(int productId) {
 		this.productId = productId;
-	} */
+	} 
 	public String getProductName() {
 		return productName;
 	}
@@ -84,6 +85,12 @@ public class ProductDTO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public List<Integer> getIds() {
+		return ids;
+	}
+	public void setIds(List<Integer> ids) {
+		this.ids = ids;
 	}
 	
 }

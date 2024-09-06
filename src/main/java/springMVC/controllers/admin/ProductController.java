@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,8 +35,16 @@ public class ProductController {
 		return mav;
 	}
 	@RequestMapping(value = "/edit",method = RequestMethod.GET)
-	public ModelAndView Product() {
-	    ModelAndView modelAndView = new ModelAndView();
+	public ModelAndView Product(@RequestParam(value = "id",required = false) Integer id) {
+		 ModelAndView modelAndView = new ModelAndView();
+		// chỉnh sửa-> lấy đối tượng lên để chỉnh sửa 
+		if(id!=null) {
+			ProductDTO product=productService.findOne(id);
+			System.out.println(" image: "+product.getImage());
+			System.out.println(" listimage: "+product.getListImage().get(0));
+			modelAndView.addObject("product", product);
+		}
+	   
 		List<CategoryDTO> listCategory=category.findAll();
 		modelAndView.setViewName("EditProduct");
 		modelAndView.addObject("category", listCategory);

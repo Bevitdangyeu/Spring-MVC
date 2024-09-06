@@ -6,7 +6,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Edit</title>
+   <style>
+        img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            margin: 10px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,7 +33,7 @@
 		<div class="form-group- row">
 		  <label class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
 		  <div class="col-md-8">
-		  <input id="productName" name="productName" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
+		  <input value="${product.productName }" id="productName" name="productName" placeholder="PRODUCT NAME" class="form-control input-md" required="" type="text">
 		    
 		  </div>
 		</div>
@@ -39,29 +49,45 @@
 		
 		<!-- Select Basic -->
 		<div class="form-group row " style="margin-top:20px">
-		  <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
-		  <div class="col-md-8">
-		    <select id="categoryName" name="categoryName" class="form-control">
-		    <option selected>Open this select caterogy name</option>
-				    			<c:forEach var="item" items="${category}" varStatus="status">
-				    			 	 <option value="${item.categoryName}">${item.categoryName}</option>
-				    			</c:forEach>	
-		    </select>
-		  </div>
+			  <label class="col-md-4 control-label" for="product_categorie">PRODUCT CATEGORY</label>
+			  <div class="col-md-8">
+			  	<select id="categoryName" name="categoryName" class="form-control">
+				  <c:if test="${empty product.productId }">
+				  
+				    <option selected>Open this select caterogy name</option>
+						    			<c:forEach var="item" items="${category}" varStatus="status">
+						    			 	 <option value="${item.categoryName}">${item.categoryName}</option>
+						    			</c:forEach>	
+				    
+				  </c:if>
+			   	  <c:if test="${not empty product.productId }">
+			   	  		<c:forEach var="item" items="${category}">
+			   	  		<!-- phần này dùng để hiển thị thông tin catelogy đã chọn -->
+			   	  			<c:if test="${item.categoryId==product.categoryId }">
+			   	  				<option value="${item.categoryName}" selected="selected">${item.categoryName}</option>
+			   	  			</c:if>			   
+			   	  			<c:if test="${item.categoryId != ProductEdit.catelogyId}">
+			    				<option value="${item.categoryName}">${item.categoryName}</option>
+			    			</c:if>
+			   	  		</c:forEach>
+			   	  		<option>Open this select caterogy name</option>		
+			   	  </c:if>
+			   	  </select>
+			  </div>
 		</div>
 		
 		<!-- Text input-->
 		<div class="form-group row ">
 		  <label class="col-md-4 control-label" for="available_quantity">QUANTITY</label>  
 		  <div class="col-md-8">
-		  <input id="quantity" name="quantity" placeholder="AVAILABLE QUANTITY" class="form-control input-md" required="" type="number">
+		  <input value="${product.quantity }" id="quantity" name="quantity" placeholder="AVAILABLE QUANTITY" class="form-control input-md" required="" type="number">
 		    
 		  </div>
 		</div>
 		<div class="form-group row ">
 		  <label class="col-md-4 control-label" for="available_quantity">PRINCE</label>  
 		  <div class="col-md-8">
-		  <input id="prince" name="prince" placeholder="AVAILABLE QUANTITY" class="form-control input-md" required="" type="text">
+		  <input value="${product.prince }" id="prince" name="prince" placeholder="AVAILABLE QUANTITY" class="form-control input-md" required="" type="text">
 		    
 		  </div>
 		</div>
@@ -69,23 +95,57 @@
 		<div class="form-group row">
 		  <label class="col-md-4 control-label" for="product_description">PRODUCT DESCRIPTION</label>
 		  <div class="col-md-8">                     
-		    <textarea class="form-control" id="description" name="description"></textarea>
-		  </div>
-		</div>
-		 <!-- File Button --> 
-		<div class="form-group row">
-		  <label class="col-md-4 control-label" for="filebutton">main_image</label>
-		  <div class="col-md-8">
-		    <input id="image" name="image" class="input-file" type="file">
+		    <textarea class="form-control" id="description" name="description">${product.description }</textarea>
 		  </div>
 		</div>
 		<!-- File Button --> 
-		<div class="form-group row">
-		  <label class="col-md-4 control-label" for="filebutton">auxiliary_images</label>
-		  <div class="col-md-8">
-		    <input id="listImage" name="listImage" class="input-file" type="file" multiple>
-		  </div>
-		</div>
+		
+		<c:if test="${ not empty product.image }">
+			
+			<div class="form-group row">
+			  <label class="col-md-4 control-label" for="filebutton">main_image</label>
+			  <div class="col-md-8">
+			  	<img style ="margin-bottom:15px" src="${product.image}" alt="Auxiliary Image" width="100" height="100" />
+			  	<div class="preview" ></div>
+			    <input id="image" name="image" class="input-file" type="file" onchange="previewImages(event)">
+			    
+			  </div>
+			</div>
+		
+		<c:forEach var="img" items="${product.listImage }">
+			<div class="form-group row">
+			  <label class="col-md-4 control-label" for="filebutton">auxiliary_images</label>
+			  <div class="col-md-8">
+			  	<img style ="margin-right:10px;margin-bottom:15px" src="${img}" alt="Auxiliary Image" width="100" height="100" />
+			  </div>
+			</div>
+		</c:forEach>
+				<div class="form-group row">
+				  <label class="col-md-4 control-label" for="filebutton">auxiliary_images</label>
+				  <div class="col-md-8">
+				    <input id="listImage"  name="listImage" class="input-file" type="file" multiple onchange="previewImages(event)">
+				    <div class="preview" ></div>
+				  </div>
+				</div>
+		</c:if>
+		 <!-- File Button --> 
+		<c:if test="${ empty product.image}">
+			<div class="form-group row">
+			  <label class="col-md-4 control-label" for="filebutton">main_image</label>
+			  <div class="col-md-8">
+			    <input  id="image" name="image" class="input-file" type="file" onchange="previewImages(event)">
+			     <div class="preview" ></div>
+			  </div>
+			</div>
+			<!-- File Button --> 
+				<div class="form-group row">
+				  <label class="col-md-4 control-label" for="filebutton">auxiliary_images</label>
+				  <div class="col-md-8">
+				    <input id="listImage"  name="listImage" class="input-file" type="file" multiple onchange="previewImages(event)">
+				   <div class="preview"></div> 
+				  </div>
+				</div>
+		</c:if>
 		
 		<!-- Button -->
 		<div class="form-group row">
@@ -93,62 +153,116 @@
 		  <div class="col-md-8">
 		    <button type="submit"id="EditButton" name="EditButton" class="btn btn-primary">Button</button>
 		  </div>
-		  </div>
-		
+		</div>
+		<input type="hidden" value=${product.productId } id="productId"/>
 		</fieldset>
 </div>
 
 
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
-	$('#EditButton').click(function () {
-		var productName=$('#productName').val();
-		var catelogyName=$('#categoryName').val();
-		var quantity=$('#quantity').val();
-		var prince=$('#prince').val();
-		var description=$('#description').val();
-		var fileInput = $('#image')[0];
-  		var file = fileInput.files;
-  		var formData = new FormData();
-  		for (var i = 0; i < file.length; i++) {
-  		    formData.append('image', file[i]);
-  		}
-  		
-  		var fileInputList = $('#listImage')[0];
-  		var fileList = fileInputList.files;
-  		for (var i = 0; i < fileList.length; i++) {
-  		    formData.append('listImage', fileList[i]);
-  		}
-	  	var jsonData = {
-	  			productName: productName,
-	  			categoryName: catelogyName,
-	  			quantity: quantity,
-	  			prince: prince,
-	  			description:description
-	  			
-	  	};
-	    formData.append('jsonData', JSON.stringify(jsonData));
-  			add(formData)
-  		
-	});
-	function add(formData) {
-		$.ajax({
-			url:'${ApiUrl}',
-			type:'post',
-			data: formData,
-			processData: false, // Để jQuery không xử lý dữ liệu thành chuỗi query string
-		    contentType: false,
-			success: function (result) {
-			//	showToast("Add request successful","success");
-				console.log(result);
-			},
-			error: function name(error) {
-			//	showToast("Add request failed","danger");
-				console.log(error);
-			}
+		
+		$('#EditButton').click(function () {
+		/* 	var productId=$('#productId').val(); */
+			var productName=$('#productName').val();
+			var catelogyName=$('#categoryName').val();
+			var quantity=$('#quantity').val();
+			var prince=$('#prince').val();
+			var description=$('#description').val();
+			var fileInput = $('#image')[0];
+	  		var file = fileInput.files;
+	  		var formData = new FormData();
+	  		for (var i = 0; i < file.length; i++) {
+	  		    formData.append('image', file[i]);
+	  		}
+	  		
+	  		var fileInputList = $('#listImage')[0];
+	  		var fileList = fileInputList.files;
+	  		for (var i = 0; i < fileList.length; i++) {
+	  		    formData.append('listImage', fileList[i]);
+	  		}
+	  		if($('#productId').length === 0){
+	  			var jsonData = {
+	  		  			productName: productName,
+	  		  			categoryName: catelogyName,
+	  		  			quantity: quantity,
+	  		  			prince: prince,
+	  		  			description:description
+	  		  			
+	  		  	};
+	  		  	
+	  		    formData.append('jsonData', JSON.stringify(jsonData));
+	  	  			add(formData)
+	  		}
+	  		else{
+	  			var jsonData = {
+	  					productId:$('#productId').val(),
+	  		  			productName: productName,
+	  		  			categoryName: catelogyName,
+	  		  			quantity: quantity,
+	  		  			prince: prince,
+	  		  			description:description
+	  		  			
+	  		  	};
+	  		  	
+	  		    formData.append('jsonData', JSON.stringify(jsonData));
+	  	  			add(formData)
+	  		}
+		  
 		});
-	};
+		function add(formData) {
+			$.ajax({
+				url:'${ApiUrl}',
+				type:'post',
+				data: formData,
+				processData: false, // Để jQuery không xử lý dữ liệu thành chuỗi query string
+			    contentType: false,
+				success: function (result) {
+				//	showToast("Add request successful","success");
+					console.log(result);
+				},
+				error: function name(error) {
+				//	showToast("Add request failed","danger");
+					console.log(error);
+				}
+			});
+		};
+		function previewImages() {
+			// Lấy đối tượng input đã kích hoạt sự kiện
+			var input = event.target;
+			// Tìm phần tử cha có lớp 'form-group' của đối tượng input
+		    var formGroup = input.parentElement.parentElement; // Tìm thẻ cha .form-group
+		    // Tìm phần tử con có lớp 'preview' trong phần tử cha
+		    var previewContainer = formGroup.querySelector('.preview'); // Tìm thẻ .preview trong thẻ cha
+		    // Xóa nội dung trước đó trong phần tử .preview
+            previewContainer.innerHTML = ''; // Xóa nội dung trước đó
+            // Lấy danh sách các file từ đối tượng input
+            var files = input.files;
+            // Kiểm tra nếu có file
+            if (files) {
+            	// Chuyển đổi đối tượng file thành mảng và lặp qua từng file
+                Array.from(files).forEach(function(file) {
+                	// Tạo đối tượng FileReader để đọc nội dung của file
+                    var reader = new FileReader();
+                    // Định nghĩa hàm sẽ được gọi khi FileReader hoàn thành việc đọc file
+                    reader.onload = function(e) {
+                    	 // Tạo phần tử hình ảnh mới
+                        var img = document.createElement('img');
+                        // Gán thuộc tính src của hình ảnh bằng dữ liệu đọc được từ FileReader
+                        img.src = e.target.result;
+                        img.style.width = '100px';  // Đặt chiều rộng
+                        img.style.height = '100px'; // Đặt chiều cao
+                        img.style.margin='10px',
+                        // Thêm phần tử hình ảnh vào trong phần tử previewContainer
+                        previewContainer.appendChild(img);
+                    }
+                    // Bắt đầu đọc file dưới dạng Data URL
+                    reader.readAsDataURL(file);
+                });
+            }
+        };
+	
 </script>
 </body>
 
