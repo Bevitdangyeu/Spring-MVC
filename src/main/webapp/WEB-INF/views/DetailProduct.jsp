@@ -57,36 +57,38 @@
     				<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.
 						</p>
 						<div class="row mt-4">
-							<div class="col-md-6">
+							<div class="col-md-9">
 								<div class="form-group d-flex">
-		              <div class="select-wrap">
-	                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-	                  <select name="" id="" class="form-control">
-	                  	<option value="">Small</option>
-	                    <option value="">Medium</option>
-	                    <option value="">Large</option>
-	                    <option value="">Extra Large</option>
-	                  </select>
-	                </div>
-		            </div>
+								    <div style="display:inline-block; width: 100%;">
+						              <div class="select-wrap"  style="display:inline-block; width: 45%;">
+					                  	 <div style="display:inline-block; width: 5%;" class="icon"><span class="ion-ios-arrow-down" ></span></div>
+					                  	 <select name="size" id="size" class="form-control"style="display:inline-block; width: 95%;border-radius: 5px" >
+					                  	  <option selected>Chọn size</option>
+						                  <c:forEach var="size" items="${product.listSize }">
+						                  	<option value="${size }">${size }</option>
+						                  </c:forEach>       
+						                  </select>
+						              </div>
+						               <div class="select-wrap"  style="display:inline-block; width: 50%;">
+						                    <div style="display:inline-block; width: 5%;" class="icon"><span class="ion-ios-arrow-down"></span></div>
+						                   <select name="color" id="color" class="form-control" style="display:inline-block; width: 95%;border-radius: 5px">
+						                    <option selected>Chọn màu</option>
+							                  <c:forEach var="color" items="${product.listColor }">
+							                  	<option value="${color }">${color }</option>
+							                  </c:forEach>       
+						                  </select>
+					                  </div>
+					                </div>
+						            </div>
 							</div>
 							<div class="w-100"></div>
-							<div class="input-group col-md-6 d-flex mb-3">
-	             	<span class="input-group-btn mr-2">
-	                	<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
-	                   <i class="ion-ios-remove"></i>
-	                	</button>
-	            		</span>
-	             	<input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-	             	<span class="input-group-btn ml-2">
-	                	<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-	                     <i class="ion-ios-add"></i>
-	                 </button>
-	             	</span>
-	          	</div>
+							<div class="input-group col-md-6 d-flex">
+								<label style="width:70%;display:inline-block;margin-top:5px"class="control-label" for="filebutton">CHỌN SỐ LƯỢNG:</label>
+				             	<input style="width:15%;display:inline-block; border-radius: 5px" type="number" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">   	
+				          	</div>
 	          	<div class="w-100"></div>
 	          	<div class="col-md-12">
-	          		<p style="color: #000;">80 piece available</p>
+	          		<p style="color: #000;">${product.quantity } piece available</p>
 	          	</div>
           	</div>
           	<p><a href="cart.html" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="cart.html" class="btn btn-primary py-3 px-5">Buy now</a></p>

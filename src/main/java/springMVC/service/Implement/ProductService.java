@@ -157,6 +157,18 @@ public class ProductService implements IProductService{
 			String image=productEntity.getListImage().get(i).getImgae();
 			listImage.add(image);
 		}
+		List<String> listColor=new ArrayList<String>();
+		for(int i=0;i<productEntity.getListColor().size();i++) {
+			String color=productEntity.getListColor().get(i).getColorName();
+			listColor.add(color);
+		}
+		List<String> listSize=new ArrayList<String>();
+		for( int i=0;i<productEntity.getListSize().size();i++) {
+			String size=productEntity.getListSize().get(i).getSizeName();
+			listSize.add(size);
+		}
+		DTO.setListColor(listColor);
+		DTO.setListSize(listSize);
 		DTO.setListImage(listImage);
 		DTO.setDescription(productEntity.getDescription());
 		DTO.setPrince(productEntity.getPrince());
@@ -166,10 +178,13 @@ public class ProductService implements IProductService{
 	@Transactional
 	@Override
 	public void delete(List<Integer> list) {
+		// nếu muốn xóa một product thì cần phải xóa dữ liệu từ bảng liên kết(vd product_size) trươcs
+		// xóa dữ liệu từ bảng liên kết xóa liên kết từ 2 phía (xóa listSize mà sản phẩm đó liên kết và xóa product mà size đó đang liên kết 
 		for(int i=0;i<list.size();i++) {			
 			// lấy sản phẩm đó lên từ cơ sở dữ liệu
 			ProductEntity product=productRepository.findOneByProductId(list.get(i));
 			for( int j=0;j<product.getListColor().size();j++) {
+				// sp Áo liên kết với size S M L thì phải tìm đối tượng size M xóa đối tượng Áo này ra khỏi danh sách các sp mà size này liên kết, tương tự với M và L
 				// lấy size từ cơ sở dữ liệu
 				ColorEntity color=colorRepository.findBycolorName(product.getListColor().get(j).getColorName());
 				// remove product đó ra khỏi danh sách các product đang liên kết đến size đó
