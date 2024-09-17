@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
@@ -23,104 +24,47 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import springMVC.DTO.ProductDTO;
+import springMVC.Util.Image;
+import springMVC.Util.InterfaceImage;
 import springMVC.service.Implement.ProductService;
 import springMVC.service.Interface.IProductService;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/api")
 public class ProductAPI {
 	 @Autowired
 	    private ServletContext servletContext;
 	 @Autowired
 	 	private IProductService product;
-	@PostMapping("/add")
+	 @Autowired
+	 	private InterfaceImage image;
+	@PostMapping("product/add")
 	public ProductDTO create(  @RequestParam("jsonData") String jsonData,@RequestParam(value="image",required = false)  MultipartFile fileFromClient,@RequestParam(value="listImage",required = false) MultipartFile[] Listfiles) throws JsonMappingException, JsonProcessingException {
-		System.out.println(" vao duoc ham them ");
 		ProductDTO productDto=new ProductDTO();
 		ObjectMapper mapper=new ObjectMapper();
 	    productDto=mapper.readValue(jsonData, ProductDTO.class);
+	    System.out.println(" color: "+ productDto.getListColor().get(0));
+	    System.out.println(" size: "+ productDto.getListSize().get(0));
+	    String applicationPath=servletContext.getRealPath("");
 		// Lưu các ảnh phụ
 	    if(Listfiles!=null) {
-	    	 for( int i=0;i<Listfiles.length;i++) {
-	 	    	String fileName=Listfiles[i].getOriginalFilename();
-	 	    	System.out.println(" fileName: "+fileName);
-	 	    	// lấy toàn bộ đường dẫn của ứng dụng
-	 	    	String applicationPath=servletContext.getRealPath("");
-	 	    	System.out.println(" realPath: "+applicationPath);
-	 	    	// tạo đường dẫn đến nơi lưu trữ tệp trên server , File.separatorlà dấu phân cách ,UPLOAD_DIR tên thư mục mình muốn upload
-	 	    	String uploadFilePath = applicationPath + "uploads";
-	 	    	System.out.println(" uploadFilePath: "+uploadFilePath);
-	 	    	// tạo thư mục lưu trữ tệp 
-	 	    	File uploadDir = new File(uploadFilePath);
-	 	    	  // nếu thư mục chưa tồn tại thì phải tạo thư mục 
-	             if (!uploadDir.exists()) {
-	                 uploadDir.mkdirs();
-	             }
-	             File file=new File(uploadFilePath + File.separator + fileName);
-	             try (FileOutputStream fos = new FileOutputStream(file);
-	                 	//Đọc dữ liệu nhị phân từ body của part đưa vào biến fileContent
-	                       InputStream fileContent = Listfiles[i].getInputStream()) {
-	 					  byte[] buffer = new byte[1024]; 
-	 					  int bytesRead;
-	 					  while ((bytesRead =fileContent.read(buffer)) != -1) 
-	 					  { 
-	 						  fos.write(buffer, 0, bytesRead); 
-	 					  }
-	 					 
-
-	                 } catch (IOException e) {
-	                     e.printStackTrace();
-	                    
-	                     return null;
-	                 }
-	             String fileUrl = servletContext.getContextPath() + "/" + "uploads" + "/" + fileName;
-	             productDto.addImage(fileUrl);    
-	             System.out.println(" Listimage 1: "+productDto.getListImage().get(i));
-	 	    }
+	    	
+	    	for(int i=0;i<Listfiles.length;i++) {
+	    		String url=image.AddImage(Listfiles[i], applicationPath);
+	    		productDto.addImage(url);
+	    	}
 	    }
 	   
 //-------------------------------------------------------------------------------------------------
 	    if(fileFromClient!=null) {
-	    	  // lưu ảnh chính
-		    String fileName=fileFromClient.getOriginalFilename();
-		    // lấy toàn bộ đường dẫn của ứng dụng
-		    String applicationPath=servletContext.getRealPath("");
-			// tạo đường dẫn đến nơi lưu trữ tệp trên server , File.separatorlà dấu phân cách ,UPLOAD_DIR tên thư mục mình muốn upload
-	    	String uploadFilePath = applicationPath + "uploads";
-	    	System.out.println(" uploadFilePath: "+uploadFilePath);
-	    	// tạo thư mục lưu trữ tệp 
-	    	File uploadDir = new File(uploadFilePath);
-	    	  // nếu thư mục chưa tồn tại thì phải tạo thư mục 
-	        if (!uploadDir.exists()) {
-	            uploadDir.mkdirs();
-	        }
-	        File file=new File(uploadFilePath + File.separator + fileName);
-	        try (FileOutputStream fos = new FileOutputStream(file);
-	            	//Đọc dữ liệu nhị phân từ body của part đưa vào biến fileContent
-	                  InputStream fileContent = fileFromClient.getInputStream()) {
-					  byte[] buffer = new byte[1024]; 
-					  int bytesRead;
-					  while ((bytesRead =fileContent.read(buffer)) != -1) 
-					  { 
-						  fos.write(buffer, 0, bytesRead); 
-					  }
-					 
-
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	               
-	                return null;
-	            }
-	        String fileUrl = servletContext.getContextPath() + "/" + "uploads" + "/" + fileName;
-		    productDto.setImage(fileUrl);
-		    System.out.println(" imageee: "+productDto.getImage());
+	    	productDto.setImage(image.AddImage(fileFromClient, applicationPath));
 	    }
-	  
+	 
 //-----------------------------------------------------------------------	 
 	    ProductDTO pro=product.save(productDto);
-		return null;
+		return pro;
 	}
-	@DeleteMapping("/delete")
+	@DeleteMapping("product/delete")
 	public void delete(@RequestBody ProductDTO productDelete) {
 		product.delete(productDelete.getIds());
 	}

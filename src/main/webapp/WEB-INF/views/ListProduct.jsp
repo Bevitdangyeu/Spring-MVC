@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <c:url var="ApiDelete" value="/public/delete"/>
-        <c:url var="NewUrl" value="/admin1/list"/>
+        <c:url var="ApiDelete" value="/api/product/delete"/>
+        <c:url var="NewUrl" value="/admin1/product/list?page=1&totalItem=3&sortBy=name"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    		<div class="col-md-9 ftco-animate">
+   
+    	<div class="col-md-9 ftco-animate">
+    	 <form action='<c:url value="/admin1/list"/>'  id="listProduct"  method="get">
     			<div class="cart-list">
 	    			<table class="table">
 						<thead class="thead-primary">
@@ -37,7 +39,7 @@
 						     	<tr class="text-center">
 							     	<td ><input type="checkbox" id="checkbox_${item.productId}" class="product-checkbox" value="${item.productId}" ></td>
 							     	<td class="product-edit">
-							     	<c:url var="EditURL" value="/admin1/edit">
+							     	<c:url var="EditURL" value="/admin1/product/edit">
 							      		<c:param name="id" value="${ item.productId}"/>
 							      	</c:url>
 							      	<a flag="edit"
@@ -88,36 +90,62 @@
 						    </tbody>
 						  </table>
 					  </div>
-    			</div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>		
-	 <script type="text/javascript">
-	 	// tác dụng khi click bất kì nút nào có bắt đầu là btn_edt
-	   $('#btn_delete').click(function (e) {
-		   //lấy ra id bằng cách thay thế btn_edit bằng khoảng trắng-> còn lại số id của nút, mà số id của nút cũng bằng với id của các giá trị khác
-		   // Lấy tất cả các checkbox được chọn
-	        var checkedValues = $('.product-checkbox:checked').map(function() {
-	            return this.value;
-	        }).get();
-	        delete_fun({ids:checkedValues})
-		   
-	        alert('Bạn có chắc chắn muốn xóa : ' + checkedValues.join(', '));
-	   });
-	   function delete_fun(data){
-		   $.ajax({
-			   url:'${ApiDelete}',
-				type:'DELETE',
-				data: JSON.stringify(data),
-				contentType :'application/json',
-				success: function (result) {
-					window.location.href="${NewUrl}";
-				},
-				error: function (error) {
-					//showToast("Edit request failed","danger");
-					console.log(error);
-				}
-			}); 
-	   }
-	 </script>
-  
+    			<ul style="display: flex;justify-content: center;" class="pagination" id="pagination"></ul>
+    			<input type="hidden" id="page" value="" name="page">
+    			<input type="hidden" id="totalItem" value="" name="totalItem">
+				<input type="hidden" id="sortBy" value="" name="sortBy" />
+    	</form>
+    </div>
+	<script type="text/javascript">
+	var currentpage=${product.page};
+	var visiblePage=${product.totalItem};
+	var totalPage=${product.totalPage};
+	var sortBy="${product.sortBy}";
+	    $(function () {
+	        window.pagObj = $('#pagination').twbsPagination({
+	            totalPages: totalPage,<!-- tổng số trang -->
+	            visiblePages: totalItem, <!-- tổng số lượng item trên 1 page -->
+	            startPage:currentpage, <!-- page hiện tại đang trỏ -->
+	            onPageClick: function (event, page) {
+	                //console.info(page + ' (from options)');
+	               if(currentpage!=page){
+	            	   $('#maxPage').val(visiblePage);
+		               $('#page').val(page);
+		               $('#sortBy').val(sortBy);
+		               $('#listProduct').submit();
+	               }
+	            }
+	        }).on('page', function (event, page) {
+	            console.info(page + ' (from event listening)');
+	        });
+	    });
+ // xử lý xóa
+ 	// tác dụng khi click bất kì nút nào có bắt đầu là btn_edt
+   $('#btn_delete').click(function (e) {
+	   //lấy ra id bằng cách thay thế btn_edit bằng khoảng trắng-> còn lại số id của nút, mà số id của nút cũng bằng với id của các giá trị khác
+	   // Lấy tất cả các checkbox được chọn
+        var checkedValues = $('.product-checkbox:checked').map(function() {
+            return this.value;
+        }).get();
+        delete_fun({ids:checkedValues})
+	   
+        alert('Bạn có chắc chắn muốn xóa : ' + checkedValues.join(', '));
+   });
+   function delete_fun(data){
+	   $.ajax({
+		   url:'${ApiDelete}',
+			type:'DELETE',
+			data: JSON.stringify(data),
+			contentType :'application/json',
+			success: function (result) {
+				window.location.href="${NewUrl}";
+			},
+			error: function (error) {
+				//showToast("Edit request failed","danger");
+				console.log(error);
+			}
+		}); 
+   };
+	</script>
 </body>
 </html>

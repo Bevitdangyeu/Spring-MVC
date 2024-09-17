@@ -1,9 +1,11 @@
 
 package springMVC.entity;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,61 +26,43 @@ public class BillEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="billId")
 	private int billId;
-	@Column(name="totalBill")
-	private int totalBill;
 	@Column(name="totalQuantity")
 	private int totalQuantity;
 	@Column(name="totalPrice")
-	private int totalPrice;
+	private float totalPrice;
 	@Column(name="date")
-	private Timestamp date;
-	@ManyToMany
-	@JoinTable( name="detailBill",
-				joinColumns=@JoinColumn(name="billId"),
-				inverseJoinColumns = @JoinColumn(name="productId")
-			)
-	List<ProductEntity> product=new ArrayList<ProductEntity>();
-	@ManyToOne(fetch = FetchType.LAZY)
+	private LocalDateTime date;
+	
+	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinColumn(name="customerId")
 	private customerEntity customer;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="employeeId")
 	private EmployeeEntity employee;
-	@OneToMany(mappedBy = "bill")
+	// khi thêm bill sẽ tự động thêm detail bill 
+	@OneToMany(mappedBy = "bill",cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
 	private List<DetailBillEntity> list=new ArrayList<DetailBillEntity>();
 	public int getBillId() {
 		return billId;
 	}
 	
-	public int getTotalBill() {
-		return totalBill;
-	}
-	public void setTotalBill(int totalBill) {
-		this.totalBill = totalBill;
-	}
 	public int getTotalQuantity() {
 		return totalQuantity;
 	}
 	public void setTotalQuantity(int totalQuantity) {
 		this.totalQuantity = totalQuantity;
 	}
-	public int getTotalPrice() {
+	public float getTotalPrice() {
 		return totalPrice;
 	}
-	public void setTotalPrice(int totalPrice) {
+	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-	public Timestamp getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Timestamp date) {
-		this.date = date;
-	}
-	public List<ProductEntity> getProduct() {
-		return product;
-	}
-	public void setProduct(List<ProductEntity> product) {
-		this.product = product;
+	public void setDate(LocalDateTime currentDateTime) {
+		this.date = currentDateTime;
 	}
 	public customerEntity getCustomer() {
 		return customer;

@@ -9,4 +9,5 @@ import springMVC.entity.UserAndPassEntity;
 public interface ProductRespository extends JpaRepository<ProductEntity, Integer> {
 	ProductEntity save(ProductEntity product);
 	ProductEntity findOneByProductId (int productId);
+	ProductEntity findOneByName(String name);
 }

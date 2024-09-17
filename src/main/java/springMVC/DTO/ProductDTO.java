@@ -12,10 +12,17 @@ public class ProductDTO {
 	private int quantity;
 	private float prince;
 	private String image;
+	private int page;
+	private int totalItem;// lấy bao nhiêu đối tượng trên 1 trang
+	private int totalPage;// tổng số trang
+	private int offset;// vị trí lấy( lấy từ vị trí nào) 
+	private String sortBy;
 //	private String image;
 	private List<Integer> ids=new ArrayList<Integer>();
 	private List<String> listImage=new ArrayList<String>();
 	private List<Integer> ListProduct=new ArrayList<Integer>();
+	private List<String> listSize=new ArrayList<String>();
+	private List<String> listColor=new ArrayList<String>();
 	public int getProductId() {
 		return productId;
 	}
@@ -91,6 +98,48 @@ public class ProductDTO {
 	}
 	public void setIds(List<Integer> ids) {
 		this.ids = ids;
+	}
+	public int getTotalItem() {
+		return totalItem;
+	}
+	public void setTotalItem(int totalItem) {
+		this.totalItem = totalItem;
+	}
+	public int getTotalPage() {
+		return totalPage;
+	}
+	public void setTotalPage(int totalPage) {
+		this.totalPage = totalPage;
+	}
+	public int getOffset() {
+		return offset;
+	}
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public String getSortBy() {
+		return sortBy;
+	}
+	public void setSortBy(String sortBy) {
+		this.sortBy = sortBy;
+	}
+	public List<String> getListSize() {
+		return listSize;
+	}
+	public void setListSize(List<String> listSize) {
+		this.listSize = listSize;
+	}
+	public List<String> getListColor() {
+		return listColor;
+	}
+	public void setListColor(List<String> listColor) {
+		this.listColor = listColor;
 	}
 	
 }

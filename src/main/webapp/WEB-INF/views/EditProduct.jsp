@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <c:url var="ApiUrl" value="/public/add"/>
+    <c:url var="ApiUrl" value="/api/product/add"/>
+    <c:url var="NewUrl" value="/admin1/product/edit"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -146,14 +147,57 @@
 				  </div>
 				</div>
 		</c:if>
-		
-		<!-- Button -->
-		<div class="form-group row">
-		  <label class="col-md-4 control-label" for="singlebutton"></label>
-		  <div class="col-md-8">
-		    <button type="submit"id="EditButton" name="EditButton" class="btn btn-primary">Button</button>
-		  </div>
+		<!-- check box thông tin sản phẩm -->
+		<!-- SIZE -->
+		<div class="form-group row" >
+			<label class="col-md-4 control-label" for="filebutton">SIZE</label>
+				<div class="col-md-8" style="display: inline-block">
+					<input type="checkbox" id="checkbox1" class="size-checkbox" value="S" >
+					<label class="col-md-2 control-label" for="filebutton">S</label>
+					<input type="checkbox" id="checkbox2" class="size-checkbox" value="M" >
+					<label class="col-md-2 control-label" for="filebutton">M</label>
+					<input type="checkbox" id="checkbox3" class="size-checkbox" value="L" >
+					<label class="col-md-2 control-label" for="filebutton">L</label>
+					<input type="checkbox" id="checkbox4" class="size-checkbox" value="XL" >
+					<label class="col-md-2 control-label" for="filebutton">XL</label>
+				</div>
 		</div>
+		<!-- COLOR -->
+		<div class="form-group row">
+			  <label class="col-md-4 control-label" for="singlebutton">
+			   	<button style="margin-top:20px;margin-bottom:20px" type="button" id="addColor" class="btn btn-primary">Thêm màu sắc</button>
+			   </label>
+			    <div class="col-md-8">
+			   	<div id="product-container">
+				<!-- Nơi ô nhập màu sắc sẽ được thêm vào -->
+				</div>
+			  </div>
+		</div>
+		<!-- <div class="form-group row" >
+			<label class="col-md-4 control-label" for="singlebutton"></label>
+			  <div class="col-md-8">
+			   	<div id="product-container">
+				Nơi ô nhập màu sắc sẽ được thêm vào
+				</div>
+			  </div>
+			</div> -->
+		<!-- Button -->
+		<c:if test="${not empty product.productId }">
+		<div class="form-group row">
+		  <label class="col-md-6 control-label" for="singlebutton">
+		  	<button type="submit"id="EditButton" name="EditButton" class="btn btn-primary">Sửa sản phẩm</button>
+		  </label>
+		    
+		</div>
+		</c:if>
+		<c:if test="${ empty product.productId }">
+		<div class="form-group row">
+		  <label class="col-md-6 control-label" for="singlebutton">
+		   	<button type="submit"id="EditButton" name="EditButton" class="btn btn-primary">Thêm sản phẩm</button>
+		  </label>
+		   
+		</div>
+		</c:if>
 		<input type="hidden" value=${product.productId } id="productId"/>
 		</fieldset>
 </div>
@@ -162,9 +206,59 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
-		
+	function previewImages() {
+		// Lấy đối tượng input đã kích hoạt sự kiện
+		var input = event.target;
+		// Tìm phần tử cha có lớp 'form-group' của đối tượng input
+	    var formGroup = input.parentElement.parentElement; // Tìm thẻ cha .form-group
+	    // Tìm phần tử con có lớp 'preview' trong phần tử cha
+	    var previewContainer = formGroup.querySelector('.preview'); // Tìm thẻ .preview trong thẻ cha
+	    // Xóa nội dung trước đó trong phần tử .preview
+        previewContainer.innerHTML = ''; // Xóa nội dung trước đó
+        // Lấy danh sách các file từ đối tượng input
+        var files = input.files;
+        // Kiểm tra nếu có file
+        if (files) {
+        	// Chuyển đổi đối tượng file thành mảng và lặp qua từng file
+            Array.from(files).forEach(function(file) {
+            	// Tạo đối tượng FileReader để đọc nội dung của file
+                var reader = new FileReader();
+                // Định nghĩa hàm sẽ được gọi khi FileReader hoàn thành việc đọc file
+                reader.onload = function(e) {
+                	 // Tạo phần tử hình ảnh mới
+                    var img = document.createElement('img');
+                    // Gán thuộc tính src của hình ảnh bằng dữ liệu đọc được từ FileReader
+                    img.src = e.target.result;
+                    img.style.width = '100px';  // Đặt chiều rộng
+                    img.style.height = '100px'; // Đặt chiều cao
+                    img.style.margin='10px',
+                    // Thêm phần tử hình ảnh vào trong phần tử previewContainer
+                    previewContainer.appendChild(img);
+                }
+                // Bắt đầu đọc file dưới dạng Data URL
+                reader.readAsDataURL(file);
+            });
+        }
+    };
+	  document.getElementById('addColor').addEventListener('click', function() {
+		// Tạo một phần tử div mới để chứa các mục nhập sản phẩm
+	       // Hai câu lệnh này tạo và cấu hình một phần tử HTML mới bằng JavaScript:
+	       var productEntry = document.createElement('div');// chỉ định thẻ <div> 
+	       productEntry.className = 'row product-entry';// gán class và id sẽ được áp dụng, tương đương với <div class="row product-entry"> 
+	       /*  // list="suggestions" với suggestions là id của danh sách các đề xuất sẽ được hiển thị ở trường nhập liệu */
+	       // Thêm mã HTML cho phần nhập thông tin sản phẩm và phần số lượng
+	       //Gán nội dung HTML phức tạp cho phần tử div
+	       productEntry.innerHTML = `  	
+	    	   <input style="margin-bottom:10px"class="form-control input-md" placeholder="Nhập màu sắc" type="text" id="color" name="color">
+	       `;
+	
+	       // Thêm phần tử mới vào container
+	       document.getElementById('product-container').appendChild(productEntry);
+	  });
 		$('#EditButton').click(function () {
 		/* 	var productId=$('#productId').val(); */
+			/* khai báo 2 mảng lưu trữ dữ liệu của size và color */
+			var color=[];
 			var productName=$('#productName').val();
 			var catelogyName=$('#categoryName').val();
 			var quantity=$('#quantity').val();
@@ -182,14 +276,24 @@
 	  		for (var i = 0; i < fileList.length; i++) {
 	  		    formData.append('listImage', fileList[i]);
 	  		}
+	  		/* lấy dữ liệu của color */
+	  		$(".product-entry").each(function name() {
+	  			var a=$(this).find('#color').val();
+	  			color.push(a);
+			});
+	  	/* 	lấy dữ liệu của size */
+	  		 var sizeChecked = $('.size-checkbox:checked').map(function() {
+           	 return this.value;
+        	 }).get();
 	  		if($('#productId').length === 0){
 	  			var jsonData = {
 	  		  			productName: productName,
 	  		  			categoryName: catelogyName,
 	  		  			quantity: quantity,
 	  		  			prince: prince,
-	  		  			description:description
-	  		  			
+	  		  			description:description,
+	  		  			listSize:sizeChecked,
+	  		  			listColor:color
 	  		  	};
 	  		  	
 	  		    formData.append('jsonData', JSON.stringify(jsonData));
@@ -202,8 +306,9 @@
 	  		  			categoryName: catelogyName,
 	  		  			quantity: quantity,
 	  		  			prince: prince,
-	  		  			description:description
-	  		  			
+	  		  			description:description,
+	  		  			listSize:sizeChecked,
+  		  				listColor:color
 	  		  	};
 	  		  	
 	  		    formData.append('jsonData', JSON.stringify(jsonData));
@@ -220,6 +325,8 @@
 			    contentType: false,
 				success: function (result) {
 				//	showToast("Add request successful","success");
+					 alert('Sản phẩm được thêm thành công');
+					window.location.href="${NewUrl}";
 					console.log(result);
 				},
 				error: function name(error) {
@@ -228,40 +335,7 @@
 				}
 			});
 		};
-		function previewImages() {
-			// Lấy đối tượng input đã kích hoạt sự kiện
-			var input = event.target;
-			// Tìm phần tử cha có lớp 'form-group' của đối tượng input
-		    var formGroup = input.parentElement.parentElement; // Tìm thẻ cha .form-group
-		    // Tìm phần tử con có lớp 'preview' trong phần tử cha
-		    var previewContainer = formGroup.querySelector('.preview'); // Tìm thẻ .preview trong thẻ cha
-		    // Xóa nội dung trước đó trong phần tử .preview
-            previewContainer.innerHTML = ''; // Xóa nội dung trước đó
-            // Lấy danh sách các file từ đối tượng input
-            var files = input.files;
-            // Kiểm tra nếu có file
-            if (files) {
-            	// Chuyển đổi đối tượng file thành mảng và lặp qua từng file
-                Array.from(files).forEach(function(file) {
-                	// Tạo đối tượng FileReader để đọc nội dung của file
-                    var reader = new FileReader();
-                    // Định nghĩa hàm sẽ được gọi khi FileReader hoàn thành việc đọc file
-                    reader.onload = function(e) {
-                    	 // Tạo phần tử hình ảnh mới
-                        var img = document.createElement('img');
-                        // Gán thuộc tính src của hình ảnh bằng dữ liệu đọc được từ FileReader
-                        img.src = e.target.result;
-                        img.style.width = '100px';  // Đặt chiều rộng
-                        img.style.height = '100px'; // Đặt chiều cao
-                        img.style.margin='10px',
-                        // Thêm phần tử hình ảnh vào trong phần tử previewContainer
-                        previewContainer.appendChild(img);
-                    }
-                    // Bắt đầu đọc file dưới dạng Data URL
-                    reader.readAsDataURL(file);
-                });
-            }
-        };
+		
 	
 </script>
 </body>

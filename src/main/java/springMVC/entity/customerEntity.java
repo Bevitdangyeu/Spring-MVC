@@ -21,7 +21,7 @@ public class customerEntity {
 	@Column(name="customerId")
 	private int customerId;
 	@Column(name="CustomerName")
-	private String CustomerName;
+	private String customerName;
 	@Column(name="phoneNumber")
 	private long phoneNumber;
 	@Column(name="status")
@@ -44,10 +44,10 @@ public class customerEntity {
 		return customerId;
 	}
 	public String getCustomerName() {
-		return CustomerName;
+		return customerName;
 	}
 	public void setCustomerName(String customerName) {
-		CustomerName = customerName;
+		this.customerName = customerName;
 	}
 	public List<BillEntity> getListBill() {
 		return listBill;

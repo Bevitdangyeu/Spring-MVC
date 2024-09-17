@@ -17,34 +17,20 @@ public class DetailBillEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="detailBillId")
 	private int detailBillId;
-	@Column(name="billId")
-	private int billId;
-	@Column(name="productId")
-	private int productId;
 	@Column(name="quantity")
 	private int quantity;
-	@Column(name="prince")
-	private float prince;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Column(name="total")
+	private float total;
+	@Column(name="price")
+	private float price;
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="billid")
 	private BillEntity bill;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="productid")
 	private ProductEntity product;
 	public int getDetailBillId() {
 		return detailBillId;
-	}
-	public int getBillId() {
-		return billId;
-	}
-	public void setBillId(int billId) {
-		this.billId = billId;
-	}
-	public int getProductId() {
-		return productId;
-	}
-	public void setProductId(int productId) {
-		this.productId = productId;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -52,11 +38,11 @@ public class DetailBillEntity {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public float getPrince() {
-		return prince;
+	public float getPrice() {
+		return price;
 	}
-	public void setPrince(float prince) {
-		this.prince = prince;
+	public void setPrice(float prince) {
+		this.price = prince;
 	}
 	public BillEntity getBill() {
 		return bill;
@@ -69,6 +55,15 @@ public class DetailBillEntity {
 	}
 	public void setProduct(ProductEntity product) {
 		this.product = product;
+	}
+	public float getTotal() {
+		return total;
+	}
+	public void setTotal(float total) {
+		this.total = total;
+	}
+	public void setDetailBillId(int detailBillId) {
+		this.detailBillId = detailBillId;
 	}
 	
 }

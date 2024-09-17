@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -50,12 +51,14 @@ public class ProductEntity {
 	// tạo ra column categoryId bên trong bảng Product
     @JoinColumn(name = "cateroryId")
     private CaterogyEntity category;
-	@ManyToMany(mappedBy = "product")
-	private List<BillEntity> listBill=new ArrayList<BillEntity>();
 	@OneToMany(mappedBy = "product")
 	private List<DetailBillEntity> list=new ArrayList<DetailBillEntity>();
-	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
 	private List<ImageEntity> listImage=new ArrayList<ImageEntity>();
+	@ManyToMany(mappedBy = "listProduct",fetch = FetchType.LAZY)
+	private List<SizeEntity> listSize=new ArrayList<SizeEntity>();
+	@ManyToMany(mappedBy = "listProduct",fetch = FetchType.LAZY)
+	private List<ColorEntity> listColor=new ArrayList<ColorEntity>();
 	public int getProductId() {
 		return productId;
 	}
@@ -97,12 +100,6 @@ public class ProductEntity {
 	public void setDescription(String description) {
 		Description = description;
 	}
-	public List<BillEntity> getListBill() {
-		return listBill;
-	}
-	public void setListBill(List<BillEntity> listBill) {
-		this.listBill = listBill;
-	}
 	public List<DetailBillEntity> getList() {
 		return list;
 	}
@@ -120,6 +117,21 @@ public class ProductEntity {
 	}
 	public void setListImage(List<ImageEntity> listImage) {
 		this.listImage = listImage;
+	}
+	public List<SizeEntity> getListSize() {
+		return listSize;
+	}
+	public void setListSize(List<SizeEntity> listSize) {
+		this.listSize = listSize;
+	}
+	public List<ColorEntity> getListColor() {
+		return listColor;
+	}
+	public void setListColor(List<ColorEntity> listColor) {
+		this.listColor = listColor;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 	
 	

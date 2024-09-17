@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -133,10 +134,10 @@
     	</div>
     	<div class="container">
     		<div class="row">
-    			
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
+    			<c:forEach var="item" items="${list }">
+    				<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-2.png" alt="Colorlib Template">
+    					<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template">
     						<span class="status">50% Off</span>
     						<div class="overlay"></div>
     					</a>
@@ -155,9 +156,14 @@
 	    							</p>
 	    						</div>
 	    					</div>
-    						<h3><a href="#">Nike Free RN 2019 iD</a></h3>
+    						<h3>
+    						<c:url var="detail" value="/public/product/detail">
+    							<c:param name="id" value="${item.productId }"></c:param>
+    						</c:url>
+    						<a href='${ detail}'>${item.productName }</a>
+    						</h3>
   							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
+	    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">${item.prince }</span></p>
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
     							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
@@ -166,6 +172,9 @@
     					</div>
     				</div>
     			</div>
+    			</c:forEach>
+    			
+    			
     			
     			
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">

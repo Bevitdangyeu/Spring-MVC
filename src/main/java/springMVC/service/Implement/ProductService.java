@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import springMVC.DTO.ProductDTO;
 import springMVC.entity.CaterogyEntity;
+import springMVC.entity.ColorEntity;
 import springMVC.entity.ImageEntity;
 import springMVC.entity.ProductEntity;
+import springMVC.entity.SizeEntity;
+import springMVC.paging.PageRequest;
 import springMVC.repository.CategoryResponsitory;
+import springMVC.repository.ColorRespository;
 import springMVC.repository.ProductRespository;
+import springMVC.repository.SizeRespository;
 import springMVC.service.Interface.IProductService;
 
 @Service
@@ -21,6 +28,11 @@ public class ProductService implements IProductService{
 		private ProductRespository productRepository;
 	@Autowired
 		private CategoryResponsitory category;
+	@Autowired
+		private SizeRespository sizeRepository;
+	@Autowired
+		private ColorRespository colorRepository;
+	@Transactional
 	@Override
 	public ProductDTO save(ProductDTO product) {
 		CaterogyEntity cate=category.findByCategoryName(product.getCategoryName());
@@ -43,6 +55,31 @@ public class ProductService implements IProductService{
 				image.setProduct(productEntity);
 				listImage.add(image);
 			}
+			// kiểm tra xem color đã tồn tại chưa, nếu chưa thì thêm mới 
+			List<ColorEntity> listColor=new ArrayList<ColorEntity>();
+			for(int i=0;i<product.getListColor().size();i++) {
+				ColorEntity color= colorRepository.findBycolorName(product.getListColor().get(i));
+				if(color==null) {
+					color=new ColorEntity();
+					color.setColorName(product.getListColor().get(i));
+					color.getListProduct().add(productEntity);
+					colorRepository.save(color);
+					listColor.add(color);
+				}
+				else {
+					color.getListProduct().add(productEntity);
+					listColor.add(color);
+				}
+			}
+			// kiểm tra xem size có trong bảng size hay không nếu chưa thì thêm vào
+			List<SizeEntity> listSize=new ArrayList<SizeEntity>();
+			for(int i=0;i<product.getListSize().size();i++) {
+				SizeEntity size=sizeRepository.findBySizeName(product.getListSize().get(i));
+					size.getListProduct().add(productEntity);
+					listSize.add(size);
+			}
+			productEntity.setListSize(listSize);
+			productEntity.setListColor(listColor);
 			productEntity.setListImage(listImage);
 			ProductEntity pro= productRepository.save(productEntity);	
 			DTO.setCategoryId(pro.getCategory().getCateroryId());
@@ -78,9 +115,10 @@ public class ProductService implements IProductService{
 		}
 		return DTO;
 	}
+	@Transactional
 	@Override
-	public List<ProductDTO> findAll() {
-		List<ProductEntity> list=productRepository.findAll();
+	public List<ProductDTO> findAll(Pageable page) {
+		List<ProductEntity> list=(List<ProductEntity>) productRepository.findAll(page).getContent();
 		// chuyển từ entity sang DTO
 		List<ProductDTO> listProductDTO=new ArrayList<ProductDTO>();
 		for(int i=0;i<list.size();i++) {
@@ -92,6 +130,13 @@ public class ProductService implements IProductService{
 			productDTO.setImage(list.get(i).getImage());
 			productDTO.setPrince(list.get(i).getPrince());
 			productDTO.setQuantity(list.get(i).getQuantity());
+			List<String> listImage=new ArrayList<String>();
+			for(int j=0;j<list.get(i).getListImage().size();j++) {
+				String image=list.get(i).getListImage().get(j).getImgae();
+				System.out.println("image: "+image);
+				listImage.add(image);
+			}
+			productDTO.setListImage(listImage);
 			listProductDTO.add(productDTO);
 		}
 		
@@ -118,13 +163,61 @@ public class ProductService implements IProductService{
 		DTO.setQuantity(productEntity.getQuantity());
 		return DTO;
 	}
+	@Transactional
 	@Override
 	public void delete(List<Integer> list) {
-		for(int i=0;i<list.size();i++) {
-			productRepository.deleteById(list.get(i));
+		for(int i=0;i<list.size();i++) {			
+			// lấy sản phẩm đó lên từ cơ sở dữ liệu
+			ProductEntity product=productRepository.findOneByProductId(list.get(i));
+			for( int j=0;j<product.getListColor().size();j++) {
+				// lấy size từ cơ sở dữ liệu
+				ColorEntity color=colorRepository.findBycolorName(product.getListColor().get(j).getColorName());
+				// remove product đó ra khỏi danh sách các product đang liên kết đến size đó
+				color.getListProduct().remove(product);
+				// lưu lại color đó với danh sách product mới
+				colorRepository.save(color);
+			}
+			for(int j=0;j<product.getListSize().size();j++) {
+				SizeEntity size=sizeRepository.findBySizeName(product.getListSize().get(j).getSizeName());
+				size.getListProduct().remove(product);
+				sizeRepository.save(size);
+			}
+			// sau đó xóa liên kết giữa product và size
+			product.getListSize().clear();
+			// xóa liên kết giữa product và color 
+			product.getListColor().clear();
+			//sau đó cập nhật lại đối tượng product ( không còn liên kết đến size và color=> sẽ không gây ra lỗi khóa ngoại)
+			product=productRepository.save(product);
+			// sau đó thực hiện xóa sản phẩm
+			productRepository.deleteById(product.getProductId());
 		}
 		
 	}
+	@Override
+	public int count() {
+		return (int) productRepository.count();
+	}
+	@Override
+	public List<ProductDTO> findAllProduct() {
+		List<ProductEntity> list=(List<ProductEntity>) productRepository.findAll();
+		// chuyển từ entity sang DTO
+		List<ProductDTO> listProductDTO=new ArrayList<ProductDTO>();
+		for(int i=0;i<list.size();i++) {
+			ProductDTO productDTO=new ProductDTO();
+			productDTO.setProductId(list.get(i).getProductId());
+			productDTO.setProductName(list.get(i).getName());
+			productDTO.setCategoryName(list.get(i).getCategory().getCategoryName());
+			productDTO.setDescription(list.get(i).getDescription());
+			productDTO.setImage(list.get(i).getImage());
+			productDTO.setPrince(list.get(i).getPrince());
+			productDTO.setQuantity(list.get(i).getQuantity());
+			listProductDTO.add(productDTO);
+		}
+		
+		return listProductDTO;
+	}
+
+	
 	
 	
 

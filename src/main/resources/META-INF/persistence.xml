@@ -12,7 +12,8 @@
         <class>springMVC.entity.DetailBillEntity</class>
         <class>springMVC.entity.ImageEntity</class>
         <class>springMVC.entity.PermissionEntity</class>
-      
+      	<class>springMVC.entity.SizeEntity</class>
+      	<class>springMVC.entity.ColorEntity</class>
     </persistence-unit>
 </persistence>
 
