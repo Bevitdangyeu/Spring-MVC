@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <c:url var="ApiUrl" value="/api/product/add"/>
@@ -152,6 +153,24 @@
 		<div class="form-group row" >
 			<label class="col-md-4 control-label" for="filebutton">SIZE</label>
 				<div class="col-md-8" style="display: inline-block">
+				<c:if test="${not empty product.productId }">
+					<c:set var="stopLoop" value="false" />
+					<c:forEach var="i" items="${fn:split('S,M,L,XL', ',')}">
+						<c:forEach var="j" items="${product.listSize }">
+							<c:if test="${i==j }">
+								<input type="checkbox" id="checkbox1" class="size-checkbox" value="${j }" checked>
+								<label class="col-md-2 control-label" for="filebutton">${j}</label>
+								<c:set var="stopLoop" value="true" />
+							</c:if>
+						</c:forEach>
+						<c:if test="${stopLoop==false }">
+								<input type="checkbox" id="checkbox1" class="size-checkbox" value="${i }">
+								<label class="col-md-2 control-label" for="filebutton">${i}</label>
+						</c:if>
+						<c:set var="stopLoop" value="flase" />
+					</c:forEach>
+				</c:if>
+				<c:if test="${empty product.productId }">
 					<input type="checkbox" id="checkbox1" class="size-checkbox" value="S" >
 					<label class="col-md-2 control-label" for="filebutton">S</label>
 					<input type="checkbox" id="checkbox2" class="size-checkbox" value="M" >
@@ -160,8 +179,25 @@
 					<label class="col-md-2 control-label" for="filebutton">L</label>
 					<input type="checkbox" id="checkbox4" class="size-checkbox" value="XL" >
 					<label class="col-md-2 control-label" for="filebutton">XL</label>
+				</c:if>
 				</div>
 		</div>
+		<!-- hiển thị color -->
+		<c:if test="${not empty product.productId }">
+			<div class="form-group row">
+			  <label class="col-md-4 control-label" for="singlebutton">COLOR
+			   </label>
+			    <div class="col-md-8">
+			   		<div class="color">
+			   			<c:forEach var="color" items="${product.listColor }">
+			   			  <input style="margin-bottom:10px"class="form-control input-md" placeholder="Nhập màu sắc" type="text" id="color" name="color" value="${color }">	
+			   			</c:forEach>
+			   		</div>
+				</div>
+			  </div>
+		</c:if>
+			
+		
 		<!-- COLOR -->
 		<div class="form-group row">
 			  <label class="col-md-4 control-label" for="singlebutton">
@@ -300,6 +336,10 @@
 	  	  			add(formData)
 	  		}
 	  		else{
+	  			$('.color').each(function name() {
+		  		  	var a=$(this).find('#color').val();
+		  				color.push(a);
+					})
 	  			var jsonData = {
 	  					productId:$('#productId').val(),
 	  		  			productName: productName,

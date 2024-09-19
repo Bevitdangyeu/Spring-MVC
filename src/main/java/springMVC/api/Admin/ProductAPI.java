@@ -43,8 +43,6 @@ public class ProductAPI {
 		ProductDTO productDto=new ProductDTO();
 		ObjectMapper mapper=new ObjectMapper();
 	    productDto=mapper.readValue(jsonData, ProductDTO.class);
-	    System.out.println(" color: "+ productDto.getListColor().get(0));
-	    System.out.println(" size: "+ productDto.getListSize().get(0));
 	    String applicationPath=servletContext.getRealPath("");
 		// Lưu các ảnh phụ
 	    if(Listfiles!=null) {

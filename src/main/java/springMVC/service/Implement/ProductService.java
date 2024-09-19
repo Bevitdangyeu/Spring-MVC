@@ -55,7 +55,7 @@ public class ProductService implements IProductService{
 				image.setProduct(productEntity);
 				listImage.add(image);
 			}
-			// kiểm tra xem color đã tồn tại chưa, nếu chưa thì thêm mới 
+			// kiểm tra xem color đã tồn tại chưa, nếu chưa thì thêm mới cần phải đảm bảo color đó đã tồn tại trong cơ sở dữ liệu trước khi được add vào list trong productEntity
 			List<ColorEntity> listColor=new ArrayList<ColorEntity>();
 			for(int i=0;i<product.getListColor().size();i++) {
 				ColorEntity color= colorRepository.findBycolorName(product.getListColor().get(i));
@@ -93,7 +93,95 @@ public class ProductService implements IProductService{
 			oldProduct.setQuantity(product.getQuantity());
 			oldProduct.setPrince(product.getPrince());
 			oldProduct.setStatus(1);
-			oldProduct.setDescription(product.getDescription());			
+			oldProduct.setDescription(product.getDescription());	
+			// nếu như danh sách truyền vào có  color thì mới thực hiện
+			int findColor=0;
+			for(int i=0;i<product.getListColor().size();i++) {
+				for(int j=0;j<oldProduct.getListColor().size();j++) {
+					if(product.getListColor().get(i).equals(oldProduct.getListColor().get(j).getColorName())) {
+						findColor=1;
+						break;
+					}
+				}
+				if(findColor==0) {
+					String color=product.getListColor().get(i);
+					ColorEntity colorEntity=colorRepository.findBycolorName(color);
+					if(colorEntity==null) {
+						// nếu màu này chưa có trong cơ sở dữ liệu 
+						colorEntity=new ColorEntity();
+						colorEntity.setColorName(color);
+						colorEntity.getListProduct().add(oldProduct);
+						colorRepository.save(colorEntity);				
+					}
+					else {
+						colorEntity.getListProduct().add(oldProduct);
+					}
+					oldProduct.getListColor().add(colorEntity);
+				}
+				findColor=0;
+			}
+			int findSize=0;
+			for(int i=0;i<product.getListSize().size();i++) {
+				for(int j=0;j<oldProduct.getListSize().size();j++) {
+					if(product.getListSize().get(i).equals(oldProduct.getListSize().get(j).getSizeName())) {
+						findSize=1;
+						break;
+					}
+				}
+				if(findSize==0) {
+					String size=product.getListSize().get(i);
+					SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
+					if(sizeEntity==null) {
+						// nếu màu này chưa có trong cơ sở dữ liệu 
+						sizeEntity=new SizeEntity();
+						sizeEntity.setSizeName(size);
+						sizeEntity.getListProduct().add(oldProduct);
+						sizeRepository.save(sizeEntity);				
+					}
+					else {
+						sizeEntity.getListProduct().add(oldProduct);
+					}
+					oldProduct.getListSize().add(sizeEntity);
+				}
+				findSize=0;
+			}
+			/*if(product.getListColor().size()>0) {
+				List<ColorEntity> listColor=new ArrayList<ColorEntity>();
+				for(int i=0;i<product.getListColor().size();i++) {
+					String color=product.getListColor().get(i);
+					ColorEntity colorEntity=colorRepository.findBycolorName(color);
+					if(colorEntity==null) {
+						// nếu màu này chưa có trong cơ sở dữ liệu 
+						colorEntity=new ColorEntity();
+						colorEntity.setColorName(color);
+						colorEntity.getListProduct().add(oldProduct);
+						colorRepository.save(colorEntity);				
+					}
+					else {
+						colorEntity.getListProduct().add(oldProduct);
+					}
+					listColor.add(colorEntity);
+				}
+				oldProduct.setListColor(listColor);
+			}
+			if(product.getListSize().size()>0) {
+				List<SizeEntity> listSize=new ArrayList<SizeEntity>();
+				for(int i=0;i<product.getListSize().size();i++) {
+					String size=product.getListSize().get(i);
+					System.out.println(" size: "+size);
+					SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
+					if(sizeEntity==null) {
+						sizeEntity=new SizeEntity();
+						sizeEntity.setSizeName(size);
+						sizeEntity.getListProduct().add(oldProduct);
+						sizeRepository.save(sizeEntity);
+					}else {
+						sizeEntity.getListProduct().add(oldProduct);
+					}
+					listSize.add(sizeEntity);
+				}
+				oldProduct.setListSize(listSize);
+			} */
 			java.util.List<ImageEntity> listImage =new ArrayList<ImageEntity>();
 			if(product.getImage()!=null) {
 				oldProduct.setImage(product.getImage());
@@ -133,7 +221,6 @@ public class ProductService implements IProductService{
 			List<String> listImage=new ArrayList<String>();
 			for(int j=0;j<list.get(i).getListImage().size();j++) {
 				String image=list.get(i).getListImage().get(j).getImgae();
-				System.out.println("image: "+image);
 				listImage.add(image);
 			}
 			productDTO.setListImage(listImage);
