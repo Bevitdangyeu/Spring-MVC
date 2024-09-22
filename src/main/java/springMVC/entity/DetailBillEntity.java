@@ -23,6 +23,10 @@ public class DetailBillEntity {
 	private float total;
 	@Column(name="price")
 	private float price;
+	@Column(name="color")
+	private String color;
+	@Column(name="size")
+	private String size;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="billid")
 	private BillEntity bill;
@@ -64,6 +68,18 @@ public class DetailBillEntity {
 	}
 	public void setDetailBillId(int detailBillId) {
 		this.detailBillId = detailBillId;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
 	}
 	
 }

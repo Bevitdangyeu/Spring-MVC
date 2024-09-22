@@ -14,10 +14,14 @@ public class BillDTO {
 	private int totalQuantity;
 	private float totalPrice;
 	private LocalDateTime date;
-	private List<String> product=new ArrayList<String>();
+	private List<CheckoutDTO> items=new ArrayList<CheckoutDTO>();
+/*	private List<String> product=new ArrayList<String>();
 	private List<Integer> quantity=new ArrayList<Integer>();
 	private List<Float> prince=new ArrayList<Float>();
 	private List<Float> total=new ArrayList<Float>();
+	private List<String> size=new ArrayList<String>();
+	private List<String> color=new ArrayList<String>();
+	private List<String> image=new ArrayList<String>(); */
 	// phần phân trang
 	private int page;
 	private int limit;// tổng số lượng phần tử trên một trang
@@ -49,24 +53,7 @@ public class BillDTO {
 	public void setDate(LocalDateTime localDateTime) {
 		this.date = localDateTime;
 	}
-	public List<Integer> getQuantity() {
-		return quantity;
-	}
-	public void setQuantity(List<Integer> quantity) {
-		this.quantity = quantity;
-	}
-	public List<Float> getPrince() {
-		return prince;
-	}
-	public void setPrince(List<Float> prince) {
-		this.prince = prince;
-	}
-	public List<Float> getTotal() {
-		return total;
-	}
-	public void setTotal(List<Float> total) {
-		this.total = total;
-	}
+	
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -79,12 +66,7 @@ public class BillDTO {
 	public void setEmployeeID(int employeeID) {
 		this.employeeID = employeeID;
 	}
-	public List<String> getProduct() {
-		return product;
-	}
-	public void setProduct(List<String> product) {
-		this.product = product;
-	}
+
 	public int getPage() {
 		return page;
 	}
@@ -115,22 +97,18 @@ public class BillDTO {
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
 	}
-	public void addProduct(String product) {
-		this.product.add(product);
-	}
-	public  void addQuantity(int quantity) {
-		this.quantity.add(quantity);
-	}
-	public void addPrice(float price) {
-		this.prince.add(price);
-	}
-	public void addTotal(float total) {
-		this.total.add(total);
-	}
+	
 	public String getProductName() {
 		return productName;
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+	public List<CheckoutDTO> getItems() {
+		return items;
+	}
+	public void setItems(List<CheckoutDTO> items) {
+		this.items = items;
+	}
+	
 }

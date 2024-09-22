@@ -218,11 +218,24 @@ public class ProductService implements IProductService{
 			productDTO.setImage(list.get(i).getImage());
 			productDTO.setPrince(list.get(i).getPrince());
 			productDTO.setQuantity(list.get(i).getQuantity());
+			List<String> listColor=new ArrayList<String>();
+			for(int j=0;j<list.get(i).getListColor().size();j++) {
+				String color=list.get(i).getListColor().get(j).getColorName();
+				listColor.add(color);
+			}
+			List<String> listSize=new ArrayList<String>();
+			for(int j=0;j<list.get(i).getListSize().size();j++) {
+				String size=list.get(i).getListSize().get(j).getSizeName();
+				listSize.add(size);
+			}
+			productDTO.setListColor(listColor);
+			productDTO.setListSize(listSize);
 			List<String> listImage=new ArrayList<String>();
 			for(int j=0;j<list.get(i).getListImage().size();j++) {
 				String image=list.get(i).getListImage().get(j).getImgae();
 				listImage.add(image);
 			}
+			
 			productDTO.setListImage(listImage);
 			listProductDTO.add(productDTO);
 		}

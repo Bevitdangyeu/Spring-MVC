@@ -34,9 +34,11 @@
 
 	</bean>
 	
+	
 	<mvc:resources mapping="/template/**" location="/template/" />
 	<mvc:resources mapping="/uploads/**" location="/uploads/" />
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
    		<property name="maxUploadSize" value="5242880"/> <!-- 5MB -->
 	</bean>
+	
 </beans>

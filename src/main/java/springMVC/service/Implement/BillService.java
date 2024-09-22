@@ -22,8 +22,8 @@ import springMVC.repository.EmployeeResponsitory;
 import springMVC.repository.ProductRespository;
 import springMVC.service.Interface.IBillService;
 @Service
-public class BillService implements IBillService {
-	@Autowired
+public class BillService  {
+	/* @Autowired
 	CustomerResponsitory customerResponsitory;
 	@Autowired
 	EmployeeResponsitory employeeResponsitory;
@@ -79,6 +79,8 @@ public class BillService implements IBillService {
 				detailBill.setPrice(bill.getPrince().get(i));
 				detailBill.setQuantity(bill.getQuantity().get(i));
 				detailBill.setTotal(bill.getTotal().get(i));
+				detailBill.setColor(bill.getColor().get(i));
+				detailBill.setSize(bill.getSize().get(i));
 				list.add(detailBill);
 			}
 			billEntity.setList(list);
@@ -192,5 +194,5 @@ public class BillService implements IBillService {
 		billResponsitory.save(billEntity);
 		return billEntity.getBillId();
 	}
-	
+	*/
 }

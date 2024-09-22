@@ -22,7 +22,7 @@ import springMVC.service.Interface.IProductService;
 @Controller
 @RequestMapping("/admin1/bill")
 public class BillController {
-	@Autowired
+/*	@Autowired
 	IProductService productService;
 	@Autowired
 	IBillService billService;
@@ -50,4 +50,5 @@ public class BillController {
 		
 		return mav;
 	}
+	*/
 }

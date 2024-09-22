@@ -1,8 +1,9 @@
 package springMVC.DTO;
 
 public class ProductCartDTO {
+	private int productId;
 	private ProductDTO product;
-	private int SoLuong;
+	private int soLuong;
 	private String color;
 	private String size;
 	public ProductDTO getProduct() {
@@ -12,10 +13,10 @@ public class ProductCartDTO {
 		this.product = product;
 	}
 	public int getSoLuong() {
-		return SoLuong;
+		return soLuong;
 	}
 	public void setSoLuong(int soLuong) {
-		SoLuong = soLuong;
+		this.soLuong = soLuong;
 	}
 	public String getColor() {
 		return color;
@@ -28,6 +29,12 @@ public class ProductCartDTO {
 	}
 	public void setSize(String size) {
 		this.size = size;
+	}
+	public int getProductId() {
+		return productId;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 	
 	

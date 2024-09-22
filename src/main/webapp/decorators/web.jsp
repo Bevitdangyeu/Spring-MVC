@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="<c:url value='/template/web/css/flaticon.css' />" type="text/css">
     <link rel="stylesheet" href="<c:url value='/template/web/css/icomoon.css' />" type="text/css">
     <link rel="stylesheet" href="<c:url value='/template/web/css/style.css' />" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 	<%@ include file="/common/web/Header.jsp" %>

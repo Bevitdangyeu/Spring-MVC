@@ -1,43 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
      <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+     <c:url var="CartUrl" value="/api/cart/add"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 </head>
 	<body class="goto-here">
-		
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">Minishop</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
-	          <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
-                <a class="dropdown-item" href="product-single.html">Single Product</a>
-                <a class="dropdown-item" href="cart.html">Cart</a>
-                <a class="dropdown-item" href="checkout.html">Checkout</a>
-              </div>
-            </li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
-    <!-- END nav -->
 
     <section id="home-section" class="hero">
 		  <div class="home-slider owl-carousel">
@@ -51,26 +23,6 @@
 		          		<span class="subheading">#New Arrival</span>
 		          		<div class="horizontal">
 				            <h1 class="mb-4 mt-3">Shoes Collection 2019</h1>
-				            <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country.</p>
-				            
-				            <p><a href="#" class="btn-custom">Discover Now</a></p>
-				          </div>
-		            </div>
-		          </div>
-	        	</div>
-	        </div>
-	      </div>
-
-	      <div class="slider-item js-fullheight">
-	      	<div class="overlay"></div>
-	        <div class="container-fluid p-0">
-	          <div class="row d-flex no-gutters slider-text align-items-center justify-content-end" data-scrollax-parent="true">
-	          	<img class="one-third order-md-last img-fluid" src="images/bg_2.png" alt="">
-		          <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
-		          	<div class="text">
-		          		<span class="subheading">#New Arrival</span>
-		          		<div class="horizontal">
-				            <h1 class="mb-4 mt-3">New Shoes Winter Collection</h1>
 				            <p class="mb-4">A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country.</p>
 				            
 				            <p><a href="#" class="btn-custom">Discover Now</a></p>
@@ -134,7 +86,7 @@
     	</div>
     	<div class="container">
     		<div class="row">
-    			<c:forEach var="item" items="${list }">
+    			<c:forEach var="item" items="${list }" varStatus="status">
     				<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column">
     					<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template">
@@ -165,50 +117,61 @@
   							<div class="pricing">
 	    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">${item.prince }</span></p>
 	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-    						</p>
+	    					<p class="bottom-area d-flex px-6">	
+	    						<div class="btn-group custom-dropdown">
+								    <button style="width:220px; text-align:center" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+								        Chọn
+								    </button>
+								    <div class="dropdown-menu" style="min-width: 14rem;border-radius: 10px;top:35px;left:2px" >
+								            <!-- Dropdown for Size -->
+								            <div class="form-group" style="padding-left:10px;padding-right:10px;">
+								                <label for="size">Chọn kích thước</label>
+								                <select style="border-radius: 10px;height:35px ;width:100%;font-size: 14px;padding-left:20px" class="size" id="size${status.index }" name="size">
+								                    <option selected>Kích thước</option>
+								                    <c:forEach var="sizeItem" items="${item.listSize}">
+								                        <option value="${sizeItem}">${sizeItem}</option>
+								                    </c:forEach>
+								                </select>
+								            </div>
+								
+								            <!-- Dropdown for Color -->
+								            <div class="form-group"  style="padding-left:10px;padding-right:10px;">
+								                <label for="color">Chọn màu sắc</label>
+								                <select style="border-radius: 10px;height:35px;width:100%;font-size: 14px;padding-left:20px" class="color" aria-label="Default select example" id="color${status.index }" name="color">
+								                    <option selected>Màu sắc</option>
+								                    <c:forEach var="colorItem" items="${item.listColor}">
+								                        <option value="${colorItem}">${colorItem}</option>
+								                    </c:forEach>
+								                </select>
+								            </div>
+											<div class="form-group" style="padding-left:10px;padding-right:10px;">
+								               <label  for="filebutton">SỐ LƯỢNG:</label>
+				             					<input style="border-radius:10px;height:35px;width:50%;font-size: 14px;padding-left:20px" type="number" id="quantity${status.index }" name="quantity" class="quantity input-number" value="1" min="1" max="100">
+								            </div>
+								            <!-- Add to Cart Button -->
+								            <div class="card-footer p-10 pt-0 border-top-0 bg-transparent">
+								                <div class="text-center">
+								                    <button style="width:150px; margin:10px" type="submit" class="btn btn-primary" id="addToCart${status.index }">ADD TO CART</button>
+								                </div>
+								           
+								                <div class="text-center">
+								                    <button style="width:150px; margin:10px"  type="submit" class="btn btn-primary" id="buyNow">BUY NOW</button>
+								                </div>
+								            </div>
+								      
+								    </div>
+								</div>
+		
+	    					</p>
+	    						<p  class="bottom-area d-flex px-3">
+	    						<!-- <a href="#" id="AddToCart" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
+    							<a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a> -->
+	    						</p>
     					</div>
     				</div>
     			</div>
+    			<input type="hidden" id="product${status.index }" name="product" value="${item.productId  }">
     			</c:forEach>
-    			
-    			
-    			
-    			
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="images/product-7.png" alt="Colorlib Template">
-	    					<div class="overlay"></div>
-	    				</a>
-    					<div class="text py-3 pb-4 px-3">
-    						<div class="d-flex">
-    							<div class="cat">
-		    						<span>Lifestyle</span>
-		    					</div>
-		    					<div class="rating">
-	    							<p class="text-right mb-0">
-	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
-	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
-	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
-	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
-	    								<a href="#"><span class="ion-ios-star-outline"></span></a>
-	    							</p>
-	    						</div>
-	    					</div>
-    						<h3><a href="#">Nike Free RN 2019 iD</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span>$120.00</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-add ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			
     		</div>
     	</div>
     </section>
@@ -369,7 +332,38 @@
       </div>
     </section>
 
-  
-	
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.dropdown-menu ').click(function() {
+    	event.stopPropagation();
+    });
+});
+$('button[id^="addToCart"]').click(function () {
+	var index=$(this).attr('id').replace('addToCart', '');
+	var id=$('#product'+index).val();
+	var sizeP=$('#size'+index).val();
+	var colorP=$('#color'+index).val();
+	var quantityP=$('#quantity'+index).val();
+	add({productId:id,size:sizeP,color:colorP,soLuong:quantityP})
+});
+function add(data) {
+		$.ajax({
+			url:'${CartUrl}',
+			type:'post',
+			data: JSON.stringify(data) ,
+			contentType :'application/json',
+			dataType: 'json',
+			success: function (result) {
+				/* window.location.href=window.location.href; */
+			},
+			error: function (error) {
+				//showToast("Edit request failed","danger");
+				//window.location.href=window.location.href;
+				console.log(error);
+			}
+		});
+}
+</script>
 </body>
 </html>
