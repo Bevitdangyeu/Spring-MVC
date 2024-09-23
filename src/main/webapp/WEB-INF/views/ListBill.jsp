@@ -58,42 +58,28 @@
 								        <input type="text" value="${item.customerName }" id="customerName${status.index}" name="customerName" style="border-radius:10px; border-width: 0px; text-align: center;height:40px;width:150px"/>
 								        </div>	  	
 							        </td>       
-							        <td class="product-name">
-							         <div class="input-group mb-1">
-							        <c:forEach var="name" items="${item.product }" varStatus="statusProduct">
-							        	
-								        	<input  type="text" value="${name}" id="productName${statusProduct.index}" name="productName" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:150px"/>
-								       
-							        </c:forEach>
-							       	 </div>
-							        </td> 
-							         <td class="price">
-							         <div class="input-group mb-1">
-							        <c:forEach var="price" items="${item.prince }" varStatus="statusPrice">
-							        	
-								        	<input  type="text" value="${price}" id="prince${statusPrice.index}" name="prince" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:120px"/>
-								       
-							        </c:forEach>
-							       	 </div>
-							        </td> 
-							         <td class="quantity">
-							         <div class="input-group mb-1">
-							        <c:forEach var="quantity" items="${item.quantity }" varStatus="statusQuantity">
-							        	
-								        	<input  type="text" value="${quantity}" id="quantity${statusQuantity.index}" name="quantity" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:50px"/>
-								       
-							        </c:forEach>
-							       	 </div>
-							        </td> 
-							         <td class="total">
-							         <div class="input-group mb-1">
-							        <c:forEach var="total" items="${item.total }" varStatus="statusTotal">
-							        	
-								        	<input  type="text" value="${total}" id="total${statusTotal.index}" name="total" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:120px"/>
-								       
-							        </c:forEach>
-							       	 </div>
-							        </td> 
+							       <c:forEach var="product" items="${item.items }">
+							       		 <td class="product-name">
+								         <div class="input-group mb-1">
+									        	<input  type="text" value="${product.product }" id="productName${statusProduct.index}" name="productName" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:150px"/>
+								       	 </div>
+								        </td> 
+								         <td class="price">
+								         <div class="input-group mb-1">
+									        	<input  type="text" value="${product.prince}" id="prince${statusPrice.index}" name="prince" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:120px"/>
+								       	 </div>
+								        </td> 
+								         <td class="quantity">
+								         <div class="input-group mb-1">
+									        	<input  type="text" value="${product.quantity }" id="quantity${statusQuantity.index}" name="quantity" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:50px"/>
+								       	 </div>
+								        </td> 
+								         <td class="total">
+								         <div class="input-group mb-1">
+									        	<input  type="text" value="${product.total}" id="total${statusTotal.index}" name="total" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:120px"/>
+								       	 </div>
+								        </td> 
+							       </c:forEach>
 							        <td class="TotalBill">
 								        <div class="input-group mb-1">
 								        <input type="text" value="${item.totalPrice }" id="totalPrice${status.index}" name="totalPrice" style="border-radius:10px; border-width: 0px; text-align: center;height:40px;width:120px"/>

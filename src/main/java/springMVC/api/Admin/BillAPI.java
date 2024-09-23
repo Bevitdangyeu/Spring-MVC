@@ -13,10 +13,12 @@ import springMVC.service.Interface.IBillService;
 @RestController
 @RequestMapping("/api/bill")
 public class BillAPI {
-	/* @Autowired
+	@Autowired
 	IBillService billService;
 	@PostMapping("/add")
 	public BillDTO add(@RequestBody BillDTO bill ) {
+		System.out.println(" vao ");
+		System.out.println(" sl produc "+bill.getItems().size());
 		BillDTO billDTO=billService.addBill(bill);
 		return billDTO;
 	}
@@ -25,6 +27,6 @@ public class BillAPI {
 		int result= billService.delete(bill);
 		return result;
 	}
-	*/
+	
 }
 

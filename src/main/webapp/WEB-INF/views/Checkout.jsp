@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
          <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+         <c:url var="ApiUrl" value="/api/bill/add"></c:url>
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,6 +102,7 @@
 
 	$("#checkout").click(function name() {
 		var listProduct=[];
+		var employee=1;
 		var customerName=$('#customerName').val();
 		var address=$('#address').val();
 		var phoneNumber=$('#phone').val();
@@ -112,11 +114,30 @@
 		        var price = $(this).find("input[id^='price']").val(); // Tìm input có giá trị bắt đầu bằng 'x'        
 		        var quantity = $(this).find("input[id^='quantity']").val(); // Tìm input có giá trị bắt đầu bằng 'x'
 		        var img = $(this).find("input[id^='img']").val();
-		        var total=$(this).find("input[id^='total']").val()
+		        var total=$(this).find("input[id^='total']").val();
 		        var product={product:name,quantity:quantity,prince:price,size:size,color:color,image:img,total:total};
 		        listProduct.push(product);
 	});
+		add({employeeID:employee,customerName:customerName,address:address,phone:phoneNumber,items:listProduct});
+		
 	});
+	function add(data) {
+		$.ajax({
+			url:'${ApiUrl}',
+			type:'post',
+			data: JSON.stringify(data),
+			contentType :'application/json',
+			dataType: 'json',
+			success: function (result) {
+				window.location.href=window.location.href;
+			},
+			error: function (error) {
+				//showToast("Edit request failed","danger");
+				window.location.href=window.location.href;
+				console.log(error);
+			}
+		});
+	};
 </script>
 </body>
 </html>

@@ -24,6 +24,8 @@ public class customerEntity {
 	private String customerName;
 	@Column(name="phoneNumber")
 	private long phoneNumber;
+	@Column(name="address")
+	private String address;
 	@Column(name="status")
 	private int status;
 	@OneToMany(mappedBy = "customer")
@@ -54,6 +56,12 @@ public class customerEntity {
 	}
 	public void setListBill(List<BillEntity> listBill) {
 		this.listBill = listBill;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 }

@@ -9,6 +9,8 @@ public class BillDTO {
 	private int billId;
 	private String productName;
 	private String customerName;
+	private String address;
+	private long phone;
 	private int employeeID;
 	private String employeeName;
 	private int totalQuantity;
@@ -109,6 +111,18 @@ public class BillDTO {
 	}
 	public void setItems(List<CheckoutDTO> items) {
 		this.items = items;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public long getPhone() {
+		return phone;
+	}
+	public void setPhone(long phone) {
+		this.phone = phone;
 	}
 	
 }

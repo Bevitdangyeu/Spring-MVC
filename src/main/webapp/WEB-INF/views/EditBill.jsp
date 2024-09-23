@@ -12,7 +12,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<div style="margin-left:100px;margin-top:30px">
+	<div style="margin-left:50px">
 			<fieldset>
 		
 		<!-- Form Name -->
@@ -24,13 +24,13 @@
 		<div class="form-group- row">
 		  <label class="col-md-4 control-label" for="customerName">CUSTOMER NAME</label>  
 		  <div class="col-md-8" >
-		  <input value="${bill.customerName }" id="customerName" name="customerName" placeholder="CUSTOMER NAME" class="form-control input-md" required="" type="text" />	    
+		  <input value="${bill.customerName }" id="customerName" name="customerName" placeholder="CUSTOMER NAME" class="form-control input-md" required="" type="text" style="width:300px" />	    
 		  </div>
 		</div>	
 		<div class="form-group- row" style="margin-top:10px">
 		  <label class="col-md-4 control-label" for="employeeID">EMPLOYEE ID</label>  
 		  <div class="col-md-8">
-		  <input value="${bill.employeeID }" id="employeeID" name="employeeID" placeholder=" EMPLOYEE ID" class="form-control input-md" required="" type="text" />	    
+		  <input value="${bill.employeeID }" id="employeeID" name="employeeID" placeholder=" EMPLOYEE ID" class="form-control input-md" required="" type="text" style="width:300px" />	    
 		  </div>
 		</div>	
 		
@@ -53,73 +53,46 @@
 			</div>
 		</c:if>
 		<c:if test="${not empty bill.billId }">
-		<div class="form-group- row" style="margin-top:20px">
-			<label class="col-md-4 control-label" for="employeeID">THÔNG TIN SẢN PHẨM</label>  
-			<div class="col-md-8">
-				<div class="product">
-					<table class="table">
-					<thead class="thead-primary">
-					<tr class="text-center"> 
-						<th style="width:300px">Product Name</th>
-						<th style="width:150px">Price</th>
-						<th style="width:100px">Quantity</th>
-					<!-- 	<th style="width:150px">TotalPrice</th> -->
-					</tr>
-					</thead>
-					 <tbody>
-					 <tr class="text-center">
-					 	 <td class="product-name">
-							<div class="input-group mb-1">
-								<c:forEach var="name" items="${bill.product }" varStatus="statusProduct">
-									<button id="btn_delete${statusProduct.index }" type="button" style=" border: none; cursor: pointer;background: none;margin-top:10px">
-										<span><i style="color:#0099CC" class="fa fa-trash" aria-hidden="true"></i></span>
-									</button>
-									
-									<input value="${name}"  list="suggestions" id="productName${statusProduct.index}" name="productName" placeholder=" PRODUCT NAME" class="productName" onchange="updatePrice(this,'product','price')" style="margin-top:10px;margin-left:10px;border-radius:10px; border-width: 1px; text-align: center;height:40px; width:80%">
-								 	  <datalist id="suggestions">
-						                 <c:forEach var="item" items="${product}">
-						                     <option value="${item.productName}" data-price="${item.prince}" >${productName}</option>
-						                 </c:forEach>
-						              </datalist>	  
-						              <br> 
-						     
-								</c:forEach>
-							</div>
-						</td> 
-						<td class="price">
-							<div class="input-group mb-1">
-								<c:forEach var="price" items="${bill.prince }" varStatus="statusPrice">
-									        	
-									<input readonly type="text" class="price" value="${price}" id="price${statusPrice.index}" name="prince" style="margin-top:10px;border-radius:10px; border-width: 1px; text-align: center;height:40px; width:80%"/>
-										       
-								</c:forEach>
-							</div>
-						</td> 
-						<td class="quantity">
-							<div class="input-group mb-1">
-								<c:forEach var="quantity" items="${bill.quantity }" varStatus="statusQuantity">
-									        	
-									<input  type="text" class="quantity" value="${quantity}" id="quantity${statusQuantity.index}" name="quantity" style="margin-top:10px;border-radius:10px; border-width: 1px; text-align: center;height:40px; width:80%"/>
-										       
-								</c:forEach>
-							</div>
-						</td> 
-						<%-- <td class="total">
-							<div class="input-group mb-1">
-								<c:forEach var="total" items="${bill.total }" varStatus="statusTotal">
-									        	
-									<input readonly  type="text" value="${total}" id="total${statusQuantity.index}" name="total" style="margin-top:10px;border-radius:10px; border-width: 1px; text-align: center;height:40px; width:80%" onchange="updatePrice(this)"/>
-										       
-								</c:forEach>
-							</div>
-						</td>  --%>
-						
-					</tr>
-					</tbody>
-					</table>
-				</div>
-			</div>
-			</div>
+		<div class="col col-lg-12 cart-wrap ftco-animate" style="width:900px">
+	    			<div class="cart-total mb-1" style="margin-top:30px">
+	    				<h3>Thông tin sản phẩm</h3>
+	    				<c:forEach var="item" items="${bill.items }"  varStatus="status">
+	    					<div class="product" style="display:flex;margin:15px;border:1px dashed #DDDDDD;padding:10px">
+	    						<div style="margin-right:30px">
+		    						<input type="hidden" id="img${status.index}" value="${item.image  }">
+		    							<img style="height:100px;width:100px ;object-fit: cover;border-radius:50px;border:1px dashed  #888888;" alt="" src="${item.image }">
+	    							
+	    						</div>
+	    						<div  >
+	    							<p style="margin:5px" class="d-flex">
+	    								<span style="width:20%;color:#DDDDDD" >Name</span>
+	    								<span style="width:50%" ><input value="${item.product }" id="name${status.index}"  style="border:none"  /></span>
+	    							</p>
+	    							<p style="margin:5px" class="d-flex">
+	    								<span style="width:20%;color:#DDDDDD" >Size</span>
+	    								<span style="width:50%" ><input style="border:none" value="${item.size }" id="size${status.index}"  /></span>
+	    							</p>
+	    							<p style="margin:5px" class="d-flex">
+	    								<span style="width:20%;color:#DDDDDD" >Color</span>
+	    								<span style="width:50%" ><input style="border:none" value="${item.color }" id="color${status.index}"  /></span>
+	    							</p>
+	    						</div>
+	    						<div class="d-flex justify-content-center " style=" align-items: center;">
+	    							<p style="margin-left:10px;text-align: center;width:100px" class="d-flex">
+	    								<span ><input style="border:none" value="${item.prince}" id="price${status.index}"  /></span>
+	    							</p>
+	    							<p style="margin-left:10px;text-align: center;width:100px" class="d-flex">
+	    								<span ><input style="border:none" value="${item.quantity }" id="quantity${status.index}"  /></span>
+	    							</p>
+	    							<p style="margin-left:10px;text-align: center;width:100px" class="d-flex">
+	    								<span ><input style="border:none" value="${item.total }" id="total${status.index}"  /></span>
+	    							</p>
+	    						</div>
+	    						
+	    					</div>
+	    				</c:forEach>
+    			</div>
+    			</div>
 			<!-- Thêm sản phẩm mới -->
 			<div class="form-group row">
 			  <label class="col-md-4 control-label" for="singlebutton"></label>
@@ -149,7 +122,7 @@
 
 <script type="text/javascript">
 	// khi nhấn vào button có id là add product thì mục nhập sản phẩm sẽ hiện ra
-	$(document).ready(function() {
+	
     console.log("jQuery is loaded");
 	  document.getElementById('addProduct').addEventListener('click', function() {
 		  // Tạo một phần tử div mới để chứa các mục nhập sản phẩm
@@ -160,9 +133,10 @@
 	       // Thêm mã HTML cho phần nhập thông tin sản phẩm và phần số lượng
 	       //Gán nội dung HTML phức tạp cho phần tử div
 	       productEntry.innerHTML = `  	
-		 		  <label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
-		 		  <div class="col-md-8">
-			 		  <input style="margin-top:10px;margin-bottom:10px" list="suggestions" id="productName1" name="product" placeholder=" PRODUCT NAME" class="form-control input-md" onchange="updatePrice(this,'product-entry','price')">
+		 		 <div style="width:800px;margin-left:50px;display:Inline-block">
+	    	   <label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="product_name">PRODUCT NAME</label>  
+		 		  <div class="col-md-6">
+			 		  <input style="margin-top:10px;margin-bottom:10px; width:300px" list="suggestions" id="productName1" name="product" placeholder=" PRODUCT NAME" class="form-control input-md" onchange="updatePrice(this,'product-entry','price')">
 				 	  <datalist id="suggestions">
 		                 <c:forEach var="item" items="${product}">
 		                     <option value="${item.productName}" data-price="${item.prince}" >${productName}</option>
@@ -172,14 +146,27 @@
 		 		  </div>
 	 			
 	 			<br>
+	 			 
+	 			<label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="price">Size</label>  
+	 	        <div class="col-md-6">
+	 	            <input style="margin-top:10px;margin-bottom:10px; width:300px" id="size1" name="size" class="form-control input-md" type="text">    
+	 	        </div>
+	 	    
+	 	       <label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="price">Color</label>  
+	 	        <div class="col-md-6">
+	 	            <input style="margin-top:10px;margin-bottom:10px; width:300px" id="color1" name="color" class="form-control input-md"  type="text">    
+	 	        </div>
+	 	    	
 	 			<label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="price">Price</label>  
-		 	        <div class="col-md-8">
-		 	            <input style="margin-top:10px;margin-bottom:10px" id="price1" name="price" class="form-control input-md" readonly type="text">    
+		 	        <div class="col-md-6">
+		 	            <input style="margin-top:10px;margin-bottom:10p; width:300px" id="price1" name="price" class="form-control input-md" readonly type="text">    
 		 	        </div>
+		 	   
 				<label style="margin-top:10px;margin-bottom:10px" class="col-md-4 control-label" for="available_quantity">QUANTITY</label>  
 				  <div class="col-md-8">
-				  	<input style="margin-top:10px;margin-bottom:10px" id="quantity" name="quantity" placeholder="QUANTITY" class="form-control input-md" required="" type="number">    
+				  	<input style="margin-top:10px;margin-bottom:10px; width:300px" id="quantity1" name="quantity" placeholder="QUANTITY" class="form-control input-md" required="" type="number">    
 				  </div>
+	       		</div>
 				
 			
 	       `;
@@ -187,7 +174,6 @@
 	       // Thêm phần tử mới vào container
 	       document.getElementById('product-container').appendChild(productEntry);
 	  });
-	});
 	function updatePrice(input, targetClass, targetField) {
 	    // Lấy giá trị được nhập trong phần tử input
 	    var inputId = input.id;
@@ -218,44 +204,39 @@
 	  $(document).on('click', '#EditButton', function () {
 		// tạo ra các mảng để chứa thông tin
 		var listProduct=[];
-		var listQuantity=[];	
-		var listPrice=[];
 		var customer=$('#customerName').val();
 		var employeeId=$('#employeeID').val();
 		var billId=$('#id').val();
 		$(".product-entry").each(function name() {
 			var name=$(this).find('#productName1').val();
-			var quantity = $(this).find('#quantity').val();
+			var quantity = $(this).find('#quantity1').val();
 			var price=$(this).find('#price1').val();
-			listProduct.push(name);
-			listQuantity.push(quantity);
-			listPrice.push(price);
+			var total=quantity*price;
+			var size=$(this).find('#size1').val();
+			var color=$(this).find('#color1').val();
+			var img="";
+			var product={product:name,quantity:quantity,prince:price,size:size,color:color,image:img,total:total};
+			listProduct.push(product);
 		});
 		if(billId==""){			
-			add({customerName:customer,employeeID:employeeId,product:listProduct,quantity:listQuantity,prince:listPrice})
+			add({customerName:customer,employeeID:employeeId,items:listProduct});
 		}
 		else{
-			var bill=$('#id').val();
-			$('.productName').each(function name() {
-				var name=$(this).val();
-				listProduct.push(name);
-			});
-			$('.price').each(function name() {
-				var price=$(this).val();
-				if(price!=""){
-					listPrice.push(price);
-				}
-			});
-			$('.quantity').each(function name() {
-				var quantity=$(this).val();
-				if( quantity!=""){
-					listQuantity.push(quantity);
-				}
-			})
-			add({billId:bill,customerName:customer,employeeID:employeeId,product:listProduct,quantity:listQuantity,prince:listPrice})
-		}
-		
-	});
+			$(".product").each(function() {
+		        var name = $(this).find("input[id^='name']").val(); // Tìm input có id bắt đầu bằng 'name'
+		        var size = $(this).find("input[id^='size']").val(); // Tìm input có id bắt đầu bằng 'size'
+		        var color = $(this).find("input[id^='color']").val(); // Tìm input có id bắt đầu bằng 'color'
+		        var price = $(this).find("input[id^='price']").val(); // Tìm input có giá trị bắt đầu bằng 'x'        
+		        var quantity = $(this).find("input[id^='quantity']").val(); // Tìm input có giá trị bắt đầu bằng 'x'
+		        var img = "";
+		        var total=price*quantity;
+		        var product={product:name,quantity:quantity,prince:price,size:size,color:color,image:img,total:total};
+		        listProduct.push(product);
+			
+		});
+			add({billId:billId,customerName:customer,employeeID:employeeId,items:listProduct});
+	};
+	  });
 	function add(data) {
 		$.ajax({
 			url:'${ApiUrl}',

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import springMVC.DTO.BillDTO;
+import springMVC.DTO.CheckoutDTO;
 import springMVC.entity.BillEntity;
 import springMVC.entity.DetailBillEntity;
 import springMVC.entity.EmployeeEntity;
@@ -22,8 +23,8 @@ import springMVC.repository.EmployeeResponsitory;
 import springMVC.repository.ProductRespository;
 import springMVC.service.Interface.IBillService;
 @Service
-public class BillService  {
-	/* @Autowired
+public class BillService implements IBillService {
+	@Autowired
 	CustomerResponsitory customerResponsitory;
 	@Autowired
 	EmployeeResponsitory employeeResponsitory;
@@ -37,17 +38,16 @@ public class BillService  {
 		// tính toán tổng bill 
 		float tong=0;
 		int tongSl=0;
-		List<Float> tongTien=new ArrayList<Float>();
-		for (int i=0;i<bill.getPrince().size();i++) {
-			tongTien.add(bill.getPrince().get(i)*bill.getQuantity().get(i));
+		// tính tổng tiền của hóa đơn
+		for(int i=0;i<bill.getItems().size();i++) {
+			tong+=bill.getItems().get(i).getTotal();
 		}
-		bill.setTotal(tongTien);
-		for(int i=0;i<bill.getTotal().size();i++) {
-			tong+=bill.getTotal().get(i);
+		bill.setTotalPrice(tong);
+		// tính tông số lượng sản phẩm
+		for(int i=0;i<bill.getItems().size();i++) {
+			tongSl+=bill.getItems().get(i).getQuantity();
 		}
-		for(int i=0;i<bill.getQuantity().size();i++) {
-			tongSl+=bill.getQuantity().get(i);
-		}
+		bill.setTotalQuantity(tongSl);
 		// lấy employee từ cơ sở dữ liệu
 		EmployeeEntity employee=new EmployeeEntity();
 		employee=employeeResponsitory.findByEmployeeId(bill.getEmployeeID());
@@ -56,6 +56,8 @@ public class BillService  {
 		if(customer==null) {
 			customer=new customerEntity();
 			customer.setCustomerName(bill.getCustomerName());
+			customer.setPhoneNumber(bill.getPhone());
+			customer.setAddress(bill.getAddress());
 			customer.setStatus(1);
 		
 		}
@@ -71,16 +73,16 @@ public class BillService  {
 			billEntity.setTotalPrice(tong);
 			billEntity.setTotalQuantity(tongSl);
 			List<DetailBillEntity> list=new ArrayList<DetailBillEntity>();
-			for(int i=0;i<bill.getProduct().size();i++) {
+			for(int i=0;i<bill.getItems().size();i++) {
 				DetailBillEntity detailBill=new DetailBillEntity();
-				ProductEntity product=productResponsitory.findOneByName(bill.getProduct().get(i));
+				ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
 				detailBill.setProduct(product);
 				detailBill.setBill(billEntity);
-				detailBill.setPrice(bill.getPrince().get(i));
-				detailBill.setQuantity(bill.getQuantity().get(i));
-				detailBill.setTotal(bill.getTotal().get(i));
-				detailBill.setColor(bill.getColor().get(i));
-				detailBill.setSize(bill.getSize().get(i));
+				detailBill.setPrice(bill.getItems().get(i).getPrince());
+				detailBill.setQuantity(bill.getItems().get(i).getQuantity());
+				detailBill.setTotal(bill.getItems().get(i).getTotal());
+				detailBill.setColor(bill.getItems().get(i).getColor());
+				detailBill.setSize(bill.getItems().get(i).getSize());
 				list.add(detailBill);
 			}
 			billEntity.setList(list);
@@ -94,23 +96,31 @@ public class BillService  {
 			billEntity.setTotalPrice(tong);
 			billEntity.setTotalQuantity(tongSl);
 			List<DetailBillEntity> list=billEntity.getList();
-			for(int i=0;i<bill.getProduct().size();i++) {
+			for(int i=0;i<bill.getItems().size();i++) {
 				if(i<billEntity.getList().size()) {
+					/// lấy bill detail cũ và sau đó set lại giá trị mới
 					DetailBillEntity detailBill= billEntity.getList().get(i);
-					ProductEntity product=productResponsitory.findOneByName(bill.getProduct().get(i));
+					ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
 					detailBill.setProduct(product);
 					detailBill.setBill(billEntity);
-					detailBill.setPrice(bill.getPrince().get(i));
-					detailBill.setQuantity(bill.getQuantity().get(i));
-					detailBill.setTotal(bill.getTotal().get(i));
-				}else {
+					detailBill.setPrice(bill.getItems().get(i).getPrince());
+					detailBill.setQuantity(bill.getItems().get(i).getQuantity());
+					detailBill.setTotal(bill.getItems().get(i).getTotal());
+					detailBill.setColor(bill.getItems().get(i).getColor());
+					detailBill.setSize(bill.getItems().get(i).getSize());
+				}
+				// nếu như có một sản phẩm mới được thêm vào thì size nó sẽ lớn hơn=> thêm mới vào 
+				else {
+					// tạo mới một billdetail mới và gán cho nó giá trị mới 
 					DetailBillEntity detailBill=new DetailBillEntity();
-					ProductEntity product=productResponsitory.findOneByName(bill.getProduct().get(i));
+					ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
 					detailBill.setProduct(product);
 					detailBill.setBill(billEntity);
-					detailBill.setPrice(bill.getPrince().get(i));
-					detailBill.setQuantity(bill.getQuantity().get(i));
-					detailBill.setTotal(bill.getTotal().get(i));
+					detailBill.setPrice(bill.getItems().get(i).getPrince());
+					detailBill.setQuantity(bill.getItems().get(i).getQuantity());
+					detailBill.setTotal(bill.getItems().get(i).getTotal());
+					detailBill.setColor(bill.getItems().get(i).getColor());
+					detailBill.setSize(bill.getItems().get(i).getSize());
 					list.add(detailBill);
 				}
 				
@@ -134,15 +144,17 @@ public class BillService  {
 			bill.setDate(billEntity.get(i).getDate());
 			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
 			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
+			List<CheckoutDTO> listCheckout=new ArrayList<CheckoutDTO>();
 			for(int j=0;j<billEntity.get(i).getList().size();j++) {
 				DetailBillEntity detail =billEntity.get(i).getList().get(j);
-				bill.addProduct(detail.getProduct().getName());
-				bill.addPrice(detail.getPrice());
-				bill.addQuantity(detail.getQuantity());
-				bill.addTotal(detail.getTotal());
+				CheckoutDTO checkout=new CheckoutDTO();
+				checkout.setProduct(detail.getProduct().getName());
+				checkout.setPrince(detail.getPrice());
+				checkout.setQuantity(detail.getQuantity());
+				checkout.setTotal(detail.getTotal());
+				listCheckout.add(checkout);
 			}
-			bill.setTotalPrice(billEntity.get(i).getTotalPrice());
-			bill.setTotalQuantity(billEntity.get(i).getTotalQuantity());
+			bill.setItems(listCheckout);
 			list.add(bill);
 		}
 		return list;
@@ -158,15 +170,21 @@ public class BillService  {
 		bill.setDate(billEntity.getDate());
 		bill.setEmployeeID(billEntity.getEmployee().getEmployeeId());
 		bill.setEmployeeID(billEntity.getEmployee().getEmployeeId());
+		List<CheckoutDTO> listCheckout=new ArrayList<CheckoutDTO>();
 		for(int j=0;j<billEntity.getList().size();j++) {
 			DetailBillEntity detail =billEntity.getList().get(j);
-			bill.addProduct(detail.getProduct().getName());
-			bill.addPrice(detail.getPrice());
-			bill.addQuantity(detail.getQuantity());
-			bill.addTotal(detail.getTotal());
+			CheckoutDTO checkout=new CheckoutDTO();
+			checkout.setProduct(detail.getProduct().getName());
+			checkout.setPrince(detail.getPrice());
+			System.out.println(" prince: "+checkout.getPrince());
+			checkout.setQuantity(detail.getQuantity());
+			System.out.println(" quatity: "+checkout.getQuantity());
+			checkout.setTotal(detail.getTotal());
+			checkout.setSize(detail.getSize());
+			checkout.setColor(detail.getColor());
+			listCheckout.add(checkout);
 		}
-		bill.setTotalPrice(billEntity.getTotalPrice());
-		bill.setTotalQuantity(billEntity.getTotalQuantity());
+		bill.setItems(listCheckout);
 		return bill;
 	}
 	@Transactional
@@ -194,5 +212,5 @@ public class BillService  {
 		billResponsitory.save(billEntity);
 		return billEntity.getBillId();
 	}
-	*/
+	
 }

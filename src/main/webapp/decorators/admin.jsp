@@ -20,7 +20,7 @@
 <body>
 	<%@ include file="/common/admin/Header.jsp" %>
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row" style="display: flex;">
 			<%@ include file="/common/admin/Menu.jsp" %>
 		 	<dec:body />
 	  </div>
