@@ -15,4 +15,5 @@ public interface IProductService {
 	void delete(List<Integer> list);
 	int count();
 	void deleteProductColor( ProductDTO product);
+	List<ProductDTO> findRelatedProduct( int caterogyId);
 }

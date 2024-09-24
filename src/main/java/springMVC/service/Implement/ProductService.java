@@ -3,6 +3,9 @@ package springMVC.service.Implement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import springMVC.DTO.ProductDTO;
 import springMVC.entity.CaterogyEntity;
 import springMVC.entity.ColorEntity;
+import springMVC.entity.DetailBillEntity;
 import springMVC.entity.ImageEntity;
 import springMVC.entity.ProductEntity;
 import springMVC.entity.SizeEntity;
@@ -32,6 +36,8 @@ public class ProductService implements IProductService{
 		private SizeRespository sizeRepository;
 	@Autowired
 		private ColorRespository colorRepository;
+	 @Autowired
+	    private EntityManager entityManager;
 	@Transactional
 	@Override
 	public ProductDTO save(ProductDTO product) {
@@ -201,43 +207,7 @@ public class ProductService implements IProductService{
 					findSize=0;
 				}
 			}
-			/*if(product.getListColor().size()>0) {
-				List<ColorEntity> listColor=new ArrayList<ColorEntity>();
-				for(int i=0;i<product.getListColor().size();i++) {
-					String color=product.getListColor().get(i);
-					ColorEntity colorEntity=colorRepository.findBycolorName(color);
-					if(colorEntity==null) {
-						// nếu màu này chưa có trong cơ sở dữ liệu 
-						colorEntity=new ColorEntity();
-						colorEntity.setColorName(color);
-						colorEntity.getListProduct().add(oldProduct);
-						colorRepository.save(colorEntity);				
-					}
-					else {
-						colorEntity.getListProduct().add(oldProduct);
-					}
-					listColor.add(colorEntity);
-				}
-				oldProduct.setListColor(listColor);
-			}
-			if(product.getListSize().size()>0) {
-				List<SizeEntity> listSize=new ArrayList<SizeEntity>();
-				for(int i=0;i<product.getListSize().size();i++) {
-					String size=product.getListSize().get(i);
-					System.out.println(" size: "+size);
-					SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
-					if(sizeEntity==null) {
-						sizeEntity=new SizeEntity();
-						sizeEntity.setSizeName(size);
-						sizeEntity.getListProduct().add(oldProduct);
-						sizeRepository.save(sizeEntity);
-					}else {
-						sizeEntity.getListProduct().add(oldProduct);
-					}
-					listSize.add(sizeEntity);
-				}
-				oldProduct.setListSize(listSize);
-			} */
+			
 			java.util.List<ImageEntity> listImage =new ArrayList<ImageEntity>();
 			if(product.getImage()!=null) {
 				oldProduct.setImage(product.getImage());
@@ -274,6 +244,7 @@ public class ProductService implements IProductService{
 			productDTO.setImage(list.get(i).getImage());
 			productDTO.setPrince(list.get(i).getPrince());
 			productDTO.setQuantity(list.get(i).getQuantity());
+			productDTO.setCategoryId(list.get(i).getCategory().getCateroryId());
 			List<String> listColor=new ArrayList<String>();
 			for(int j=0;j<list.get(i).getListColor().size();j++) {
 				String color=list.get(i).getListColor().get(j).getColorName();
@@ -399,7 +370,46 @@ public class ProductService implements IProductService{
 			
 		}
 	}
-
+	@Transactional
+	@Override
+	public List<ProductDTO> findRelatedProduct(int caterogyId) {
+		List<Integer> list= productRepository.findRelatedProduct(caterogyId);
+		List<ProductDTO> listProductDTO=new  ArrayList<ProductDTO>();
+		// chuyển từ entity sang dto
+		for( int i=0;i<list.size();i++)
+		{
+			ProductEntity productEntity=productRepository.findOneByProductId(list.get(i));
+			ProductDTO DTO=new ProductDTO();
+			DTO.setProductId(productEntity.getProductId());
+			DTO.setProductName(productEntity.getName());
+			DTO.setCategoryId(productEntity.getCategory().getCateroryId());
+			DTO.setCategoryName(productEntity.getCategory().getCategoryName());
+			DTO.setImage(productEntity.getImage());
+			List<String> listImage=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListImage().size();j++) {
+				String image=productEntity.getListImage().get(j).getImgae();
+				listImage.add(image);
+			}
+			List<String> listColor=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListColor().size();j++) {
+				String color=productEntity.getListColor().get(j).getColorName();
+				listColor.add(color);
+			}
+			List<String> listSize=new ArrayList<String>();
+			for( int j=0;j<productEntity.getListSize().size();j++) {
+				String size=productEntity.getListSize().get(j).getSizeName();
+				listSize.add(size);
+			}
+			DTO.setListColor(listColor);
+			DTO.setListSize(listSize);
+			DTO.setListImage(listImage);
+			DTO.setDescription(productEntity.getDescription());
+			DTO.setPrince(productEntity.getPrince());
+			DTO.setQuantity(productEntity.getQuantity());
+			listProductDTO.add(DTO);
+		}
+		return listProductDTO;
+	}
 	
 	
 	

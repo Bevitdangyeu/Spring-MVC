@@ -33,12 +33,6 @@ public class CheckoutController {
 			bill.getItems().get(i).setTotal(tong);		
 		}
 		bill.setTotalPrice(totalBill);	
-		for( int i=0;i<bill.getItems().size();i++) {
-			System.out.println(" name: "+bill.getItems().get(i).getProduct());
-			System.out.println(" size: "+bill.getItems().get(i).getSize());
-			System.out.println(" color: "+bill.getItems().get(i).getColor());
-			System.out.println(" img: "+bill.getItems().get(i).getImage());
-		}
 		HttpSession session=request.getSession();
 		session.setAttribute("checkout", bill);
 		return "Checkout";

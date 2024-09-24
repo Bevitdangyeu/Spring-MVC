@@ -36,10 +36,15 @@
 						    		<td class="product-remove" ><button id="deleteProduct${status.index}" style="background-color: transparent; border: none;width:25px;height:10px"><span style="color:red;font-size: 30px;" class="ion-ios-close"></span></button></td>
 							   <!--      <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td> -->
 							        <td class="image-prod">
-							        	<input type="hidden" value="${product.product.image }" id="img${status.index}" > <img  src="${product.product.image}" style="width:80px;height:100px; object-fit: cover;" ></input>
+							        	<input type="hidden" value="${product.product.image }" id="img${status.index}" > <img  src="${product.product.image}" style="width:80px;height:100px; object-fit: cover;border-radius:10px;border:2px dashed #DDDDDD" ></input>
 							        </td>
 							        <td class="product-name">
-							        	<input type="text" id="productName${status.index}"value="${product.product.productName }" style="text-align:center;border-radius:10px;font-weight: bold;width:150px;height:45px;border:0px" readonly>
+							        	<c:url var="detail" value="/public/product/detail">
+			    							<c:param name="id" value="${product.product.productId }"></c:param>
+			    							<c:param name="caterogyId" value="${product.product.categoryId }"></c:param>
+			    						</c:url>
+    									<a href='${ detail}' style="text-align:center;border-radius:10px;font-weight: bold;width:150px;height:45px;border:0px">${product.product.productName }</a>
+							        	<input type="hidden" id="productName${status.index}"value="${product.product.productName }" style="text-align:center;border-radius:10px;font-weight: bold;width:150px;height:45px;border:0px" readonly> 
 							        </td>
 							        <td class="Size">
 							        	<input type="text" id="size${status.index}" value="${product.size }" style="text-align:center;border-radius:10px;height:45px;border:0px" readonly>
@@ -69,26 +74,7 @@
     		</div>
     		<div class="row justify-content-start">
     			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
-    				<!-- <div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
-    					<p class="d-flex">
-    						<span>Subtotal</span>
-    						<span>$20.60</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Delivery</span>
-    						<span>$0.00</span>
-    					</p>
-    					<p class="d-flex">
-    						<span>Discount</span>
-    						<span>$3.00</span>
-    					</p>
-    					<hr>
-    					<p class="d-flex total-price">
-    						<span>Total</span>
-    						<span>$17.60</span>
-    					</p>
-    				</div> -->
+    				
     				<p class="text-center"><a id="checkout" href="#" class="btn btn-primary py-3 px-3">Proceed to Checkout</a></p>
     			</div>
     		</div>

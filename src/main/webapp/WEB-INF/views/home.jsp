@@ -111,6 +111,7 @@
     						<h3>
     						<c:url var="detail" value="/public/product/detail">
     							<c:param name="id" value="${item.productId }"></c:param>
+    							<c:param name="caterogyId" value="${item.categoryId }"></c:param>
     						</c:url>
     						<a href='${ detail}'>${item.productName }</a>
     						</h3>

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
          <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
          <c:url var="ApiUrl" value="/api/bill/add"></c:url>
+          <c:url var="NewUrl" value="/public/Cart/view"></c:url>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,6 +90,7 @@
 	    				<div style="text-align: right; ">
 					    <p style="width: 20%;display: inline-block;">
 					      <a class="btn btn-primary" id="checkout" href="#" >ĐẶT HÀNG</a>
+					     <%--  '<c:url value="/public/Cart/view"/>' --%>
 					    </p>
 					</div>
 	    				
@@ -100,7 +102,8 @@
 </section>
 <script type="text/javascript">
 
-	$("#checkout").click(function name() {
+	$("#checkout").click(function (event) {
+		event.preventDefault();
 		var listProduct=[];
 		var employee=1;
 		var customerName=$('#customerName').val();
@@ -129,11 +132,11 @@
 			contentType :'application/json',
 			dataType: 'json',
 			success: function (result) {
-				window.location.href=window.location.href;
+				window.location.href='${NewUrl}'
 			},
 			error: function (error) {
 				//showToast("Edit request failed","danger");
-				window.location.href=window.location.href;
+				window.location.href='${NewUrl}'
 				console.log(error);
 			}
 		});

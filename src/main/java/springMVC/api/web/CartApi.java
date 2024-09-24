@@ -29,6 +29,7 @@ public class CartApi {
 	@RequestMapping(value="/add",method = RequestMethod.POST)
 	public void add(@RequestBody ProductCartDTO product) {
 		CartDTO cart=new CartDTO();
+		// tìm thông tin của sản phẩm đó thông qua ProductCartDTO được gửi từ client
 		ProductDTO productDto=productService.findOne(product.getProductId());
 		product.setProduct(productDto);
 		// lấy session
