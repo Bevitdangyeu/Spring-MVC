@@ -176,13 +176,13 @@ public class BillService implements IBillService {
 			CheckoutDTO checkout=new CheckoutDTO();
 			checkout.setProduct(detail.getProduct().getName());
 			checkout.setPrince(detail.getPrice());
-			System.out.println(" prince: "+checkout.getPrince());
 			checkout.setQuantity(detail.getQuantity());
-			System.out.println(" quatity: "+checkout.getQuantity());
 			checkout.setTotal(detail.getTotal());
 			checkout.setSize(detail.getSize());
 			checkout.setColor(detail.getColor());
+			checkout.setImage(detail.getProduct().getImage());
 			listCheckout.add(checkout);
+			
 		}
 		bill.setItems(listCheckout);
 		return bill;

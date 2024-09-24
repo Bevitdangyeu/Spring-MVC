@@ -4,6 +4,7 @@
     pageEncoding="UTF-8"%>
     <c:url var="ApiUrl" value="/api/product/add"/>
     <c:url var="NewUrl" value="/admin1/product/edit"/>
+    <c:url var="ApiDeleteColor" value="/api/color/delete"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -186,11 +187,15 @@
 		<c:if test="${not empty product.productId }">
 			<div class="form-group row">
 			  <label class="col-md-4 control-label" for="singlebutton">COLOR
+			  <button id="btn_delete" type="button" style=" border: none; cursor: pointer;background: none;">
+					<span><i style="color:#0099CC" class="fa fa-trash" aria-hidden="true"></i></span>
+			  </button>
 			   </label>
 			    <div class="col-md-8">
-			   		<div class="color">
-			   			<c:forEach var="color" items="${product.listColor }">
-			   			  <input style="margin-bottom:10px"class="form-control input-md" placeholder="Nhập màu sắc" type="text" id="color" name="color" value="${color }">	
+			   		<div class="colorList" style="display: flex; gap: 10px;">
+			   			<c:forEach var="color" items="${product.listColor }" varStatus="status">
+			   			  <input type="checkbox" id="checkbox${status.index }" class="color-checkbox" value="${color }" >
+			   			  <input id="color${status.index }" placeholder="Nhập màu sắc" type="text" name="color" value="${color }" style="margin-bottom:10px"class="form-control input-md" >	
 			   			</c:forEach>
 			   		</div>
 				</div>
@@ -313,10 +318,10 @@
 	  		    formData.append('listImage', fileList[i]);
 	  		}
 	  		/* lấy dữ liệu của color */
-	  		$(".product-entry").each(function name() {
+	  		 $(".product-entry").each(function name() {
 	  			var a=$(this).find('#color').val();
 	  			color.push(a);
-			});
+			}); 
 	  	/* 	lấy dữ liệu của size */
 	  		 var sizeChecked = $('.size-checkbox:checked').map(function() {
            	 return this.value;
@@ -336,10 +341,10 @@
 	  	  			add(formData)
 	  		}
 	  		else{
-	  			$('.color').each(function name() {
-		  		  	var a=$(this).find('#color').val();
-		  				color.push(a);
-					})
+	  			$('.colorList').find('input[name="color"]').each(function() {
+	  			    var a = $(this).val();
+	  			    color.push(a);
+	  			});
 	  			var jsonData = {
 	  					productId:$('#productId').val(),
 	  		  			productName: productName,
@@ -366,7 +371,7 @@
 				success: function (result) {
 				//	showToast("Add request successful","success");
 					 alert('Sản phẩm được thêm thành công');
-					window.location.href="${NewUrl}";
+					window.location.href= window.location.href;;
 					console.log(result);
 				},
 				error: function name(error) {
@@ -375,8 +380,31 @@
 				}
 			});
 		};
-		
-	
+	/* 	hàm xóa color của sản phẩm */
+	$('#btn_delete').click(function name() {
+		var id=$(this).attr('id').replace('btn_delete', '');
+		var color_delete =[];
+		color_delete = $('.color-checkbox:checked').map(function() {
+           	 return this.value;
+        	 }).get();
+		var productId=$('#productId').val();
+		delete_fun({productId:productId,listColor:color_delete});
+	});
+	 function delete_fun(data){
+	   $.ajax({
+		   url:'${ApiDeleteColor}',
+			type:'DELETE',
+			data: JSON.stringify(data),
+			contentType :'application/json',
+			success: function (result) {
+				window.location.href= window.location.href;;
+			},
+			error: function (error) {
+				//showToast("Edit request failed","danger");
+				console.log(error);
+			}
+		}); 
+   };
 </script>
 </body>
 

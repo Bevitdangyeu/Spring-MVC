@@ -66,4 +66,9 @@ public class ProductAPI {
 	public void delete(@RequestBody ProductDTO productDelete) {
 		product.delete(productDelete.getIds());
 	}
+	@DeleteMapping("color/delete")
+	public void deleteColor(@RequestBody ProductDTO productDelete) {
+		System.out.println(" id "+ productDelete.getProductId());
+		product.deleteProductColor(productDelete);
+	}
 }

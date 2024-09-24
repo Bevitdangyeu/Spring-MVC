@@ -27,6 +27,8 @@ public class DetailBillEntity {
 	private String color;
 	@Column(name="size")
 	private String size;
+	@Column(name="image")
+	private String img;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="billid")
 	private BillEntity bill;
@@ -80,6 +82,12 @@ public class DetailBillEntity {
 	}
 	public void setSize(String size) {
 		this.size = size;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
 	}
 	
 }

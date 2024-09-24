@@ -95,55 +95,111 @@ public class ProductService implements IProductService{
 			oldProduct.setStatus(1);
 			oldProduct.setDescription(product.getDescription());	
 			// nếu như danh sách truyền vào có  color thì mới thực hiện
+			// xử lí phần thay đổi color
 			int findColor=0;
-			for(int i=0;i<product.getListColor().size();i++) {
-				for(int j=0;j<oldProduct.getListColor().size();j++) {
-					if(product.getListColor().get(i).equals(oldProduct.getListColor().get(j).getColorName())) {
-						findColor=1;
-						break;
+			// nếu danh sách color mới nhiều hơn cũ=>thêm mới
+			if(product.getListColor().size()>=oldProduct.getListColor().size()) {	
+				for(int i=0;i<product.getListColor().size();i++) {
+					for(int j=0;j<oldProduct.getListColor().size();j++) {
+						if(product.getListColor().get(i).equals(oldProduct.getListColor().get(j).getColorName())) {
+							findColor=1;
+							break;
+						}
 					}
+					if(findColor==0) {
+						String color=product.getListColor().get(i);
+						ColorEntity colorEntity=colorRepository.findBycolorName(color);
+						if(colorEntity==null) {
+							// nếu màu này chưa có trong cơ sở dữ liệu 
+							colorEntity=new ColorEntity();
+							colorEntity.setColorName(color);
+							colorEntity.getListProduct().add(oldProduct);
+							colorRepository.save(colorEntity);				
+						}
+						else {
+							colorEntity.getListProduct().add(oldProduct);
+						}
+						oldProduct.getListColor().add(colorEntity);
+					}
+					findColor=0;
 				}
-				if(findColor==0) {
-					String color=product.getListColor().get(i);
-					ColorEntity colorEntity=colorRepository.findBycolorName(color);
-					if(colorEntity==null) {
-						// nếu màu này chưa có trong cơ sở dữ liệu 
-						colorEntity=new ColorEntity();
-						colorEntity.setColorName(color);
-						colorEntity.getListProduct().add(oldProduct);
-						colorRepository.save(colorEntity);				
-					}
-					else {
-						colorEntity.getListProduct().add(oldProduct);
-					}
-					oldProduct.getListColor().add(colorEntity);
-				}
-				findColor=0;
 			}
+			// nếu danh sách color mới ít hơn cũ=> xóa color
+			if(product.getListColor().size()<oldProduct.getListColor().size()) {
+				for(int i=0;i<oldProduct.getListColor().size();i++) {
+					for(int j=0;j<product.getListColor().size();j++) {
+						// so sánh từng cái color cũ với color mới nếu color cũ không tìm thấy trong danh sách color mới => xóa color đó
+						if(oldProduct.getListColor().get(i).getColorName().equals(product.getListColor().get(j))) {
+							findColor=1;
+							break;
+						}
+					}
+					if(findColor==0) {
+						// lấy lên color sẽ xóa từ cơ sở dữ liệu
+						String color=oldProduct.getListColor().get(i).getColorName();
+						ColorEntity colorEntity=colorRepository.findBycolorName(color);
+						// xóa product đó ra khỏi danh sach product của color đó
+						colorEntity.getListProduct().remove(oldProduct);
+						// xóa color đó ra khỏi danh sach color của product đó
+						oldProduct.getListColor().remove(colorEntity);
+						
+					}
+					findColor=0;
+				}
+			}
+			
+			
+			/* Xử lí phần thay đổi size */
 			int findSize=0;
-			for(int i=0;i<product.getListSize().size();i++) {
-				for(int j=0;j<oldProduct.getListSize().size();j++) {
-					if(product.getListSize().get(i).equals(oldProduct.getListSize().get(j).getSizeName())) {
-						findSize=1;
-						break;
+			// nếu như danh sách size vừa thêm lớn hơn danh sách size cũ=> thêm mới size
+			if(product.getListSize().size()>=oldProduct.getListSize().size()) {
+				for(int i=0;i<product.getListSize().size();i++) { 
+					for(int j=0;j<oldProduct.getListSize().size();j++) {
+						if(product.getListSize().get(i).equals(oldProduct.getListSize().get(j).getSizeName())) {
+							findSize=1;
+							break;
+						}
+						
 					}
+					if(findSize==0) {
+						String size=product.getListSize().get(i);
+						SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
+						if(sizeEntity==null) {
+							// nếu màu này chưa có trong cơ sở dữ liệu 
+							sizeEntity=new SizeEntity();
+							sizeEntity.setSizeName(size);
+							sizeEntity.getListProduct().add(oldProduct);
+							sizeRepository.save(sizeEntity);				
+						}
+						else {
+							sizeEntity.getListProduct().add(oldProduct);
+						}
+						oldProduct.getListSize().add(sizeEntity);
+					}
+					findSize=0;
 				}
-				if(findSize==0) {
-					String size=product.getListSize().get(i);
-					SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
-					if(sizeEntity==null) {
-						// nếu màu này chưa có trong cơ sở dữ liệu 
-						sizeEntity=new SizeEntity();
-						sizeEntity.setSizeName(size);
-						sizeEntity.getListProduct().add(oldProduct);
-						sizeRepository.save(sizeEntity);				
+			}
+			// nếu size mới ít hơn size cũ => thực hiện xóa size
+			if(product.getListSize().size()<=oldProduct.getListSize().size()) {
+				for(int i=0;i<oldProduct.getListSize().size();i++) { 
+					for(int j=0;j<product.getListSize().size();j++) {
+						// oldProduct.getListSize().get(i).getSizeName().equals(product.getListSize().get(j))
+						if(oldProduct.getListSize().get(i).getSizeName().equals(product.getListSize().get(j))) {
+							findSize=1;
+							break;
+						}
+						
 					}
-					else {
-						sizeEntity.getListProduct().add(oldProduct);
+					// nếu như không tìm thấy => xóa size này( xóa size ra khỏi danh sách size của product và xóa product ra khỏi list product của size
+					if(findSize==0) {
+						// lấy size đó lên từ cơ sở dữ liệu
+						String size=oldProduct.getListSize().get(i).getSizeName();
+						SizeEntity sizeEntity=sizeRepository.findBySizeName(size);
+						sizeEntity.getListProduct().remove(oldProduct);
+						oldProduct.getListSize().remove(sizeEntity);
 					}
-					oldProduct.getListSize().add(sizeEntity);
+					findSize=0;
 				}
-				findSize=0;
 			}
 			/*if(product.getListColor().size()>0) {
 				List<ColorEntity> listColor=new ArrayList<ColorEntity>();
@@ -330,6 +386,18 @@ public class ProductService implements IProductService{
 		}
 		
 		return listProductDTO;
+	}
+	@Transactional
+	@Override
+	public void deleteProductColor(ProductDTO product) {
+		// lấy product đó lên từ cơ sở dữ liệu
+		ProductEntity productEntity = productRepository.findOneByProductId(product.getProductId());
+		for( int i=0;i<product.getListColor().size();i++) {
+				ColorEntity color=colorRepository.findBycolorName(product.getListColor().get(i));
+				productEntity.getListColor().remove(color);
+				color.getListProduct().remove(productEntity);
+			
+		}
 	}
 
 	

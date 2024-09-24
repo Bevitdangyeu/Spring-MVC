@@ -14,4 +14,5 @@ public interface IProductService {
 	ProductDTO findOne ( int id);
 	void delete(List<Integer> list);
 	int count();
+	void deleteProductColor( ProductDTO product);
 }

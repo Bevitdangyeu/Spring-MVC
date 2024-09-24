@@ -56,8 +56,6 @@ public class ProductController {
 		// chỉnh sửa-> lấy đối tượng lên để chỉnh sửa 
 		if(id!=null) {
 			ProductDTO product=productService.findOne(id);
-			System.out.println(" image: "+product.getImage());
-			System.out.println(" listimage: "+product.getListImage().get(0));
 			modelAndView.addObject("product", product);
 		}
 	   
