@@ -16,4 +16,6 @@ public interface IProductService {
 	int count();
 	void deleteProductColor( ProductDTO product);
 	List<ProductDTO> findRelatedProduct( int caterogyId);
+	List<ProductDTO> searchByName(String name);
+	List<ProductDTO> filter(float price);
 }

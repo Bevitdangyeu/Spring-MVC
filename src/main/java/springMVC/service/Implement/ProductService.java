@@ -410,6 +410,86 @@ public class ProductService implements IProductService{
 		}
 		return listProductDTO;
 	}
+	@Transactional
+	@Override
+	public List<ProductDTO> searchByName(String name) {
+		List<ProductEntity> list=productRepository.findByName(name);
+		System.out.println(" size "+list.size());
+		List<ProductDTO> listProductDTO=new ArrayList<ProductDTO>();
+		// chuyển đổi list này thanh dto
+		for( int i=0;i<list.size();i++) {
+			ProductEntity productEntity=list.get(i);
+			ProductDTO DTO=new ProductDTO();
+			DTO.setProductId(productEntity.getProductId());
+			DTO.setProductName(productEntity.getName());
+			DTO.setCategoryId(productEntity.getCategory().getCateroryId());
+			DTO.setCategoryName(productEntity.getCategory().getCategoryName());
+			DTO.setImage(productEntity.getImage());
+			List<String> listImage=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListImage().size();j++) {
+				String image=productEntity.getListImage().get(j).getImgae();
+				listImage.add(image);
+			}
+			List<String> listColor=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListColor().size();j++) {
+				String color=productEntity.getListColor().get(j).getColorName();
+				listColor.add(color);
+			}
+			List<String> listSize=new ArrayList<String>();
+			for( int j=0;j<productEntity.getListSize().size();j++) {
+				String size=productEntity.getListSize().get(j).getSizeName();
+				listSize.add(size);
+			}
+			DTO.setListColor(listColor);
+			DTO.setListSize(listSize);
+			DTO.setListImage(listImage);
+			DTO.setDescription(productEntity.getDescription());
+			DTO.setPrince(productEntity.getPrince());
+			DTO.setQuantity(productEntity.getQuantity());
+			listProductDTO.add(DTO);
+		}
+		return listProductDTO;
+	}
+	@Transactional
+	@Override
+	public List<ProductDTO> filter(float price) {
+		List<ProductEntity> list=productRepository.filter(price);
+		System.out.println(" size "+list.size());
+		List<ProductDTO> listProductDTO=new ArrayList<ProductDTO>();
+		// chuyển đổi list này thanh dto
+		for( int i=0;i<list.size();i++) {
+			ProductEntity productEntity=list.get(i);
+			ProductDTO DTO=new ProductDTO();
+			DTO.setProductId(productEntity.getProductId());
+			DTO.setProductName(productEntity.getName());
+			DTO.setCategoryId(productEntity.getCategory().getCateroryId());
+			DTO.setCategoryName(productEntity.getCategory().getCategoryName());
+			DTO.setImage(productEntity.getImage());
+			List<String> listImage=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListImage().size();j++) {
+				String image=productEntity.getListImage().get(j).getImgae();
+				listImage.add(image);
+			}
+			List<String> listColor=new ArrayList<String>();
+			for(int j=0;j<productEntity.getListColor().size();j++) {
+				String color=productEntity.getListColor().get(j).getColorName();
+				listColor.add(color);
+			}
+			List<String> listSize=new ArrayList<String>();
+			for( int j=0;j<productEntity.getListSize().size();j++) {
+				String size=productEntity.getListSize().get(j).getSizeName();
+				listSize.add(size);
+			}
+			DTO.setListColor(listColor);
+			DTO.setListSize(listSize);
+			DTO.setListImage(listImage);
+			DTO.setDescription(productEntity.getDescription());
+			DTO.setPrince(productEntity.getPrince());
+			DTO.setQuantity(productEntity.getQuantity());
+			listProductDTO.add(DTO);
+		}
+		return listProductDTO;
+	}
 	
 	
 	

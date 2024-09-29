@@ -7,7 +7,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<style type="text/css">
+	.hideAndShow {
+	  min-width: 200px;  /* Chiều rộng tối thiểu */
+  max-width: 400px;  /* Chiều rộng tối đa */
+  width: 50%;  
+	  display: flex; /* Tương đương với d-flex */
+	  animation: fadeInUp 0.8s ease-in-out; /* Thêm animation nếu cần */
+	}
+	
+	
+</style>
 </head>
 	<body class="goto-here">
 
@@ -17,7 +27,7 @@
 	      	<div class="overlay"></div>
 	        <div class="container-fluid p-0">
 	          <div class="row d-md-flex no-gutters slider-text align-items-center justify-content-end" data-scrollax-parent="true">
-	          	<img class="one-third order-md-last img-fluid" src="images/bg_1.png" alt="">
+	          	<img class="one-third order-md-last img-fluid" src="" alt="">
 		          <div class="one-forth d-flex align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
 		          	<div class="text">
 		          		<span class="subheading">#New Arrival</span>
@@ -35,61 +45,75 @@
 	    </div>
     </section>
 
-    <section class="ftco-section ftco-no-pt ftco-no-pb">
-			<div class="container">
-				<div class="row no-gutters ftco-services">
-          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services p-4 py-md-5">
-              <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-bag"></span>
-              </div>
-              <div class="media-body">
-                <h3 class="heading">Free Shipping</h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              </div>
-            </div>      
-          </div>
-          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services p-4 py-md-5">
-              <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-customer-service"></span>
-              </div>
-              <div class="media-body">
-                <h3 class="heading">Support Customer</h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              </div>
-            </div>    
-          </div>
-          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services p-4 py-md-5">
-              <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-payment-security"></span>
-              </div>
-              <div class="media-body">
-                <h3 class="heading">Secure Payments</h3>
-                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              </div>
-            </div>      
-          </div>
-        </div>
-			</div>
-		</section>
+    
 
     <section class="ftco-section bg-light">
     	<div class="container">
-				<div class="row justify-content-center mb-3 pb-3">
-          <div class="col-md-12 heading-section text-center ftco-animate">
-            <h2 class="mb-4">New Shoes Arrival</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
-          </div>
-        </div>   		
-    	</div>
+	    <div class="row justify-content-center mb-3 pb-3">
+	        <div class="col-md-12 heading-section text-center ftco-animate">
+	            <h2 class="mb-4">New Product Arrival</h2>
+	        </div>
+	        <nav style="width:1000px">
+	            <ul style="justify-content: flex-end; align-items: center; display: flex;">
+	                <li class="nav-item dropdown" style=" margin-left: 15px;">
+	                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                        Tên <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+	                    </a>
+	                    <div class="dropdown-menu" style="position: absolute;" aria-labelledby="dropdown04">
+	                        <a class="dropdown-item" href="shop.html"><i class="fa fa-sort-alpha-asc" aria-hidden="true"></i> A->Z</a>
+	                        <a class="dropdown-item" href="product-single.html"><i class="fa fa-sort-alpha-desc" aria-hidden="true"></i> Z->A</a>
+	                    </div>
+	                </li>
+	                <li class="nav-item dropdown" style=" margin-left: 15px;">
+	                    <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                        Giá <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+	                    </a>
+	                    <div class="dropdown-menu" style="position: absolute;" aria-labelledby="dropdown05">
+	                        <a class="dropdown-item" href="shop.html"><i class="fa fa-sort-numeric-asc" aria-hidden="true"></i> Thấp đến cao</a>
+	                        <a class="dropdown-item" href="shop.html"><i class="fa fa-sort-numeric-desc" aria-hidden="true"></i> Cao đến thấp</a>
+	                            <span>
+	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="2" style="margin:10px">
+	                            </span>
+	                            Dưới 200.000đ
+	                        	 <span>
+	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="5" style="margin:10px">
+	                            </span>
+	                            Dưới 500.000đ
+	                             <span>
+	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="1000000" style="margin:10px">
+	                            </span>
+	                            Dưới 1.000.000đ
+	                    </div>
+	                </li>
+	                 <li class="nav-item dropdown" style=" margin-left: 15px;">
+	                    <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                        Tên <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+	                    </a>
+	                    <div class="dropdown-menu" style="position: absolute;" aria-labelledby="dropdown06">
+	                  		<c:forEach var="item" items="${listCategory }">
+	                  		   <span>
+	                                <input type="checkbox" id="${item.categoryName }" class="product-checkbox" value="${item.categoryName }" style="margin:10px">
+	                            </span>
+	                            ${item.categoryName }
+	                            <br>
+	                  		</c:forEach>
+	                      
+	                    </div>
+	                </li>
+	            </ul>
+	        </nav>
+    </div>
+</div>
     	<div class="container">
-    		<div class="row">
+    		
+    		<div class="row" >
     			<c:forEach var="item" items="${list }" varStatus="status">
-    				<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template">
+    				<div class="hideAndShow" style="width:280px">
+    				<div class=" product col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" style="min-width:280px;max-height:500px;min-height:499px" >
+    				
+    				<div class=" d-flex flex-column">
+    					
+    						<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template" style="height:300px;width:300px">
     						<span class="status">50% Off</span>
     						<div class="overlay"></div>
     					</a>
@@ -115,8 +139,15 @@
     						</c:url>
     						<a href='${ detail}'>${item.productName }</a>
     						</h3>
+    						<c:set var="dataPrice" value="" />
+								<c:if test="${item.prince < 200000}">
+								    <c:set var="dataPrice" value="2" />
+								</c:if>
+								<c:if test="${item.prince < 500000 and item.prince > 200000}">
+								    <c:set var="dataPrice" value="5" />
+								</c:if>
   							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">${item.prince }</span></p>
+	    						<p class="price"><span class="mr-2 price-dc">$120.00</span><span data-price="${dataPrice }" class="price-sale">${item.prince }</span></p>
 	    					</div>
 	    					<p class="bottom-area d-flex px-6">	
 	    						<div class="btn-group custom-dropdown">
@@ -169,10 +200,13 @@
     							<a href="#" class="buy-now text-center py-2">Buy now<span><i class="ion-ios-cart ml-1"></i></span></a> -->
 	    						</p>
     					</div>
-    				</div>
+    					</div>
+    				
     			</div>
     			<input type="hidden" id="product${status.index }" name="product" value="${item.productId  }">
+    			</div>
     			</c:forEach>
+    			
     		</div>
     	</div>
     </section>
@@ -332,9 +366,70 @@
         </div>
       </div>
     </section>
-
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+			<div class="container">
+				<div class="row no-gutters ftco-services">
+          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services p-4 py-md-5">
+              <div class="icon d-flex justify-content-center align-items-center mb-4">
+            		<span class="flaticon-bag"></span>
+              </div>
+              <div class="media-body">
+                <h3 class="heading">Free Shipping</h3>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              </div>
+            </div>      
+          </div>
+          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services p-4 py-md-5">
+              <div class="icon d-flex justify-content-center align-items-center mb-4">
+            		<span class="flaticon-customer-service"></span>
+              </div>
+              <div class="media-body">
+                <h3 class="heading">Support Customer</h3>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              </div>
+            </div>    
+          </div>
+          <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
+            <div class="media block-6 services p-4 py-md-5">
+              <div class="icon d-flex justify-content-center align-items-center mb-4">
+            		<span class="flaticon-payment-security"></span>
+              </div>
+              <div class="media-body">
+                <h3 class="heading">Secure Payments</h3>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              </div>
+            </div>      
+          </div>
+        </div>
+			</div>
+		</section>
 
 <script type="text/javascript">
+$(document).ready(function() {
+    $('.product-checkbox').on('change', function() {
+        var selectedCategories = [];
+        
+        // Lấy các checkbox đã được chọn
+        $('.product-checkbox:checked').each(function() {
+            selectedCategories.push($(this).val());
+        });
+        
+        // Ẩn hoặc hiện các sản phẩm dựa trên category
+        $('.hideAndShow').each(function() {
+            var productCategory = $(this).find('.price-sale').data('price');
+            console.log(productCategory);
+            if (selectedCategories.length === 0 || selectedCategories.includes(productCategory.toString())) {
+            	console.log("vào show");
+                $(this).show();
+            } else {
+            	console.log("vào hide");
+            	$(this).hide();
+            }
+        });
+    });
+});
 $(document).ready(function() {
     $('.dropdown-menu ').click(function() {
     	event.stopPropagation();

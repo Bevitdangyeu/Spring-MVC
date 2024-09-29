@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import springMVC.DTO.ProductDTO;
 import springMVC.entity.DetailBillEntity;
 import springMVC.entity.ProductEntity;
 import springMVC.entity.UserAndPassEntity;
@@ -19,4 +20,8 @@ public interface ProductRespository extends JpaRepository<ProductEntity, Integer
 			+ " FROM DetailBillEntity d WHERE d.product.productId IN (SELECT p.productId FROM ProductEntity p WHERE p.category.cateroryId = :categoryId) "
 			+ " GROUP BY  d.product.productId ORDER BY SUM(d.quantity) DESC")
 	List<Integer> findRelatedProduct( @Param("categoryId") int categoryId);
+	@Query("select p from ProductEntity p where p.name like %:name% ")
+	List<ProductEntity> findByName(@Param("name")String name );
+	@Query("select p from ProductEntity p where p.prince < :price ")
+	List<ProductEntity> filter(@Param("price") float price );
 }
