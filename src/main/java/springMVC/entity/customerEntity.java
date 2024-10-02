@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,6 +32,9 @@ public class customerEntity {
 	private int status;
 	@OneToMany(mappedBy = "customer")
 	private List<BillEntity> listBill=new ArrayList<BillEntity>();
+	@OneToOne (fetch = FetchType.EAGER)
+	@JoinColumn(name="userId")
+	private UserAndPassEntity userId;
 	public long getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -62,6 +67,12 @@ public class customerEntity {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public UserAndPassEntity getUserId() {
+		return userId;
+	}
+	public void setUserId(UserAndPassEntity userId) {
+		this.userId = userId;
 	}
 	
 }

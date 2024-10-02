@@ -47,7 +47,7 @@ public class BillAPI {
 							&& prooduct.getSize().equals(billCheckout.getSize()))
 					{
 						// nếu như trùng thì remove
-						System.out.println("xoa sp "+ prooduct.getProductId());
+						
 						cart.getList().remove(prooduct);
 					}
 						
@@ -62,6 +62,11 @@ public class BillAPI {
 		int result= billService.delete(bill);
 		return result;
 	}
-	
+	@PostMapping("/updateStatus")
+	public void update(@RequestBody BillDTO bill) {
+		System.out.print("billid: "+bill.getBillId());
+		System.out.print("status: "+bill.getStatus());
+		billService.updateStatus(bill);
+	}
 }
 

@@ -50,5 +50,14 @@ public class BillController {
 		
 		return mav;
 	}
+	@RequestMapping(value="/approveOrder", method = RequestMethod.GET)
+	public ModelAndView approveOrder() {
+		ModelAndView mav=new ModelAndView("approveOrder");
+		List<BillDTO> list=billService.findApproveOrder("Chờ xác nhận");
+		System.out.println(" size: "+list.size());
+		mav.addObject("list", list);
+		return mav;
+		
+	}
 	
 }

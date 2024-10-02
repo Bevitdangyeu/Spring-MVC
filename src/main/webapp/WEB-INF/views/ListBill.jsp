@@ -30,7 +30,7 @@
 						        <th>Total</th>
 						        <th>ToTal Bill</th>
 						        <th>ToTal Quantity</th>
-						       
+						       	<th>Status</th>
 						      </tr>
 						 </thead>
 						    <tbody>
@@ -89,6 +89,11 @@
 							        <td class="totalQuantity">
 							        	<div class="input-group mb-1">
 						             	<input type="number" name="totalQuantity" id="totalQuantity${status.index}"class="quantity form-control input-number" value="${item.totalQuantity }" >
+						          	</div>
+						          </td>
+						           <td class="status">
+							        	<div class="input-group mb-1">
+						             	<input type="text" name="status" id="status${status.index}"class="quantity form-control input-number" value="${item.status }" style="border-radius:10px; border-width: 0px; text-align: center;height:40px; width:150px" readonly>
 						          	</div>
 						          </td>
 							      

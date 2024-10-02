@@ -17,6 +17,7 @@ public class BillDTO {
 	private float totalPrice;
 	private LocalDateTime date;
 	private List<CheckoutDTO> items=new ArrayList<CheckoutDTO>();
+	private String status;
 /*	private List<String> product=new ArrayList<String>();
 	private List<Integer> quantity=new ArrayList<Integer>();
 	private List<Float> prince=new ArrayList<Float>();
@@ -123,6 +124,12 @@ public class BillDTO {
 	}
 	public void setPhone(long phone) {
 		this.phone = phone;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

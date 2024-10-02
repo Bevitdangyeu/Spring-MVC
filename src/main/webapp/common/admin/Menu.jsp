@@ -67,11 +67,18 @@
                         <a href='<c:url value="/admin1/bill/edit"/>'
                         class="collapse-item" href="utilities-color.html">Thêm hóa đơn
                         </a>
-                   <!--      <a class="collapse-item" href="utilities-border.html">Thêm thể loại</a>
-                        <a class="collapse-item" href="utilities-animation.html">Sửa thể loại</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a> -->
+                   		 <a href='<c:url value="/admin1/bill/approveOrder"/>'
+                        class="collapse-item" href="utilities-color.html">Chờ duyệt
+                        </a>
+                         <a href='<c:url value="/admin1/bill/edit"/>'
+                        class="collapse-item" href="utilities-color.html">Chờ vận chuyển
+                        </a>
+                         <a href='<c:url value="/admin1/bill/edit"/>'
+                        class="collapse-item" href="utilities-color.html">Đang vận chuyển
+                        </a>
                     </div>
                 </div>
+                
             </li>
         </ul>
      </div>

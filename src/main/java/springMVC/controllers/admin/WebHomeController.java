@@ -53,6 +53,8 @@ public class WebHomeController {
 	public ModelAndView search(@RequestParam("search") String search) {
 		List<ProductDTO> list=productService.searchByName(search);
 		ModelAndView mav=new ModelAndView("home");
+		List<CategoryDTO> listCategory=categoryService.findAll();
+		mav.addObject("listCategory", listCategory);
 		mav.addObject("list", list);
 		mav.addObject("search", search);
 		return mav;

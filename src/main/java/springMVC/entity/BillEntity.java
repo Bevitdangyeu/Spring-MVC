@@ -32,7 +32,8 @@ public class BillEntity {
 	private float totalPrice;
 	@Column(name="date")
 	private LocalDateTime date;
-	
+	@Column(name="status")
+	private String status;
 	@ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	@JoinColumn(name="customerId")
 	private customerEntity customer;
@@ -81,6 +82,14 @@ public class BillEntity {
 	}
 	public void setList(List<DetailBillEntity> list) {
 		this.list = list;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

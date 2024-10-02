@@ -30,20 +30,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private RoleReponsitory roleRe;
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		   UserAndPassEntity user = userRepository.findOneByUserNameAndStatus(username,1);
-		   List<RoleEntity> roless = user.getRole();
-		   List<GrantedAuthority> grantedAuthority=new ArrayList<GrantedAuthority>(); 
-		   for(RoleEntity role: user.getRole()) {
-			  for(PermissionEntity permission: role.getPermissions()) {
-				  System.out.println(" permission code: "+ permission.getPermissionCode());
-				  grantedAuthority.add(new SimpleGrantedAuthority(permission.getPermissionCode()));
-			  }
-		   }
-		   return new org.springframework.security.core.userdetails.User(
-		            user.getUserName(),
-		            user.getPass(),
-		            grantedAuthority
-		        );
+		UserAndPassEntity user = userRepository.findOneByUserNameAndStatus(username, 1);
+		
+	    if (user == null) {
+	        throw new UsernameNotFoundException("User not found");
+	    }
+	    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+	    if(user.getRoles().size()>0) {
+	    	for (RoleEntity role : user.getRole()) {
+		        for (PermissionEntity permission : role.getPermissions()) {
+		            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getPermissionCode()));
+		        }
+		    }
+	    }
+	    // Trả về đối tượng CustomUserDetails thay vì User của Spring Security
+	    return new CustomUserDetails(user, grantedAuthorities);
 	}
 	
 }

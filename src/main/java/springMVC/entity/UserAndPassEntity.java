@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -36,7 +37,8 @@ public class UserAndPassEntity {
 			  inverseJoinColumns = @JoinColumn(name="roleId")
 	)	
 	private List<RoleEntity> roles=new ArrayList<RoleEntity>();
-	
+	@OneToOne(mappedBy = "userId")
+	private customerEntity customerId;
 	public int getId() {
 		return userId;
 	}
@@ -63,6 +65,18 @@ public class UserAndPassEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public List<RoleEntity> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<RoleEntity> roles) {
+		this.roles = roles;
+	}
+	public customerEntity getCustomerId() {
+		return customerId;
+	}
+	public void setCustomerId(customerEntity customerId) {
+		this.customerId = customerId;
 	}
 	
 }

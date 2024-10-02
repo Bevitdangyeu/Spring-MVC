@@ -19,8 +19,8 @@
 	
 </style>
 </head>
-	<body class="goto-here">
 
+	<body class="goto-here">
     <section id="home-section" class="hero">
 		  <div class="home-slider owl-carousel">
 	      <div class="slider-item js-fullheight">
@@ -72,15 +72,15 @@
 	                        <a class="dropdown-item" href="shop.html"><i class="fa fa-sort-numeric-asc" aria-hidden="true"></i> Thấp đến cao</a>
 	                        <a class="dropdown-item" href="shop.html"><i class="fa fa-sort-numeric-desc" aria-hidden="true"></i> Cao đến thấp</a>
 	                            <span>
-	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="2" style="margin:10px">
+	                                <input type="checkbox" id="filterDuoi500" class="price-checkbox" value="2" style="margin:10px">
 	                            </span>
 	                            Dưới 200.000đ
 	                        	 <span>
-	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="5" style="margin:10px">
+	                                <input type="checkbox" id="filterDuoi500" class="price-checkbox" value="5" style="margin:10px">
 	                            </span>
 	                            Dưới 500.000đ
 	                             <span>
-	                                <input type="checkbox" id="filterDuoi500" class="product-checkbox" value="1000000" style="margin:10px">
+	                                <input type="checkbox" id="filterDuoi500" class="price-checkbox" value="1000000" style="margin:10px">
 	                            </span>
 	                            Dưới 1.000.000đ
 	                    </div>
@@ -92,7 +92,7 @@
 	                    <div class="dropdown-menu" style="position: absolute;" aria-labelledby="dropdown06">
 	                  		<c:forEach var="item" items="${listCategory }">
 	                  		   <span>
-	                                <input type="checkbox" id="${item.categoryName }" class="product-checkbox" value="${item.categoryName }" style="margin:10px">
+	                                <input type="checkbox" id="${item.categoryName }" class="category-checkbox" value="${item.categoryName }" style="margin:10px">
 	                            </span>
 	                            ${item.categoryName }
 	                            <br>
@@ -113,7 +113,7 @@
     				
     				<div class=" d-flex flex-column">
     					
-    						<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template" style="height:300px;width:300px">
+    						<a href="#" class="img-prod"><img class="img-fluid" src="${item.image }" alt="Colorlib Template" style="height:300px;width:300px;object-fit: cover">
     						<span class="status">50% Off</span>
     						<div class="overlay"></div>
     					</a>
@@ -203,6 +203,7 @@
     					</div>
     				
     			</div>
+    			<input type="hidden"  class="dataCate" value="${item.categoryName  }" data-category="${item.categoryName }" >
     			<input type="hidden" id="product${status.index }" name="product" value="${item.productId  }">
     			</div>
     			</c:forEach>
@@ -408,28 +409,39 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $('.product-checkbox').on('change', function() {
-        var selectedCategories = [];
-        
-        // Lấy các checkbox đã được chọn
-        $('.product-checkbox:checked').each(function() {
-            selectedCategories.push($(this).val());
-        });
-        
-        // Ẩn hoặc hiện các sản phẩm dựa trên category
-        $('.hideAndShow').each(function() {
-            var productCategory = $(this).find('.price-sale').data('price');
-            console.log(productCategory);
-            if (selectedCategories.length === 0 || selectedCategories.includes(productCategory.toString())) {
-            	console.log("vào show");
-                $(this).show();
-            } else {
-            	console.log("vào hide");
-            	$(this).hide();
-            }
-        });
-    });
-});
+	$('.price-checkbox, .category-checkbox').on('change', function() {
+	    var selectedPrice = [];
+	    var selectedCategory = [];
+
+	    // Lấy các checkbox giá đã được chọn
+	    $('.price-checkbox:checked').each(function() {
+	        selectedPrice.push($(this).val());
+	    });
+
+	    // Lấy các checkbox danh mục đã được chọn
+	    $('.category-checkbox:checked').each(function() {
+	        selectedCategory.push($(this).val());
+	    });
+
+	    // Ẩn hoặc hiện các sản phẩm dựa trên cả giá và danh mục
+	    $('.hideAndShow').each(function() {
+	        var productPrice = $(this).find('.price-sale').data('price');
+	        var productCategory = $(this).find('.dataCate').data('category');
+	        
+	        // Kiểm tra xem sản phẩm có thỏa mãn cả hai điều kiện không
+	        var priceMatch = selectedPrice.length === 0 || selectedPrice.includes(productPrice.toString());
+	        var categoryMatch = selectedCategory.length === 0 || selectedCategory.includes(productCategory.toString());
+
+	        // Nếu cả hai điều kiện đều đúng, hiển thị sản phẩm, ngược lại ẩn đi
+	        if (priceMatch && categoryMatch) {
+	            $(this).show();
+	        } else {
+	            $(this).hide();
+	        }
+	    });
+	});
+    
+}); 
 $(document).ready(function() {
     $('.dropdown-menu ').click(function() {
     	event.stopPropagation();
@@ -451,11 +463,11 @@ function add(data) {
 			contentType :'application/json',
 			dataType: 'json',
 			success: function (result) {
-				/* window.location.href=window.location.href; */
+				 window.location.href=window.location.href; 
 			},
 			error: function (error) {
 				//showToast("Edit request failed","danger");
-				//window.location.href=window.location.href;
+				window.location.href=window.location.href;
 				console.log(error);
 			}
 		});

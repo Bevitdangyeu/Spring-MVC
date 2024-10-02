@@ -35,6 +35,10 @@ public class BillService implements IBillService {
 	@Transactional
 	@Override
 	public BillDTO addBill(BillDTO bill) {
+		// set trạng thái
+		if(bill.getEmployeeID()!=1) {
+			bill.setStatus("Hoàn Thành");
+		}
 		// tính toán tổng bill 
 		float tong=0;
 		int tongSl=0;
@@ -72,6 +76,7 @@ public class BillService implements IBillService {
 			billEntity.setEmployee(employee);
 			billEntity.setTotalPrice(tong);
 			billEntity.setTotalQuantity(tongSl);
+			billEntity.setStatus(bill.getStatus());
 			List<DetailBillEntity> list=new ArrayList<DetailBillEntity>();
 			for(int i=0;i<bill.getItems().size();i++) {
 				DetailBillEntity detailBill=new DetailBillEntity();
@@ -144,6 +149,7 @@ public class BillService implements IBillService {
 			bill.setDate(billEntity.get(i).getDate());
 			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
 			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
+			bill.setStatus(billEntity.get(i).getStatus());
 			List<CheckoutDTO> listCheckout=new ArrayList<CheckoutDTO>();
 			for(int j=0;j<billEntity.get(i).getList().size();j++) {
 				DetailBillEntity detail =billEntity.get(i).getList().get(j);
@@ -170,6 +176,7 @@ public class BillService implements IBillService {
 		bill.setDate(billEntity.getDate());
 		bill.setEmployeeID(billEntity.getEmployee().getEmployeeId());
 		bill.setEmployeeID(billEntity.getEmployee().getEmployeeId());
+		bill.setStatus(billEntity.getStatus());
 		List<CheckoutDTO> listCheckout=new ArrayList<CheckoutDTO>();
 		for(int j=0;j<billEntity.getList().size();j++) {
 			DetailBillEntity detail =billEntity.getList().get(j);
@@ -212,5 +219,76 @@ public class BillService implements IBillService {
 		billResponsitory.save(billEntity);
 		return billEntity.getBillId();
 	}
+	@Transactional
+	@Override
+	public List<BillDTO> findApproveOrder(String status) {
+		List<BillEntity> billEntity=billResponsitory.findApproveOrder(status);
+		List<BillDTO> list=new ArrayList<BillDTO>();
+		for( int i=0;i<billEntity.size();i++) {
+			BillDTO bill=new BillDTO();
+			bill.setBillId(billEntity.get(i).getBillId());
+			bill.setCustomerName(billEntity.get(i).getCustomer().getCustomerName());
+			bill.setDate(billEntity.get(i).getDate());
+			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
+			bill.setEmployeeID(billEntity.get(i).getEmployee().getEmployeeId());
+			bill.setStatus(billEntity.get(i).getStatus());
+			List<CheckoutDTO> listCheckout=new ArrayList<CheckoutDTO>();
+			for(int j=0;j<billEntity.get(i).getList().size();j++) {
+				DetailBillEntity detail =billEntity.get(i).getList().get(j);
+				CheckoutDTO checkout=new CheckoutDTO();
+				checkout.setProduct(detail.getProduct().getName());
+				checkout.setPrince(detail.getPrice());
+				checkout.setQuantity(detail.getQuantity());
+				checkout.setTotal(detail.getTotal());
+				checkout.setImage(detail.getProduct().getImage());
+				listCheckout.add(checkout);
+			}
+			bill.setItems(listCheckout);
+			list.add(bill);
+		}
+		return list;
+	}
+	@Override
+	public void updateStatus(BillDTO bill) {
+		BillEntity billEntity=billResponsitory.findByBillId(bill.getBillId());
+		billEntity.setStatus(bill.getStatus());
+		billResponsitory.save(billEntity);
+	}
+	@Transactional
+	  @Override 
+	  public List<BillDTO> PurchaseHistory(int customerId, String status) {
+			// chuyển đổi tìm userId thông qua mã khách hàng
+		  List<BillEntity> billEntities = billResponsitory.findPurchaseHistory(status, customerId);
+		  System.out.println("billEntities size: "+billEntities.size());
+		    List<BillDTO> billDTOs = new ArrayList<>();
+
+		    for (BillEntity billEntity : billEntities) {
+		        BillDTO billDTO = new BillDTO();
+		        billDTO.setBillId(billEntity.getBillId());
+		        billDTO.setCustomerName(billEntity.getCustomer().getCustomerName());
+		        billDTO.setDate(billEntity.getDate());
+		        billDTO.setEmployeeID(billEntity.getEmployee().getEmployeeId());
+		        billDTO.setStatus(billEntity.getStatus());
+
+		        // Chuyển đổi chi tiết hóa đơn
+		        List<CheckoutDTO> checkoutDTOs = new ArrayList<>();
+		        for (DetailBillEntity detail : billEntity.getList()) {
+		            CheckoutDTO checkoutDTO = new CheckoutDTO();
+		            checkoutDTO.setProduct(detail.getProduct().getName());
+		            checkoutDTO.setPrince(detail.getPrice());
+		            checkoutDTO.setQuantity(detail.getQuantity());
+		            checkoutDTO.setTotal(detail.getTotal());
+		            checkoutDTO.setImage(detail.getProduct().getImage());
+
+		            checkoutDTOs.add(checkoutDTO);
+		        }
+
+		        billDTO.setItems(checkoutDTOs);
+		        billDTOs.add(billDTO);
+		    }
+
+		    return billDTOs;
+	  }
+	 
 	
 }

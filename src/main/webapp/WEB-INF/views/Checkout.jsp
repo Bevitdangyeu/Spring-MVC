@@ -20,20 +20,20 @@
     					<h3>Thông tin khách hàng</h3>
     					<p class="d-flex">
     						<span style="width:30%" >Tên</span>
-    						<span><input id="customerName" placeholder="Họ và tên:" type="text" value="" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD"></span>
+    						<span><input id="customerName" placeholder="Họ và tên:" type="text" value="${user.customerName }" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD"></span>
     						
     					</p>
     					<p class="d-flex">
     						<span style="width:30%"  >Địa chỉ</span>
     						<span>
-    							<input id="address" placeholder="Địa chỉ:" type="text" value="" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD">
+    							<input id="address" placeholder="Địa chỉ:" type="text" value="${user.address }" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD">
     							<input placeholder="Huyện/Thành Phố:" type="text" value="" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD;margin-top:10px">
     							<input placeholder="Tỉnh:" type="text" value="" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD;margin-top:10px">
     						</span>
     					</p>
     					<p class="d-flex">
     						<span style="width:30%" >Số điện thoại</span>
-    						<span><input id="phone" placeholder="Số điện thoại" type="text" value="" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD""></span>
+    						<span><input id="phone" placeholder="Số điện thoại" type="text" value="${user.phoneNumber }" style="border-radius:10px;width:130%;padding-left:10px;border:1px dashed #DDDDDD""></span>
     					</p>
     					<hr>
     					<p class="d-flex total-price">
@@ -106,10 +106,12 @@
 		event.preventDefault();
 		var listProduct=[];
 		var employee=1;
+		var status="Chờ xác nhận";
 		var customerName=$('#customerName').val();
 		var address=$('#address').val();
 		var phoneNumber=$('#phone').val();
 		var totalBill=$('#totalBill').val();
+		var status="Chờ xác nhận";
 			$(".product").each(function() {
 		        var name = $(this).find("input[id^='name']").val(); // Tìm input có id bắt đầu bằng 'name'
 		        var size = $(this).find("input[id^='size']").val(); // Tìm input có id bắt đầu bằng 'size'
@@ -121,7 +123,7 @@
 		        var product={product:name,quantity:quantity,prince:price,size:size,color:color,image:img,total:total};
 		        listProduct.push(product);
 	});
-		add({employeeID:employee,customerName:customerName,address:address,phone:phoneNumber,items:listProduct});
+		add({employeeID:employee,status:status,customerName:customerName,address:address,phone:phoneNumber,items:listProduct,status:status});
 		
 	});
 	function add(data) {

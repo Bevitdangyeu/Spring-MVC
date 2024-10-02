@@ -28,6 +28,7 @@ public class CartApi {
 
 	@RequestMapping(value="/add",method = RequestMethod.POST)
 	public void add(@RequestBody ProductCartDTO product) {
+		System.out.println("vo duoc ham");
 		CartDTO cart=new CartDTO();
 		// tìm thông tin của sản phẩm đó thông qua ProductCartDTO được gửi từ client
 		ProductDTO productDto=productService.findOne(product.getProductId());
@@ -36,6 +37,7 @@ public class CartApi {
 		HttpSession session=request.getSession();
 		// chưa có giỏ hàng thì thêm mới giỏ hàng
 		if(session.getAttribute("cart")==null) {
+			System.out.println("tao gio hang");
 			cart.addProduct(product);
 			session.setAttribute("cart", cart);
 		}
@@ -54,6 +56,7 @@ public class CartApi {
 						) 
 				{
 					// cộng số lượng lên 
+					System.out.println("cong so luong");
 					listProduct.get(i).setSoLuong(listProduct.get(i).getSoLuong()+product.getSoLuong());
 					check=1;
 					break;
@@ -61,6 +64,7 @@ public class CartApi {
 			}
 			if(check==0) {
 				// sp chưa tồn tại trong giỏ hàng=> thêm mới
+				System.out.println("them moi");
 				listProduct.add(product);
 				cart.setList(listProduct);
 			}
