@@ -14,6 +14,8 @@
         <class>springMVC.entity.PermissionEntity</class>
       	<class>springMVC.entity.SizeEntity</class>
       	<class>springMVC.entity.ColorEntity</class>
+      	<class>springMVC.entity.FeedbackEntity</class>
+      	<class>springMVC.entity.ReplyEntity</class>
     </persistence-unit>
 </persistence>
 

@@ -35,6 +35,10 @@ public class customerEntity {
 	@OneToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name="userId")
 	private UserAndPassEntity userId;
+	@OneToMany(mappedBy = "customer")
+	private List<FeedbackEntity> feedback=new ArrayList<FeedbackEntity>();
+	@OneToMany(mappedBy = "customer")
+	private List<ReplyEntity> reply=new ArrayList<ReplyEntity>();
 	public long getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -73,6 +77,18 @@ public class customerEntity {
 	}
 	public void setUserId(UserAndPassEntity userId) {
 		this.userId = userId;
+	}
+	public List<FeedbackEntity> getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(List<FeedbackEntity> feedback) {
+		this.feedback = feedback;
+	}
+	public List<ReplyEntity> getReply() {
+		return reply;
+	}
+	public void setReply(List<ReplyEntity> reply) {
+		this.reply = reply;
 	}
 	
 }

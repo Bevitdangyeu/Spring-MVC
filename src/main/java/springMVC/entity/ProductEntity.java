@@ -59,6 +59,8 @@ public class ProductEntity {
 	private List<SizeEntity> listSize=new ArrayList<SizeEntity>();
 	@ManyToMany(mappedBy = "listProduct",fetch = FetchType.LAZY)
 	private List<ColorEntity> listColor=new ArrayList<ColorEntity>();
+	@OneToMany(mappedBy = "product")
+	private List<FeedbackEntity> feedback=new ArrayList<FeedbackEntity>();
 	public int getProductId() {
 		return productId;
 	}
@@ -132,6 +134,12 @@ public class ProductEntity {
 	}
 	public void setProductId(int productId) {
 		this.productId = productId;
+	}
+	public List<FeedbackEntity> getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(List<FeedbackEntity> feedback) {
+		this.feedback = feedback;
 	}
 	
 	

@@ -2,7 +2,9 @@
     pageEncoding="UTF-8"%>
      <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     	<c:url var="CartUrl" value="/api/cart/add"/>
-    	
+    	<c:url var="ApiUrl" value="/user/reply/add"/>
+ <%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>   	
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +19,7 @@
 </head>
 <body>
 	<section class="ftco-section">
+		
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 mb-5 ftco-animate">
@@ -202,9 +205,189 @@
                 </c:forEach>
     		</div>
             </div>
+         <div class="col-md-12 nav-link-wrap">
+            <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+
+              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
+
+              <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+
+            </div>
+          </div>
+         <!--  feedback -->
+         
+            <div class="tab-content bg-light" id="v-pills-tabContent">
+
+              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+              	<div class="p-4">
+	              	<h3 class="mb-4">Nike Free RN 2019 iD</h3>
+	              	<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+              	</div>
+              </div>
+
+              <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
+              	<div class="p-4">
+	              	<h3 class="mb-4">Manufactured By Nike</h3>
+	              	<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+              	</div>
+              </div>
+              <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+              	<div class="row p-4">
+					<div class="col-md-7">
+						<h3 class="mb-4">23 Reviews</h3>
+						<c:forEach var="item" items="${feedback }" varStatus="status">
+							<div class="review">
+								 <div class="user-img" >
+								 	<img style="width:50px;height:50px;border-radius:30px;border:1px dashed  #888888;" alt="" src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png">
+								 </div>
+								  	<div class="desc">
+								   		<h4>
+								   			<span style="font-weight: bold;" class="text-left">${item.customer }</span>
+								   			<span class="text-right">${item.date }</span>
+								   		</h4>
+								   		<p class="star">
+								   		<c:forEach var="i" begin="1" end="${item.star}">
+										    <i style="color: #e7ec7a;" class="fa fa-star"></i>
+										</c:forEach>
+								   		</p>
+								   		<p>${item.description }</p>		
+								   		<p>
+								   			<a class="nav-link" id="pills-profile-tab${status.index }" data-toggle="pill" href="#pills-profile${status.index }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Trả lời</a>
+										    <!-- Nội dung của các tab -->
+										    <div class="tab-content" id="pills-tabContent${status.index }">
+										        <div class="tab-pane fade" id="pills-profile${status.index }" role="tabpanel" aria-labelledby="pills-profile-tab">
+										            <textarea placeholder="Nhập câu hỏi của bạn" class="form-control" id="content${status.index }" name="description" style="border-radius:20px;border:1px dashed #DDDDDD"></textarea>
+                    								<button id="ok${status.index }" type="button" class="btn btn-primary" style="margin-top:10px">Gửi câu hỏi</button>
+                    								<button id="Cancel${status.index }" type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-top:10px">Hủy</button>
+										        </div>
+										    </div>
+								   		</p>
+								   		<p>
+								   			<a class="nav-link" id="pills-profile-tab-reply${status.index }" data-toggle="pill" href="#pills-profile-reply${status.index }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Xem các câu trả lời khác</a>
+										    <!-- Nội dung của các tab -->
+										    <div class="tab-content" id="pills-tabContent-reply${status.index }">
+										    <div class="tab-pane fade" id="pills-profile-reply${status.index }" role="tabpanel" aria-labelledby="pills-profile-tab">
+										       <c:forEach var="reply" items="${item.reply }" varStatus="replyStatus">
+													 <div  style="display:flex;">
+													 	<img style="width:40px;height:40px;border-radius:30px;border:1px dashed  #888888;margin-right: 20px"" alt="" src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png">
+													 
+													 <h4>
+											   			<span style="font-weight: bold;" class="text-left">${reply.customer.customerName }</span>
+											   		</h4>
+											   		</div>
+														<div style="position: relative; display: inline-block;width:100%">
+														   <input type="text" value="${reply.content}" id="editreply${status.index }${replyStatus.index }" style="margin-left:60px; border:0px;background: transparent;outline:none;width:90%;" readonly>
+														    <a id="clickEdit${status.index }${replyStatus.index }" style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: #dbcc8f; cursor: pointer;display: none;" onclick="editReply(this)">
+														        <i class="fa fa-paper-plane"></i>
+														    </a>
+														</div>
+										       		<c:if test="${reply.customer.customerName == user.customerName  }">
+										       			<div style="display:flex">
+										       				
+										       				<a id="edit${status.index }${replyStatus.index }" style="margin-left:60px;color:#dbcc8f;cursor: pointer;" onclick="editReply(this)" ></i>Chỉnh sửa</a>
+										       				<a id="delete${status.index }${replyStatus.index }" style="margin-left:20px;color:#dbcc8f;cursor: pointer;">Xóa</a>
+										       			</div>
+										       		</c:if>
+										       		<input type="hidden" value="${reply.replyId }" id="repyId${status.index }${replyStatus.index }">
+										       		 
+										       </c:forEach>
+										     </div>
+										        
+										    </div>
+								   		</p>
+								   	</div>
+							</div>
+							<input type="hidden" id="feedbackId${status.index }" value="${item.reviewId }"> 
+						</c:forEach>  
+							   	
+					</div>						   		
+				</div>
+              </div>
+            </div>
         </section>
-    
+   <input type="hidden" id="customer" value="${user.customerName }">
     <script type="text/javascript">
+     /* hàm hiển thị phần chỉnh sửa */
+    function editReply(element) {
+        var index = $(element).attr('id').replace('edit', '');
+        
+        // Lấy ô input
+        var inputField = document.getElementById("editreply" + index);
+        
+        // Bỏ thuộc tính readonly để người dùng có thể chỉnh sửa
+        inputField.removeAttribute("readonly");
+        
+        // Đặt focus vào ô input
+        inputField.focus();
+        
+        // Thay đổi CSS cho ô input
+        inputField.style.border = "1px dashed #888888"; // Thay đổi viền
+        inputField.style.padding = "10px"; // Thay đổi padding
+        inputField.style.borderRadius = "10px"; // Thay đổi bo góc
+        // Lấy ID của thẻ <a>
+        var editLinkId = "clickEdit" + index;
+     // Lấy thẻ <a> bằng ID và hiển thị nó
+        var editLink = document.getElementById(editLinkId);
+        editLink.style.display = "inline-block";
+    };
+     // hàm thêm cmt
+    $('button[id^="ok"]').click(function () {
+		var index=$(this).attr('id').replace('ok', '');
+		var feedbackId=$('#feedbackId'+index).val();
+		var customerName=$('#customer').val();
+		var content=$('#content'+index).val();
+		var customer={
+			customerName:customerName
+		}
+		addReply({content:content,customer:customer,feedback:feedbackId})
+		});
+	function addReply(data) {
+   			$.ajax({
+   				url:'${ApiUrl}',
+   				type:'post',
+   				data: JSON.stringify(data) ,
+   				contentType :'application/json',
+   				dataType: 'json',
+   				success: function (result) {
+   					window.location.href=window.location.href;
+   				},
+   				error: function (error) {
+   					//showToast("Edit request failed","danger");
+   					window.location.href=window.location.href;
+   					console.log(error);
+   				}
+   			});
+	};
+	//phần chỉnh sửa cmt
+	 $('a[id^="clickEdit"]').click(function () {
+		var index=$(this).attr('id').replace('clickEdit','');
+		var content=$('#editreply'+index).val();
+		var customerName=$('#customer').val();
+		var customer={
+				customerName:customerName
+		}
+		var replyId=$('#repyId'+index).val();
+		sendEditReply({content:content,customer:customer,replyId:replyId})
+	});
+	function sendEditReply(data) {
+			$.ajax({
+				url:'${ApiUrl}',
+				type:'post',
+				data: JSON.stringify(data) ,
+				contentType :'application/json',
+				dataType: 'json',
+				success: function (result) {
+					 window.location.href=window.location.href;
+				},
+				error: function (error) {
+					//showToast("Edit request failed","danger");
+					 window.location.href=window.location.href;
+					console.log(error);
+				}
+			});
+	} 
+	// hàm thêm vào giỏ hàng
     $('button[id^="addToCart"]').click(function () {
    	 		var index = $(this).attr('id').replace('addToCart', '');
 			var productId=$('#idProduct'+index).val();
