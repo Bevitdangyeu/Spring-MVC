@@ -10,6 +10,8 @@ public class FeedbackDTO {
 	private String product;
 	private String customer;
 	private String date;
+	private int billDetailId;
+	private int productId;
 	private List<ReplyDTO> reply;
 	public int getReviewId() {
 		return reviewId;
@@ -58,6 +60,18 @@ public class FeedbackDTO {
 	}
 	public void setReply(List<ReplyDTO> reply) {
 		this.reply = reply;
+	}
+	public int getBillDetailId() {
+		return billDetailId;
+	}
+	public void setBillDetailId(int billDetailId) {
+		this.billDetailId = billDetailId;
+	}
+	public int getProductId() {
+		return productId;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 	
 	

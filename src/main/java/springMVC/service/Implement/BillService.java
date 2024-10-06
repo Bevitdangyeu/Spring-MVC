@@ -154,6 +154,9 @@ public class BillService implements IBillService {
 			for(int j=0;j<billEntity.get(i).getList().size();j++) {
 				DetailBillEntity detail =billEntity.get(i).getList().get(j);
 				CheckoutDTO checkout=new CheckoutDTO();
+				checkout.setFeedbacked(detail.getFeedbacked());
+				checkout.setBillDetailId(detail.getDetailBillId());
+				checkout.setProductId(detail.getProduct().getProductId());
 				checkout.setProduct(detail.getProduct().getName());
 				checkout.setPrince(detail.getPrice());
 				checkout.setQuantity(detail.getQuantity());
@@ -181,6 +184,9 @@ public class BillService implements IBillService {
 		for(int j=0;j<billEntity.getList().size();j++) {
 			DetailBillEntity detail =billEntity.getList().get(j);
 			CheckoutDTO checkout=new CheckoutDTO();
+			checkout.setFeedbacked(detail.getFeedbacked());
+			checkout.setBillDetailId(detail.getDetailBillId());
+			checkout.setProductId(detail.getProduct().getProductId());
 			checkout.setProduct(detail.getProduct().getName());
 			checkout.setPrince(detail.getPrice());
 			checkout.setQuantity(detail.getQuantity());
@@ -274,6 +280,9 @@ public class BillService implements IBillService {
 		        List<CheckoutDTO> checkoutDTOs = new ArrayList<>();
 		        for (DetailBillEntity detail : billEntity.getList()) {
 		            CheckoutDTO checkoutDTO = new CheckoutDTO();
+		            checkoutDTO.setFeedbacked(detail.getFeedbacked());
+		            checkoutDTO.setBillDetailId(detail.getDetailBillId());
+		            checkoutDTO.setProductId(detail.getProduct().getProductId());
 		            checkoutDTO.setProduct(detail.getProduct().getName());
 		            checkoutDTO.setPrince(detail.getPrice());
 		            checkoutDTO.setQuantity(detail.getQuantity());

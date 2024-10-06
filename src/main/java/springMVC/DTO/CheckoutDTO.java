@@ -3,6 +3,8 @@ package springMVC.DTO;
 
 
 public class CheckoutDTO {
+	private int billDetailId;
+	private int productId;
 	private String product;
 	private Integer quantity;
 	private Float prince;
@@ -10,6 +12,7 @@ public class CheckoutDTO {
 	private String size;
 	private String color;
 	private String image;
+	private int feedbacked;
 	public String getProduct() {
 		return product;
 	}
@@ -51,6 +54,24 @@ public class CheckoutDTO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public int getBillDetailId() {
+		return billDetailId;
+	}
+	public void setBillDetailId(int billDetailId) {
+		this.billDetailId = billDetailId;
+	}
+	public int getProductId() {
+		return productId;
+	}
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+	public int getFeedbacked() {
+		return feedbacked;
+	}
+	public void setFeedbacked(int feedbacked) {
+		this.feedbacked = feedbacked;
 	}
 	
 }

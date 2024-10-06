@@ -1,6 +1,8 @@
 package springMVC.entity;
 
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +22,8 @@ public class ReplyEntity {
 	private int replyId;
 	@Column(name="content",columnDefinition = "TEXT")
 	private String content;
+	@Column(name="date")
+	private LocalDateTime date;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="customerId")
 	private customerEntity customer;
@@ -46,6 +50,12 @@ public class ReplyEntity {
 	}
 	public int getReplyId() {
 		return replyId;
+	}
+	public LocalDateTime getDate() {
+		return date;
+	}
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 	
 }

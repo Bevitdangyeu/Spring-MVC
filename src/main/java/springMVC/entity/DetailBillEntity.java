@@ -27,6 +27,8 @@ public class DetailBillEntity {
 	private String color;
 	@Column(name="size")
 	private String size;
+	@Column(name="isfeedbackd")
+	private int feedbacked;
 	@Column(name="image")
 	private String img;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -88,6 +90,12 @@ public class DetailBillEntity {
 	}
 	public void setImg(String img) {
 		this.img = img;
+	}
+	public int getFeedbacked() {
+		return feedbacked;
+	}
+	public void setFeedbacked(int feedbacked) {
+		this.feedbacked = feedbacked;
 	}
 	
 }

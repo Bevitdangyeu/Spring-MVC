@@ -1,5 +1,6 @@
 package springMVC.service.Implement;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +26,14 @@ public class ReplyService implements IReplyService{
 	public void add(ReplyDTO reply) {
 		// chuyển từ dto thành entity
 		if(reply.getReplyId()==0) {
+			LocalDateTime currentDateTime = LocalDateTime.now();
 			ReplyEntity replyEntity=new ReplyEntity();
 			replyEntity.setContent(reply.getContent());
 			customerEntity customer=customerRepository.findByCustomerName(reply.getCustomer().getCustomerName());
 			FeedbackEntity feedback=feedbackRepository.findByFeedbackId(reply.getFeedback());
 			replyEntity.setCustomer(customer);
 			replyEntity.setFeedback(feedback);
+			replyEntity.setDate(currentDateTime);
 			replyRepository.save(replyEntity);
 		}
 		else if(reply.getReplyId()!=0) {

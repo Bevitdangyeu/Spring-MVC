@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 import springMVC.DTO.CustomerDTO;
 import springMVC.DTO.FeedbackDTO;
 import springMVC.DTO.ReplyDTO;
+import springMVC.entity.DetailBillEntity;
 import springMVC.entity.FeedbackEntity;
 import springMVC.entity.ProductEntity;
 import springMVC.entity.ReplyEntity;
 import springMVC.entity.customerEntity;
+import springMVC.repository.BillDetailRepository;
 import springMVC.repository.CustomerResponsitory;
 import springMVC.repository.FeedbackRepository;
 import springMVC.repository.ProductRespository;
@@ -28,6 +30,7 @@ public class FeedbackService implements IFeedbackService {
 	@Autowired CustomerResponsitory customerResponsitory;
 	@Autowired ProductRespository productResponsitory;
 	@Autowired FeedbackRepository feedbackReponsitory;
+	@Autowired BillDetailRepository billDetailRepository;
 	@Override
 	public void add(FeedbackDTO feedback) {
 		// chuyển từ DTO thành feedback Entity
@@ -35,6 +38,9 @@ public class FeedbackService implements IFeedbackService {
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		customerEntity customerEntity=customerResponsitory.findByCustomerName(feedback.getCustomer());
 		ProductEntity productEntity=productResponsitory.findOneByName(feedback.getProduct());
+		DetailBillEntity billDetail=billDetailRepository.findByDetailBillId(feedback.getBillDetailId());
+		billDetail.setFeedbacked(1);
+		billDetailRepository.save(billDetail);
 		feedbackEntity.setCustomer(customerEntity);
 		feedbackEntity.setProduct(productEntity);
 		feedbackEntity.setDescription(feedback.getDescription());
@@ -65,6 +71,7 @@ public class FeedbackService implements IFeedbackService {
 			for( int j=0;j<listFeedbackEntity.get(i).getReply().size();j++) {
 				ReplyEntity reply=listFeedbackEntity.get(i).getReply().get(j);
 				ReplyDTO replyDto=new ReplyDTO();
+				DateTimeFormatter formatterReply = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 				replyDto.setReplyId(reply.getReplyId());
 				// chuyển đổi từ customerEntity sang customer DTO
 				customerEntity customer=reply.getCustomer();
@@ -74,6 +81,7 @@ public class FeedbackService implements IFeedbackService {
 				replyDto.setCustomer(customerDTO);
 				replyDto.setContent(reply.getContent());
 				replyDto.setFeedback(reply.getFeedback().getFeedbackId());
+				replyDto.setDate(reply.getDate().format(formatterReply));
 				listReply.add(replyDto);
 			}
 			feedback.setReply(listReply);

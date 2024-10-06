@@ -274,6 +274,7 @@
 													 
 													 <h4>
 											   			<span style="font-weight: bold;" class="text-left">${reply.customer.customerName }</span>
+											   			<span class="text-right">${reply.date }</span>
 											   		</h4>
 											   		</div>
 														<div style="position: relative; display: inline-block;width:100%">

@@ -106,19 +106,22 @@
 						</div>
 						<div style="text-align: right; ">
 					    <p style="width: 20%;display: inline-block;">
-					    <c:url var="reviews" value="/user/reviews/add">
+					<%--     <c:url var="reviews" value="/user/reviews/add">
 					    	<c:param name="id" value="${i.product }">
 					    	</c:param>
-					    </c:url>
-					    
-					    <c:if test="${item.status  =='hoàn thành'}">
+					    </c:url> --%>
+					    <c:if test="${item.status  =='hoàn thành' && i.feedbacked==0 }">
 					    	<a class="btn btn-primary" id="reviews${status.index}${status1.index}" href="#" data-toggle="modal" data-target="#exampleModal">ĐÁNH GIÁ</a>
 					    </c:if>
-					    
+					    <c:if test="${item.status  =='hoàn thành' && i.feedbacked==1 }">
+					    	<a class="btn btn-primary" id="feedbacked${status.index}${status1.index}">MUA LẠI</a>
+					    </c:if>
 					    </p>
 					</div>
 					<input type="hidden"  value="${i.size}" id="size${status.index}${status1.index}" readonly />
 					<input type="hidden" value="${i.color}" id="color${status.index}${status1.index}" readonly />
+					<input type="hidden" value="${i.productId }" id="idProduct${status.index}${status1.index}">
+					<input type="hidden" id="billDetail${status.index}${status1.index}" value="${i.billDetailId }">
 	    			</c:forEach>
 
 	    		</div>
@@ -130,6 +133,7 @@
 			    	</p>
 	    		</div>
 	    		</div>
+	    			
 	    		</c:forEach>
 	    		
 	    		<div style="text-align: right; ">
@@ -196,6 +200,8 @@
                             <label for="feedback">Nhận xét của bạn</label>
                             <textarea class="form-control" id="feedback" rows="3"></textarea>
                         </div>
+                        <input type="hidden" value="" id="idProduct">
+						<input type="hidden" id="billDetail" value="">
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -218,11 +224,15 @@
     		var img=$('#img'+index).val();
     		var color=$('#color'+index).val();
     		var size=$('#size'+index).val();
+    		var billDetailId=$('#billDetail'+index).val();
+    		var productId=$('#idProduct'+index).val();
     		const previewImage = document.getElementById('previewImage');
     		previewImage.src = img;
     		$('#nameProduct').val(productName);
     		$('#sizeProduct').val("M");
     		$('#colorProduct').val("Trắng");
+    		$('#idProduct').val(productId);
+    		$('#billDetail').val(billDetailId);
     		
     	});
         $('#ok').click(function name() {
@@ -232,7 +242,9 @@
     		var star=$('#star').val();
     		var Description=$('#feedback').val();
     		var customer=$('#customer').val();
-    		add({customer:customer,product:productName,sizeColor:sizeColor,star:star,description:Description});
+    		var productId=$('#idProduct').val();
+    		var billDetailId=$('#billDetail').val();
+    		add({customer:customer,product:productName,sizeColor:sizeColor,star:star,description:Description,billDetailId:billDetailId,productId:productId});
 		});
         function  add(data) {
         	$.ajax({

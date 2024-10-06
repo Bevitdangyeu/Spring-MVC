@@ -5,6 +5,7 @@ public class ReplyDTO {
 	private String content;
 	private CustomerDTO customer;
 	private int feedback;
+	private String date;
 	public int getReplyId() {
 		return replyId;
 	}
@@ -29,6 +30,12 @@ public class ReplyDTO {
 	}
 	public void setFeedback(int feedback) {
 		this.feedback = feedback;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 }
