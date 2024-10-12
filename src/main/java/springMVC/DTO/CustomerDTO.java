@@ -7,6 +7,7 @@ public class CustomerDTO {
 	private int status;
 	private String address;
 	private int userId;
+	private String img;
 	public int getCustomerId() {
 		return customerId;
 	}
@@ -42,6 +43,12 @@ public class CustomerDTO {
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
 	}
 	
 }

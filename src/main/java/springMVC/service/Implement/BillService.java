@@ -265,7 +265,6 @@ public class BillService implements IBillService {
 	  public List<BillDTO> PurchaseHistory(int customerId, String status) {
 			// chuyển đổi tìm userId thông qua mã khách hàng
 		  List<BillEntity> billEntities = billResponsitory.findPurchaseHistory(status, customerId);
-		  System.out.println("billEntities size: "+billEntities.size());
 		    List<BillDTO> billDTOs = new ArrayList<>();
 
 		    for (BillEntity billEntity : billEntities) {

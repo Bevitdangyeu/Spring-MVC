@@ -30,6 +30,8 @@ public class customerEntity {
 	private String address;
 	@Column(name="status")
 	private int status;
+	@Column(name="img")
+	private String img;
 	@OneToMany(mappedBy = "customer")
 	private List<BillEntity> listBill=new ArrayList<BillEntity>();
 	@OneToOne (fetch = FetchType.EAGER)
@@ -39,6 +41,8 @@ public class customerEntity {
 	private List<FeedbackEntity> feedback=new ArrayList<FeedbackEntity>();
 	@OneToMany(mappedBy = "customer")
 	private List<ReplyEntity> reply=new ArrayList<ReplyEntity>();
+	@OneToMany(mappedBy = "customer")
+	private List<ConversationParticipantEntity> participant=new ArrayList<ConversationParticipantEntity>();
 	public long getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -89,6 +93,18 @@ public class customerEntity {
 	}
 	public void setReply(List<ReplyEntity> reply) {
 		this.reply = reply;
+	}
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	public List<ConversationParticipantEntity> getParticipant() {
+		return participant;
+	}
+	public void setParticipant(List<ConversationParticipantEntity> participant) {
+		this.participant = participant;
 	}
 	
 }

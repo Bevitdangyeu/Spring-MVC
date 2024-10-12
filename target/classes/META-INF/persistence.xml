@@ -16,6 +16,9 @@
       	<class>springMVC.entity.ColorEntity</class>
       	<class>springMVC.entity.FeedbackEntity</class>
       	<class>springMVC.entity.ReplyEntity</class>
+      	<class>springMVC.entity.ConversationParticipantEntity</class>
+      	<class>springMVC.entity.ConversationEntity</class>
+      	<class>springMVC.entity.MessageEntity</class>
     </persistence-unit>
 </persistence>
 

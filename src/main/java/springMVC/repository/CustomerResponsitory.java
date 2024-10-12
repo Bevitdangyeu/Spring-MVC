@@ -11,4 +11,5 @@ public interface CustomerResponsitory extends JpaRepository<customerEntity, Inte
 	customerEntity findByCustomerName(String customerName);
 	@Query("select c from customerEntity c where c.userId.userId=:userId ")
 	customerEntity findByUserId(@Param(value="userId") int userId);
+	customerEntity findByCustomerId(int customerId);
 }

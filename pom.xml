@@ -61,7 +61,19 @@
 	    <artifactId>spring-security-acl</artifactId>
 	    <version>5.7.5</version>
 	</dependency>
+	<!--websocket-->
+	<dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>5.3.20</version>
+    </dependency>
 
+    <!-- Spring Messaging for STOMP -->
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
+        <version>5.3.20</version>
+    </dependency>
 
     <!-- Hibernate -->
     <dependency>
