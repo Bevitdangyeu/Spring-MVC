@@ -73,22 +73,22 @@
                    <!--  nếu người gửi = user => hiển thị người nhận -->
                    		<c:forEach var="userChat" items="${item.user }" >
                    			<c:if test="${userChat.customerId != user.customerId}">	
-	                    	  <a href="#!" class="d-flex justify-content-between" id="conversation${conversation.index }" >
+	                    	  <a href="#!" class="d-flex justify-content-between" id="conversation${item.conversationId }" >
 	                          <div class="d-flex flex-row">
 	                            <div>
-	                            <input type="hidden" id="img${conversation.index }" value="${userChat.img }" >
+	                            <input type="hidden" id="img${item.conversationId }" value="${userChat.img }" >
 	                              <img
 	                                src="${userChat.img }"
 	                                alt="avatar" class="d-flex align-self-center me-3" style="width:50px;height:50px;border-radius:50px; margin-right:20px">
 	                              <span class="badge bg-success badge-dot"></span>
 	                            </div>
 	                            <div class="pt-1">
-	                               <p id="name${conversation.index }" value="${userChat.customerName }"class="fw-bold mb-0">${userChat.customerName }</p>
-	                              <p class="small text-muted">${item.message.content }</p>
+	                               <p id="name${item.conversationId }" value="${userChat.customerName }"class="fw-bold mb-0">${userChat.customerName }</p>
+	                              <p class="small text-muted lastMessage" id="lastMessage${item.conversationId }">${item.message.content }</p>
 	                            </div>
 	                          </div>
 	                          <div class="pt-1">
-	                            <p class="small text-muted mb-1">${item.message.time }</p>
+	                            <p class="small text-muted mb-1" id="time${item.conversationId}">${item.message.time }</p>
 	                            <span class="badge bg-danger rounded-pill float-end">3</span>
 	                          </div>
 	                        </a>                     
@@ -96,7 +96,7 @@
 	                    	</c:if>
 	                    	
                    		</c:forEach>
-                    	 <input type="hidden" id="conversationid${conversation.index }" value="${item.conversationId }">
+                    	 <input type="hidden" id="conversationid${item.conversationId }" value="${item.conversationId }">
                     	
                       <li class="p-2 border-bottom">
                       	<%-- <c:param name="received" value=${item.customerId }></c:param>
@@ -285,6 +285,7 @@
         function showMessage(message) {
         	var currentUser=document.getElementById('currentUserID').value;
         	// Lấy các thông tin từ object tin nhắn
+        	var conversationId=message.conversationId;
             const sendName = message.sender.customerName; // Tên người gửi
             const senderID=message.sender.customerId;
             const content = message.content; // Nội dung tin nhắn
@@ -304,7 +305,11 @@
             	}
             });
          	
-        /*     Phần hiển thị cho tin nhắn */
+        /*     Phần hiển thị cho tin nhắn */ 
+        	const ContentlastMessage = document.getElementById('lastMessage'+conversationId); 
+        	ContentlastMessage.textContent=content;
+        	const TimelastMessage = document.getElementById('time'+conversationId); 
+        	TimelastMessage.textContent=time;
             const messagesDiv = document.getElementById('messages'); // Lấy phần tử chứa tin nhắn
             const div = document.createElement('div'); // Tạo thẻ p cho tên người gửi
             const divMess = document.createElement('div'); // 

@@ -57,15 +57,17 @@ public class MessageService implements IMessageService{
 	public MessageDTO save(MessageDTO mess) {
 		// chuyển từ dto sang entity
 		ConversationDTO conversation=conversationService.findByConversationId(mess.getConversationId());
+		ConversationEntity conversationEntity=conversationRepository.findByConversationId(mess.getConversationId());
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		MessageEntity messageEntity=new MessageEntity();
 		messageEntity.setContent(mess.getContent());
 		messageEntity.setTime(currentDateTime);
 		customerEntity sender=customerRepository.findByCustomerId(mess.getSender().getCustomerId());
 		messageEntity.setSenderId(sender);
-		ConversationEntity conversationEntity=conversationRepository.findByConversationId(mess.getConversationId());
 		messageEntity.setConversationId(conversationEntity);
 		MessageEntity messEntity=messageRepository.save(messageEntity);
+		conversationEntity.setLastMessage(messageEntity);
+		conversationRepository.save(conversationEntity);
 		// chuyển ngược lại dto
 		MessageDTO dto=new MessageDTO();
 		dto.setConversationId(messEntity.getConversationId().getConversationId());
