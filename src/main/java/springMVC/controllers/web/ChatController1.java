@@ -1,6 +1,9 @@
 package springMVC.controllers.web;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +44,14 @@ public class ChatController1 {
 		 	List<CustomerDTO> listCustomer=customer.findAll();
 		 	// lấy danh sách đoạn chat của nguời dùng đó
 		 	List<ConversationDTO> listConversationDTO=conversationService.findByUser(id);
-		 	System.out.println(" size listConversationDTO "+ listConversationDTO.size());
-		 	mav.addObject("conversation", listConversationDTO);
-		 	mav.addObject("customer", listCustomer);
+		 	mav.addObject("conversation", listConversationDTO);// lấy tất cả đoạn chat theo user đó
+		 	mav.addObject("customer", listCustomer); // lấy ra tất cả các user trong hê thống
 	        return mav; // Trả về tên của trang JSP (chat.jsp)
 	    }
 	 @RequestMapping(value="/message",method = RequestMethod.POST)
-	 @ResponseBody 
-	 public List<MessageDTO> getMessage(@RequestBody ConversationDTO conversation,Model model) throws JsonProcessingException {
-		 ObjectMapper objectMapper = new ObjectMapper();
-		 List<MessageDTO> list=messageService.findByConversation(conversation.getConversationId());
+	 @ResponseBody // chuyển giá trị trả về thành json
+	 public List<MessageDTO> getMessage(@RequestBody ConversationDTO conversation) throws JsonProcessingException {
+		 List<MessageDTO> list=messageService.findByConversation(conversation.getConversationId());// lấy ra chi tiết tin nhắn theo mã đoan chat
 		 ModelAndView mav=new ModelAndView("chat");
 		 mav.addObject("message",list);
 		
@@ -61,5 +62,22 @@ public class ChatController1 {
 	 public ResponseEntity<?> deleteMess(@RequestBody MessageDTO mesesage) {
 		  messageService.deleteMess(mesesage);
 		  return ResponseEntity.ok().build();
+	 }
+	 
+	 @PostMapping("/conversation")
+	 @ResponseBody
+	 // lấy ra tin nhắn theo mã user của user hiện tại và  user nào đó
+	 public List<MessageDTO> getMessageByUserId(@RequestBody Map<String,Integer> id){
+		 List<MessageDTO> list=new ArrayList<MessageDTO>();
+		 Optional<Integer> conversationId=conversationService.findConversationIdByUser(id.get("userActiveId"), id.get("currentUser"));
+		 int conversation=conversationId.orElse(0);
+		 if(conversation!=0) {
+			list=messageService.findByConversation(conversation);
+			 ModelAndView mav=new ModelAndView("chat");
+			 mav.addObject("message",list);
+			 return list;
+		 }
+		
+		 return list;
 	 }
 }

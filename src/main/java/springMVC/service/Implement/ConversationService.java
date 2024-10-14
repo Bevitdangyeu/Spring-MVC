@@ -3,6 +3,7 @@ package springMVC.service.Implement;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -80,6 +81,11 @@ import springMVC.service.Interface.ICustomerService;
 		mess.setTime(conversationEntity.getCreatedAt().format(formatter))	;
 		conversationDTO.setMessage(mess);
 		return conversationDTO;
+	}
+	@Override
+	public Optional<Integer> findConversationIdByUser(int userActiveId, int currentUser) {
+		Optional<Integer> id=conversationRepository.findByUserId(userActiveId, currentUser);
+		return id;
 	}
 	
 	

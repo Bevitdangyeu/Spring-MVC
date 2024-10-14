@@ -14,6 +14,7 @@ import springMVC.DTO.ConversationDTO;
 import springMVC.DTO.CustomerDTO;
 import springMVC.DTO.MessageDTO;
 import springMVC.entity.ConversationEntity;
+import springMVC.entity.ConversationParticipantEntity;
 import springMVC.entity.MessageEntity;
 import springMVC.entity.customerEntity;
 import springMVC.repository.ConversationRepository;
@@ -55,10 +56,32 @@ public class MessageService implements IMessageService{
 	@Transactional
 	@Override
 	public MessageDTO save(MessageDTO mess) {
-		// chuyển từ dto sang entity
-		ConversationDTO conversation=conversationService.findByConversationId(mess.getConversationId());
-		ConversationEntity conversationEntity=conversationRepository.findByConversationId(mess.getConversationId());
 		LocalDateTime currentDateTime = LocalDateTime.now();
+		// kiểm tra xem đoạn chat đó tồn tại chưa nếu chưa =>tạo mới
+		ConversationDTO conversation=new ConversationDTO();
+		ConversationEntity conversationEntity=new ConversationEntity();
+		if(mess.getConversationId()==0) { //=>tạo mới
+			ConversationEntity con=new ConversationEntity();
+			con.setCreatedAt(currentDateTime);
+			ConversationParticipantEntity participant1=new ConversationParticipantEntity();
+			participant1.setConversation(con);
+			customerEntity customer1=customerRepository.findByCustomerId(mess.getSender().getCustomerId());
+			participant1.setCustomer(customer1);
+			ConversationParticipantEntity participant2=new ConversationParticipantEntity();
+			participant2.setConversation(con);
+			customerEntity customer2=customerRepository.findByCustomerId(mess.getReceiver().get(0).getCustomerId());
+			participant2.setCustomer(customer2);	
+			List<ConversationParticipantEntity> list=new ArrayList<ConversationParticipantEntity>();
+			list.add(participant1);
+			list.add(participant2);
+			con.setListParticipant(list);
+			conversationEntity = conversationRepository.save(con);
+		}
+		else { // đã có rồi thì lấy nó lên từ cơ sở dữ liệu 
+			conversation=conversationService.findByConversationId(mess.getConversationId());
+			conversationEntity=conversationRepository.findByConversationId(mess.getConversationId());
+		}
+		// chuyển từ dto sang entity
 		MessageEntity messageEntity=new MessageEntity();
 		messageEntity.setContent(mess.getContent());
 		messageEntity.setTime(currentDateTime);
@@ -68,6 +91,7 @@ public class MessageService implements IMessageService{
 		MessageEntity messEntity=messageRepository.save(messageEntity);
 		conversationEntity.setLastMessage(messageEntity);
 		conversationRepository.save(conversationEntity);
+		conversation=conversationService.findByConversationId(messageEntity.getConversationId().getConversationId());
 		// chuyển ngược lại dto
 		MessageDTO dto=new MessageDTO();
 		dto.setConversationId(messEntity.getConversationId().getConversationId());

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +33,7 @@ public class ConversationEntity {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="lastMessage")
 	private MessageEntity lastMessage;
-	@OneToMany(mappedBy = "conversation",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "conversation",fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ConversationParticipantEntity> listParticipant;
 	@OneToMany(mappedBy = "conversationId")
 	private List<MessageEntity> message =new ArrayList<MessageEntity>();

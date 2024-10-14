@@ -13,8 +13,7 @@
 	 <!-- Phần danh sách người dùng -->
             	
             	<div style="overflow-y:scroll;font-family: 'Roboto', sans-serif;width:15%;float: left;margin-top: 20px;height:80%">
-            	<div class="p-3">
-
+            	<div class="p-1">
                   <div class="input-group rounded mb-3">
                     <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
                       aria-describedby="search-addon" />
@@ -27,20 +26,20 @@
                     <ul class="list-unstyled mb-0">
                     <c:forEach var="item" items="${customer }">
                       <li class="p-2 border-bottom">
-                        <a href="#!" class="d-flex justify-content-between">
+                        <a href="#!" id="userActive${item.customerId }" class="d-flex justify-content-between">
                           <div class="d-flex flex-row">
                             <div>
                               <img
-                                src="${item.img }"
+                                src="${item.img }" id="imgUserActuve${item.customerId }"
                                 alt="avatar" class="d-flex align-self-center me-3" style="width:50px;height:50px;border-radius:50px; margin-right:20px">
                               <span class="badge bg-success badge-dot"></span>
                             </div>
                             <div class="pt-1">
-                              <p class="fw-bold mb-0">${item.customerName }</p>
+                              <p class="fw-bold mb-0" id="nameUserActive${item.customerId }">${item.customerName }</p>
                             </div>
                           </div>
                           <div class="pt-1">
-                           <!--  <p class="small text-muted mb-1">Just now</p> -->
+                            <p class="small text-muted mb-1">Just now</p>
                           </div>
                         </a>
                       </li>
@@ -92,7 +91,7 @@
 	                            <span class="badge bg-danger rounded-pill float-end">3</span>
 	                          </div>
 	                        </a>                     
-	                   <%--     <input type="hidden" id="Participantid${conversation.index }" value="${item.conversationId }"> --%>
+	                        <input type="hidden" id="Participantid${item.conversationId }" value="${userChat.customerId }"> <!-- id người nhận -->
 	                    	</c:if>
 	                    	
                    		</c:forEach>
@@ -115,7 +114,7 @@
                   <div class="justify-content-end" style="width:100%;height:100%">
                   	<!-- Phần hiển thị thông tin của user -->
 			 		<div id="info" style="display:flex;height:50px">
-			 		
+			 			
 			 		</div>
 			 		<hr>
                     <div id="messages" style="width:100%;overflow-y:scroll;height:500px">
@@ -140,7 +139,7 @@
           </div>
        
   </section>
-  
+  <input  type="hidden" id="receiverId" value=""> <!-- id người nhận -->
   <input  type="hidden" id="conversationID" value="">
   <input type="hidden" id="currentUser" value="${user.customerName }">
   <input type="hidden" id="currentUserID" value="${user.customerId }">
@@ -152,7 +151,61 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script>
-    // hàm thao tác xóa tin nhắn detail
+    // hàm lấy ra tin nhắn khi người dùng nhấn vào userActive(phía gốc trái)
+    $('a[id^="userActive"]').click(function () {
+    	var chatBox = $('#info'); // Chọn phần tử nơi bạn muốn hiển thị thông tin người dùng ở đầu đoạn chat
+        chatBox.empty();
+    	// lấy id của nguwofi dùng được chọn
+		var userActiveId =$(this).attr('id').replace('userActive','');
+		var currentUser=$('#currentUserID').val();
+		// hiển thị thông tin user
+		const info = document.getElementById('info');
+     	const imginfo = document.createElement('img');
+     	imginfo.src =$('#imgUserActuve'+userActiveId).attr('src');
+     	const NameInfo = document.createElement('p'); 
+     	NameInfo.textContent=$('#nameUserActive'+userActiveId).text();
+     	NameInfo.style.marginLeft='10px';
+    	NameInfo.style.marginTop='10px';
+     	NameInfo.style.fontWeight='bold';
+     	// css cho 2 thành phần
+     	imginfo.style.width='50px';
+     	imginfo.style.height='50px';
+     	imginfo.style.marginLeft='10px';
+     	imginfo.style.marginRight='10px';
+     	imginfo.style.borderRadius='30px';
+     	imginfo.style.objectFit = 'cover'; 
+     	// thêm 2 thành phần đó vào bên trong thẻ div
+     	info.appendChild(imginfo);
+     	info.appendChild(NameInfo);
+		$.ajax({
+			url:'/SpringMVC2/user/conversation',
+			type:'post',
+			data: JSON.stringify({userActiveId:userActiveId,currentUser:currentUser}),
+			contentType :'application/json',
+			dataType: 'json',
+			success: function (response) {
+				 var chatBox = $('#messages'); // Chọn phần tử nơi bạn muốn hiển thị tin nhắn
+			        chatBox.empty(); // Xóa nội dung cũ
+				 // cập nhật giá trị của conversationID
+				 // nếu như giá trị trả về thì mới thực hiện
+				 if(Array.isArray(response) && response.length > 0) {
+					 var conversation=response[0].conversationId
+					 console.log(' conversationId '+conversation);
+					 $('#conversationID').val(conversation);
+					 $('#receiverId').val(userActiveId);
+					 displayMessages(response);
+				 }else{
+					 $('#conversationID').val(0);
+					 $('#receiverId').val(userActiveId);
+				 }
+				
+			},
+			error: function (response) {
+				 console.error(response);
+			}
+		});
+	})
+    // hàm thao tác xóa tin nhắn 
     $('#messages').on('click', 'button[id^="delete"]', function () {
     	var messageId=$(this).attr('id').replace('delete', '');
 	    var conversationID = $('#conversationID').val();
@@ -178,16 +231,16 @@
    
     // hàm tải tin nhắn
     $('a[id^="conversation"]').click(function name(event) {
-    	var chatBox = $('#info'); // Chọn phần tử nơi bạn muốn hiển thị tin nhắn
+    	var chatBox = $('#info'); // Chọn phần tử nơi bạn muốn hiển thị thông tin người dùng ở đầu đoạn chat
         chatBox.empty();
     	event.preventDefault();
 		var index=$(this).attr('id').replace('conversation', '');
 		var conversation=$('#conversationid'+index).val();
 		$('#conversationID').val(conversation);
 		show({conversationId:conversation})
-		
+		var receiverId=$('#Participantid'+index).val();
 		 // hiển thị thông tin user
-		
+		 $('#receiverId').val(receiverId);// id người nhận
 		const info = document.getElementById('info');
      	const imginfo = document.createElement('img');
      	imginfo.src =$('#img'+index).val();
@@ -229,15 +282,13 @@
         chatBox.empty(); // Xóa nội dung cũ
 		var currentUser=document.getElementById('currentUserID').value;
         // Duyệt qua danh sách tin nhắn và thêm vào chatBox
-        response.forEach(function (item) {
-        	console.log(item); // Xem cấu trúc của item
-            console.log(item.content); // Kiểm tra xem giá trị có đúng không
-            var content=item.content;
-            console.log(content);
-            var messageHtml = '';
-            showMessage(item)
-        });
-      
+        if (Array.isArray(response) && response.length > 0) {
+	        response.forEach(function (item) {
+	            var content=item.content;
+	            var messageHtml = '';
+	            showMessage(item)
+	        });
+        }
     }
     //---------------------------------------------------------------------------------
         let stompClient = null; // Khai báo stompClient
@@ -261,10 +312,13 @@
         }
 
         function sendMessage() {
+        	// lấy thông tin của người nhận
         	// lấy user hiện tại currentUser
         	var currentUser=document.getElementById('currentUserID').value;
         	var conversationID = $('#conversationID').val();
+        	var receiverId=$('#receiverId').val();
             const Content = document.getElementById('messageInput').value;
+            var lisreceiver=[];
             if (!Content) {
                 alert('Please enter a message!');
                 return; // Ngừng thực hiện nếu không có nội dung
@@ -272,14 +326,19 @@
 			var sender={
 					customerId:currentUser
 			}
+			var receiver={
+					customerId:receiverId
+			}
+			lisreceiver.push(receiver);
             const MessageDTO = {
 				sender:sender , // ID người gửi
 				content:Content,
-				conversationId:conversationID
+				conversationId:conversationID,
+				receiver:lisreceiver
             };
 			console.log(JSON.stringify(MessageDTO));
             stompClient.send('/app/send', {}, JSON.stringify(MessageDTO)); // Gửi tin nhắn đến server
-            $('#messageInput').val('');
+            $('#messageInput').val(''); // xóa nội dung đã nhập
         }
 
         function showMessage(message) {
@@ -307,9 +366,11 @@
          	
         /*     Phần hiển thị cho tin nhắn */ 
         	const ContentlastMessage = document.getElementById('lastMessage'+conversationId); 
-        	ContentlastMessage.textContent=content;
-        	const TimelastMessage = document.getElementById('time'+conversationId); 
-        	TimelastMessage.textContent=time;
+        	if (ContentlastMessage) {
+        		ContentlastMessage.textContent=content;
+        		const TimelastMessage = document.getElementById('time'+conversationId); 
+            	TimelastMessage.textContent=time;
+        	}
             const messagesDiv = document.getElementById('messages'); // Lấy phần tử chứa tin nhắn
             const div = document.createElement('div'); // Tạo thẻ p cho tên người gửi
             const divMess = document.createElement('div'); // 
