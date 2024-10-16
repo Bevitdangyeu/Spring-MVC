@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,16 @@ public class MessageService implements IMessageService{
 	@Autowired ConversationRepository conversationRepository;
 	@Autowired ICustomerService customer;
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
+	@PersistenceContext
+    private EntityManager entityManager;
+
+    public void checkEntityState(ConversationEntity conversationEntity) {
+        if (entityManager.contains(conversationEntity)) {
+            System.out.println("Entity is in Persistent state.");
+        } else {
+            System.out.println("Entity is in Detached or Transient state.");
+        }
+    }
 	@Override
 	public List<MessageDTO> findByConversation(int id) {
 		
@@ -60,25 +72,24 @@ public class MessageService implements IMessageService{
 		// kiểm tra xem đoạn chat đó tồn tại chưa nếu chưa =>tạo mới
 		ConversationDTO conversation=new ConversationDTO();
 		ConversationEntity conversationEntity=new ConversationEntity();
-		if(mess.getConversationId()==0) { //=>tạo mới
-			ConversationEntity con=new ConversationEntity();
-			con.setCreatedAt(currentDateTime);
+		if(mess.getConversationId()==0) { //=>nếu đoạn chat đó chưa có thì tạo mới đoạn chat
+			conversationEntity.setCreatedAt(currentDateTime);
 			ConversationParticipantEntity participant1=new ConversationParticipantEntity();
-			participant1.setConversation(con);
+			participant1.setConversation(conversationEntity);
 			customerEntity customer1=customerRepository.findByCustomerId(mess.getSender().getCustomerId());
 			participant1.setCustomer(customer1);
 			ConversationParticipantEntity participant2=new ConversationParticipantEntity();
-			participant2.setConversation(con);
+			participant2.setConversation(conversationEntity);
 			customerEntity customer2=customerRepository.findByCustomerId(mess.getReceiver().get(0).getCustomerId());
 			participant2.setCustomer(customer2);	
 			List<ConversationParticipantEntity> list=new ArrayList<ConversationParticipantEntity>();
 			list.add(participant1);
 			list.add(participant2);
-			con.setListParticipant(list);
-			conversationEntity = conversationRepository.save(con);
+			conversationEntity.setListParticipant(list);
+			conversationEntity = conversationRepository.save(conversationEntity);
 		}
 		else { // đã có rồi thì lấy nó lên từ cơ sở dữ liệu 
-			conversation=conversationService.findByConversationId(mess.getConversationId());
+		//	conversation=conversationService.findByConversationId(mess.getConversationId());
 			conversationEntity=conversationRepository.findByConversationId(mess.getConversationId());
 		}
 		// chuyển từ dto sang entity

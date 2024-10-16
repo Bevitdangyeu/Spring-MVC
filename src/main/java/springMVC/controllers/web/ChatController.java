@@ -30,7 +30,6 @@ public class ChatController {
     @MessageMapping("/send")
     @ResponseBody
     public void sendMessage(Message<MessageDTO> message) {
-    	System.out.println(" vô sendMessage");
     	  MessageDTO mess = message.getPayload();
     	 ObjectMapper objectMapper = new ObjectMapper();    
     	    try {
@@ -42,7 +41,6 @@ public class ChatController {
     	    	MessageDTO messageResponse=messageService.save(messageDto);
     	    	// gửi đến những người nhận nào và gửi nội dung gì
     	    	for( int i=0;i<messageResponse.getReceiver().size();i++) {
-    	    		System.out.println(" nguoi duoc gui: "+messageResponse.getReceiver().get(i).getCustomerId());
     	    		 messagingTemplate.convertAndSend("/queue/"+messageResponse.getReceiver().get(i).getCustomerId(),messageResponse);
     	    	}
     	       

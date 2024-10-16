@@ -66,8 +66,8 @@
                     </span>
                   </div>
 			
-                  <div data-mdb-perfect-scrollbar-init style="position: relative; height: 400px" style="overflow-y:scroll;font-family: 'Roboto', sans-serif;height:70%">
-                    <ul class="list-unstyled mb-0">
+                  <div id="divLastMessage" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px" style="overflow-y:scroll;font-family: 'Roboto', sans-serif;height:70%">
+                    <!-- <ul class="list-unstyled mb-0"> -->
                     <c:forEach var="item" items="${conversation }" varStatus="conversation">
                    <!--  nếu người gửi = user => hiển thị người nhận -->
                    		<c:forEach var="userChat" items="${item.user }" >
@@ -81,12 +81,12 @@
 	                                alt="avatar" class="d-flex align-self-center me-3" style="width:50px;height:50px;border-radius:50px; margin-right:20px">
 	                              <span class="badge bg-success badge-dot"></span>
 	                            </div>
-	                            <div class="pt-1">
-	                               <p id="name${item.conversationId }" value="${userChat.customerName }"class="fw-bold mb-0">${userChat.customerName }</p>
+	                            <div class="pt-1" id="divContentLastMessage">
+	                               <p id="name${item.conversationId }" class="fw-bold mb-0">${userChat.customerName }</p>
 	                              <p class="small text-muted lastMessage" id="lastMessage${item.conversationId }">${item.message.content }</p>
 	                            </div>
 	                          </div>
-	                          <div class="pt-1">
+	                          <div class="pt-1" id="divTimeLastMessage">
 	                            <p class="small text-muted mb-1" id="time${item.conversationId}">${item.message.time }</p>
 	                            <span class="badge bg-danger rounded-pill float-end">3</span>
 	                          </div>
@@ -97,14 +97,14 @@
                    		</c:forEach>
                     	 <input type="hidden" id="conversationid${item.conversationId }" value="${item.conversationId }">
                     	
-                      <li class="p-2 border-bottom">
-                      	<%-- <c:param name="received" value=${item.customerId }></c:param>
+                     <%--  <li class="p-2 border-bottom">
+                      	<c:param name="received" value=${item.customerId }></c:param>
                       	<c:url var="conversation" value="/">
-                      	</c:url> --%>
+                      	</c:url>
                         
-                      </li>
+                      </li> --%>
                       </c:forEach>
-                    </ul>
+                  <!--   </ul> -->
                   </div>
 				 </div>
             	</div>
@@ -353,6 +353,7 @@
             var Receiver=message.receiver;
             var img=null;
             var name=null
+            var nameReceiver=null;
           	var idMess=message.idMessenge;
             Receiver.forEach(function (item) {
             	if(item.customerId ==currentUser){
@@ -361,6 +362,8 @@
             	}
             	else{
             		img=item.img;
+            		nameReceiver=item.customerName;
+            		
             	}
             });
          	
@@ -370,6 +373,61 @@
         		ContentlastMessage.textContent=content;
         		const TimelastMessage = document.getElementById('time'+conversationId); 
             	TimelastMessage.textContent=time;
+            	
+        	}
+        	else{ // nếu đây là lần đầu thì => tạo lastMessage divLastMessage divLastMessage
+        		const div=document.getElementById('divLastMessage'); 
+        		// ảnh đại diện(tạo một thẻ hình ảnh
+        		const imgLastMessage = document.createElement('img');// avt
+        		imgLastMessage.src=img;
+        		imgLastMessage.className="d-flex align-self-center me-3";
+        		imgLastMessage.id="img"+conversationId;
+        		// css cho hình ảnh width:50px;height:50px;border-radius:50px; margin-right:20px
+        		imgLastMessage.style.width='50px';
+        		imgLastMessage.style.height='50px';
+        		imgLastMessage.style.borderRadius='50px';
+        		imgLastMessage.style.marginRight='20px';
+        		// tên người dùng
+        		const nameLastMessage = document.createElement('p'); 
+        		nameLastMessage.textContent=nameReceiver;
+        		nameLastMessage.id='name'+conversationId;
+        		// nội dung tin nhắn
+        		const ContentlastMessage = document.createElement('p'); 
+        		ContentlastMessage.className="small text-muted lastMessage";
+        		ContentlastMessage.id='lastMessage'+conversationId;
+        		ContentlastMessage.textContent=content;
+        		
+        		// thời gian
+        		const TimelastMessage = document.createElement('p'); 
+        		TimelastMessage.className="small text-muted mb-1";
+        		TimelastMessage.id="time"+conversationId;
+        		TimelastMessage.textContent=time;
+        		TimelastMessage.style
+        		// tạo một div để cho hinh ảnh và tên tên và tin nhắn cũ (cấp 2)
+        		const DivNameImage = document.createElement('div');
+        		DivNameImage.className="d-flex flex-row";
+	        		// tạo một div hiển thị hình ảnh
+	        			const DivImage = document.createElement('div');// cấp(3)
+	        		// tạo một div hiển thị tên và tin nhắn
+	        			const DivName = document.createElement('div');// cấp(3)
+	        			DivName.className="pt-1";
+        		// tạo một div để hiển thị thời gian  (cấp 2)`
+        		const divTime = document.createElement('div');
+        		divTime.className="pt-1";
+        		DivImage.appendChild(imgLastMessage);
+        		DivName.appendChild(nameLastMessage); 
+        		DivName.appendChild(ContentlastMessage);
+        		divTime.appendChild(TimelastMessage);
+        		DivNameImage.appendChild(DivImage); // add cấp 3 vào cấp 2
+        		DivNameImage.appendChild(DivName); //add cấp 3 vào cấp 2
+        		DivNameImage.appendChild(divTime);
+        		// tạo một thẻ a để thêm cấp 1 vào class="d-flex justify-content-between" id="conversation${item.conversationId }" 
+        		var a = document.createElement('a');// avt
+        		a.className="d-flex justify-content-between";
+        		a.id='conversation'+conversationId;
+        		a.hre="#";
+        		a.appendChild(DivNameImage);
+        		div.appendChild(a);//add cấp 2 vào cấp 1
         	}
             const messagesDiv = document.getElementById('messages'); // Lấy phần tử chứa tin nhắn
             const div = document.createElement('div'); // Tạo thẻ p cho tên người gửi
