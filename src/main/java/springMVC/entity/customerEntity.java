@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -32,17 +31,26 @@ public class customerEntity {
 	private int status;
 	@Column(name="img")
 	private String img;
+	// thông tin người mua hàng
 	@OneToMany(mappedBy = "customer")
 	private List<BillEntity> listBill=new ArrayList<BillEntity>();
+	// thông tin user( tài khoản)
 	@OneToOne (fetch = FetchType.EAGER)
 	@JoinColumn(name="userId")
 	private UserAndPassEntity userId;
+	//người đánh giá
 	@OneToMany(mappedBy = "customer")
 	private List<FeedbackEntity> feedback=new ArrayList<FeedbackEntity>();
+	// người trả lời feedback
 	@OneToMany(mappedBy = "customer")
 	private List<ReplyEntity> reply=new ArrayList<ReplyEntity>();
+	// người tham gia
 	@OneToMany(mappedBy = "customer")
 	private List<ConversationParticipantEntity> participant=new ArrayList<ConversationParticipantEntity>();
+	// thông tin người bình luận sản phẩm
+	@OneToMany(mappedBy = "customer")
+	private List<CommentParentEntity> listCommentParent=new ArrayList<CommentParentEntity>();
+	
 	public long getPhoneNumber() {
 		return phoneNumber;
 	}

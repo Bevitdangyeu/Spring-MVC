@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -45,6 +44,7 @@ public class ProductEntity {
 	private int status;
 	@Column(name="image")
 	private String image;
+	private int sold;
 	@Column(name="Description",columnDefinition = "TEXT")
 	private  String Description;
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -140,6 +140,12 @@ public class ProductEntity {
 	}
 	public void setFeedback(List<FeedbackEntity> feedback) {
 		this.feedback = feedback;
+	}
+	public int getSold() {
+		return sold;
+	}
+	public void setSold(int sold) {
+		this.sold = sold;
 	}
 	
 	

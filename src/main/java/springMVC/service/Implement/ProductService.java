@@ -53,6 +53,7 @@ public class ProductService implements IProductService{
 			productEntity.setStatus(1);
 			productEntity.setDescription(product.getDescription());
 			productEntity.setImage(product.getImage());
+			productEntity.setSold(0);
 			java.util.List<ImageEntity> listImage =new ArrayList<ImageEntity>();
 			for(int i=0;i<product.getListImage().size();i++) {
 				ImageEntity image=new ImageEntity();
@@ -244,6 +245,7 @@ public class ProductService implements IProductService{
 			productDTO.setImage(list.get(i).getImage());
 			productDTO.setPrince(list.get(i).getPrince());
 			productDTO.setQuantity(list.get(i).getQuantity());
+			productDTO.setSold(list.get(i).getSold());
 			productDTO.setCategoryId(list.get(i).getCategory().getCateroryId());
 			List<String> listColor=new ArrayList<String>();
 			for(int j=0;j<list.get(i).getListColor().size();j++) {
@@ -279,6 +281,7 @@ public class ProductService implements IProductService{
 		DTO.setCategoryId(productEntity.getCategory().getCateroryId());
 		DTO.setCategoryName(productEntity.getCategory().getCategoryName());
 		DTO.setImage(productEntity.getImage());
+		DTO.setSold(productEntity.getSold());
 		List<String> listImage=new ArrayList<String>();
 		for(int i=0;i<productEntity.getListImage().size();i++) {
 			String image=productEntity.getListImage().get(i).getImgae();
@@ -353,6 +356,7 @@ public class ProductService implements IProductService{
 			productDTO.setImage(list.get(i).getImage());
 			productDTO.setPrince(list.get(i).getPrince());
 			productDTO.setQuantity(list.get(i).getQuantity());
+			productDTO.setSold(list.get(i).getSold());
 			listProductDTO.add(productDTO);
 		}
 		
@@ -425,6 +429,7 @@ public class ProductService implements IProductService{
 			DTO.setCategoryId(productEntity.getCategory().getCateroryId());
 			DTO.setCategoryName(productEntity.getCategory().getCategoryName());
 			DTO.setImage(productEntity.getImage());
+			DTO.setSold(productEntity.getSold());
 			List<String> listImage=new ArrayList<String>();
 			for(int j=0;j<productEntity.getListImage().size();j++) {
 				String image=productEntity.getListImage().get(j).getImgae();

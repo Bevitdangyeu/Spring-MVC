@@ -81,6 +81,10 @@ public class BillService implements IBillService {
 			for(int i=0;i<bill.getItems().size();i++) {
 				DetailBillEntity detailBill=new DetailBillEntity();
 				ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
+				// lấy ra giá trị đã bán cũ
+				int sl=product.getSold();
+				product.setSold(sl+bill.getItems().get(i).getQuantity());
+				productResponsitory.save(product);
 				detailBill.setProduct(product);
 				detailBill.setBill(billEntity);
 				detailBill.setPrice(bill.getItems().get(i).getPrince());
@@ -101,11 +105,21 @@ public class BillService implements IBillService {
 			billEntity.setTotalPrice(tong);
 			billEntity.setTotalQuantity(tongSl);
 			List<DetailBillEntity> list=billEntity.getList();
-			for(int i=0;i<bill.getItems().size();i++) {
-				if(i<billEntity.getList().size()) {
+			for(int i=0;i<bill.getItems().size();i++) { // danh sách sản phẩm được lấy từ client 
+				if(i<billEntity.getList().size()) {// danh sách sản phẩm cũ
 					/// lấy bill detail cũ và sau đó set lại giá trị mới
 					DetailBillEntity detailBill= billEntity.getList().get(i);
 					ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
+						int sl=product.getSold();
+						// set lại sold cho sản phẩm
+						// lấy ra số lượng cũ nếu lớn=> +vào slod còn bé thì - sold
+						int a=bill.getItems().get(i).getQuantity(); // sl mới
+						int b=billEntity.getList().get(i).getQuantity();// sl cũ
+						if(a>b) { // có thêm mới
+							product.setSold(sl+(a-b));
+						}else if(a<b){ // giảm bớt
+							product.setSold(sl-(b-a));
+						}
 					detailBill.setProduct(product);
 					detailBill.setBill(billEntity);
 					detailBill.setPrice(bill.getItems().get(i).getPrince());
@@ -113,12 +127,15 @@ public class BillService implements IBillService {
 					detailBill.setTotal(bill.getItems().get(i).getTotal());
 					detailBill.setColor(bill.getItems().get(i).getColor());
 					detailBill.setSize(bill.getItems().get(i).getSize());
+					
 				}
-				// nếu như có một sản phẩm mới được thêm vào thì size nó sẽ lớn hơn=> thêm mới vào 
-				else {
+				// nếu như có một sản phẩm mới được thêm vào thì size(index) nó sẽ lớn hơn=> thêm mới vào 
+				else { // thêm mới
 					// tạo mới một billdetail mới và gán cho nó giá trị mới 
 					DetailBillEntity detailBill=new DetailBillEntity();
-					ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
+						ProductEntity product=productResponsitory.findOneByName(bill.getItems().get(i).getProduct());
+						int sl=product.getSold();
+						product.setSold(sl+bill.getItems().get(i).getQuantity());
 					detailBill.setProduct(product);
 					detailBill.setBill(billEntity);
 					detailBill.setPrice(bill.getItems().get(i).getPrince());
@@ -132,6 +149,7 @@ public class BillService implements IBillService {
 			}
 			billEntity.setList(list);
 			billResponsitory.save(billEntity);
+			
 		}
 		
 		return null;

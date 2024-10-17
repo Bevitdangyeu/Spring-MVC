@@ -59,7 +59,7 @@
 								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
 							</p>
 							<p class="text-left">
-								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+								<a href="#" class="mr-2" style="color: #000;">${product.sold } <span style="color: #bbb;">Sold</span></a>
 							</p>
 					</div>
     				<p class="price"><span>${product.prince }</span></p>
@@ -207,11 +207,11 @@
             </div>
          <div class="col-md-12 nav-link-wrap">
             <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="false">Description</a>
 
-              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
+              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Comment</a>
 
-              <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+              <a class="nav-link ftco-animate active " id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="true">Reviews</a>
 
             </div>
           </div>
@@ -219,20 +219,31 @@
          
             <div class="tab-content bg-light" id="v-pills-tabContent">
 
-              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+              <div class="tab-pane fade " id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
               	<div class="p-4">
 	              	<h3 class="mb-4">Nike Free RN 2019 iD</h3>
 	              	<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
               	</div>
               </div>
-
+		<!-- 	Phần bình luận(hỏi đáp về sản phẩm) -->
               <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
               	<div class="p-4">
-	              	<h3 class="mb-4">Manufactured By Nike</h3>
-	              	<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country. But nothing the copy said could convince her and so it didn’t take long until a few insidious Copy Writers ambushed her, made her drunk with Longe and Parole and dragged her into their agency, where they abused her for their.</p>
+              	 <div  style="display:flex;">
+					<img style="width:40px;height:40px;border-radius:30px;border:1px dashed  #888888;margin-right: 20px"" alt="" src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png">
+						<h4>
+							<span style="font-weight: bold;" class="text-left">${user.customerName }</span>
+						</h4>
+				</div>
+	              	<div style="position: relative; display: inline-block;width:100%">
+						<input type="text" value="" placeholder="Nhập bình luận" id="editreply" style="margin:10px 0px 10px 60px; border:1px dashed #888888 ;background: transparent;outline:none;width:50%;border-radius:10px;padding-left:15px" >
+					</div>
+					<button id="comment" type="button" class="btn btn-primary" style="margin: 10px 0px 10px 60px">Gửi bình luận</button>
+					<button id="" type="button" class="btn btn-primary" style="margin-top:10px;margin-left:20px;">Hủy</button>
+					
               	</div>
               </div>
-              <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+           <!--    Phần feedback -->
+              <div class="tab-pane fade show active" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
               	<div class="row p-4">
 					<div class="col-md-7">
 						<h3 class="mb-4">23 Reviews</h3>
@@ -252,56 +263,58 @@
 										</c:forEach>
 								   		</p>
 								   		<p>${item.description }</p>		
-								   		<p>
-								   			<a class="nav-link" id="pills-profile-tab${status.index }" data-toggle="pill" href="#pills-profile${status.index }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Trả lời</a>
-										    <!-- Nội dung của các tab -->
-										    <div class="tab-content" id="pills-tabContent${status.index }">
-										        <div class="tab-pane fade" id="pills-profile${status.index }" role="tabpanel" aria-labelledby="pills-profile-tab">
-										            <textarea placeholder="Nhập câu hỏi của bạn" class="form-control" id="content${status.index }" name="description" style="border-radius:20px;border:1px dashed #DDDDDD"></textarea>
-                    								<button id="ok${status.index }" type="button" class="btn btn-primary" style="margin-top:10px">Gửi câu hỏi</button>
-                    								<button id="Cancel${status.index }" type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-top:10px">Hủy</button>
+								   		<p>	
+								   			<!-- khi ấn vào thẻ a sẽ hiển khung để bình luận -->
+								   			<a class="nav-link" id="pills-profile-tab${item.reviewId }" data-toggle="pill" href="#pills-profile${item.reviewId }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Trả lời</a>
+										   <!-- 	Phần sẽ hiển thị phần bình luận khi ấn vào thẻ a -->
+										    <div class="tab-content" id="pills-tabContent${item.reviewId }">
+										        <div class="tab-pane fade" id="pills-profile${item.reviewId }" role="tabpanel" aria-labelledby="pills-profile-tab">
+										            <textarea placeholder="Nhập câu hỏi của bạn" class="form-control" id="content${item.reviewId }" name="description" style="border-radius:20px;border:1px dashed #DDDDDD"></textarea>
+                    								<button id="ok${item.reviewId }" type="button" class="btn btn-primary" style="margin-top:10px">Gửi câu hỏi</button>
+                    								<button id="Cancel${item.reviewId }" type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-top:10px">Hủy</button>
 										        </div>
 										    </div>
+										<!------------------------------>
 								   		</p>
 								   		<p>
-								   			<a class="nav-link" id="pills-profile-tab-reply${status.index }" data-toggle="pill" href="#pills-profile-reply${status.index }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Xem các câu trả lời khác</a>
-										    <!-- Nội dung của các tab -->
-										    <div class="tab-content" id="pills-tabContent-reply${status.index }">
-										    <div class="tab-pane fade" id="pills-profile-reply${status.index }" role="tabpanel" aria-labelledby="pills-profile-tab">
-										       <c:forEach var="reply" items="${item.reply }" varStatus="replyStatus">
-													 <div  style="display:flex;">
-													 	<img style="width:40px;height:40px;border-radius:30px;border:1px dashed  #888888;margin-right: 20px"" alt="" src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png">
-													 
-													 <h4>
-											   			<span style="font-weight: bold;" class="text-left">${reply.customer.customerName }</span>
-											   			<span class="text-right">${reply.date }</span>
-											   		</h4>
-											   		</div>
-														<div style="position: relative; display: inline-block;width:100%">
-														   <input type="text" value="${reply.content}" id="editreply${status.index }${replyStatus.index }" style="margin-left:60px; border:0px;background: transparent;outline:none;width:90%;" readonly>
-														    <a id="clickEdit${status.index }${replyStatus.index }" style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: #dbcc8f; cursor: pointer;display: none;" onclick="editReply(this)">
-														        <i class="fa fa-paper-plane"></i>
-														    </a>
-														</div>
-										       		<c:if test="${reply.customer.customerName == user.customerName  }">
-										       			<div style="display:flex">
-										       				
-										       				<a id="edit${status.index }${replyStatus.index }" style="margin-left:60px;color:#dbcc8f;cursor: pointer;" onclick="editReply(this)" ></i>Chỉnh sửa</a>
-										       				<a id="delete${status.index }${replyStatus.index }" style="margin-left:20px;color:#dbcc8f;cursor: pointer;">Xóa</a>
-										       			</div>
-										       		</c:if>
-										       		<input type="hidden" value="${reply.replyId }" id="repyId${status.index }${replyStatus.index }">
-										       		 
-										       </c:forEach>
-										     </div>
-										        
-										    </div>
+								   		<!-- 	ấn vào thẻ a dạng data-toggle="pill" sẽ hiển thị phần nọi dung -->
+								   			<a class="nav-link" id="pills-profile-tab-reply${item.reviewId }" data-toggle="pill" href="#pills-profile-reply${item.reviewId }" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="icon-reply"></i> Xem các câu trả lời khác</a>
+										    <!-- Nội dung của các tab sau khi ấn thẻ a sẽ hiển thị-->
+											    <div class="tab-content" id="pills-tabContent-reply${item.reviewId }">
+												    <div class="tab-pane fade" id="pills-profile-reply${item.reviewId }" role="tabpanel" aria-labelledby="pills-profile-tab">
+												    	<div id="DivReply${item.reviewId }">
+												    		 <c:forEach var="reply" items="${item.reply }" varStatus="replyStatus">
+																 <div  style="display:flex;">
+																 	<img style="width:40px;height:40px;border-radius:30px;border:1px dashed  #888888;margin-right: 20px" alt="" src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png">
+																 
+																	 <h4>
+															   			<span style="font-weight: bold;" class="text-left">${reply.customer.customerName }</span>
+															   			<span class="text-right" id="time${item.reviewId }${reply.replyId }">${reply.date }</span>
+															   		</h4>
+														   		</div>
+																<div style="position: relative; display: inline-block;width:100%">
+																	   <input type="text" value="${reply.content}" id="editreply${item.reviewId }${reply.replyId }" style="margin-left:60px; border:0px;background: transparent;outline:none;width:90%;" readonly>
+																	    <a id="edit${item.reviewId }${reply.replyId }" style="position: absolute; right: 25px; top: 50%; transform: translateY(-50%); color: #dbcc8f; cursor: pointer;display: none;">
+																	        <i class="fa fa-paper-plane"></i>
+																	    </a>
+																</div>
+													       		<c:if test="${reply.customer.customerName == user.customerName  }">
+													       		<div style="display:flex">
+													       			<a id="clickEdit${item.reviewId }${reply.replyId }" style="margin-left:60px;color:#dbcc8f;cursor: pointer;" onclick="editReply(this)" ></i>Chỉnh sửa</a>
+													       			<a id="delete${item.reviewId }${reply.replyId }" style="margin-left:20px;color:#dbcc8f;cursor: pointer;">Xóa</a>
+													       		</div>
+													       		</c:if>
+													       		<input type="hidden" value="${reply.replyId }" id="repyId${item.reviewId }${reply.replyId }"> 		 
+													       </c:forEach>
+												    	</div>
+												    </div>
+											   </div>
+									<!----------------------------------------- -->
 								   		</p>
 								   	</div>
 							</div>
-							<input type="hidden" id="feedbackId${status.index }" value="${item.reviewId }"> 
-						</c:forEach>  
-							   	
+							<input type="hidden" id="feedbackId${item.reviewId }" value="${item.reviewId }"> 
+						</c:forEach>  			   	
 					</div>						   		
 				</div>
               </div>
@@ -309,9 +322,11 @@
         </section>
    <input type="hidden" id="customer" value="${user.customerName }">
     <script type="text/javascript">
+    // hàm lưu bình luận( không bao gồm feedback)
+    
      /* hàm hiển thị phần chỉnh sửa */
     function editReply(element) {
-        var index = $(element).attr('id').replace('edit', '');
+        var index = $(element).attr('id').replace('clickEdit', '');
         
         // Lấy ô input
         var inputField = document.getElementById("editreply" + index);
@@ -327,8 +342,8 @@
         inputField.style.padding = "10px"; // Thay đổi padding
         inputField.style.borderRadius = "10px"; // Thay đổi bo góc
         // Lấy ID của thẻ <a>
-        var editLinkId = "clickEdit" + index;
-     // Lấy thẻ <a> bằng ID và hiển thị nó
+        var editLinkId = "edit" + index;
+     // hiển thị nút mũi tên để gửi bình luận đi bằng ID và hiển thị nó
         var editLink = document.getElementById(editLinkId);
         editLink.style.display = "inline-block";
     };
@@ -347,11 +362,105 @@
    			$.ajax({
    				url:'${ApiUrl}',
    				type:'post',
-   				data: JSON.stringify(data) ,
+   				data: JSON.stringify(data),
    				contentType :'application/json',
    				dataType: 'json',
    				success: function (result) {
-   					window.location.href=window.location.href;
+   					// trả về response => hiển thị cmt vừa được thêm 
+   					// lấy khối div cần thêm vào DivReply
+   					var divReply = document.getElementById("DivReply"+result.feedback); // div cấp 1
+   					// tạo div cho phần avt và tên
+   					const divAvtName=document.createElement('div'); // div cấp 2
+   					// css cho thẻ div
+   					divAvtName.style.display="flex";
+   					// tạo hình ảnh
+   					const Avt=document.createElement('img'); // cấp 3
+   					Avt.src="/SpringMVC2/uploads/Screenshot 2024-09-06 221054.png";
+   					// tạo css cho thẻ này 
+   					Avt.style.width="40px";
+   					Avt.style.height="40px";
+   					Avt.style.borderRadius="30px";
+   					Avt.style.border="1px dashed #888888";
+   					Avt.style.marginRight="20px";
+   					// phần tên và thời gian 
+   					const customerNameSpan = document.createElement('span');// cấp 3
+   					const dateSpan = document.createElement('span'); // cấp 3
+   					dateSpan.id="time"+result.feedback+result.replyId;
+   					// Gán nội dung cho các phần tử
+   					customerNameSpan.textContent = result.customer.customerName;
+   					dateSpan.textContent = result.date;
+   					// Thêm class cho các phần tử
+   					customerNameSpan.classList.add('text-left');
+   					dateSpan.classList.add('text-right');
+   					// Sử dụng style để áp dụng CSS trực tiếp
+   					customerNameSpan.style.fontWeight = 'bold';
+   					// add cấp 3 vào cấp 2
+   					divAvtName.appendChild(Avt);
+   					divAvtName.appendChild(customerNameSpan);
+   					divAvtName.appendChild(dateSpan);
+   				// Tạo phần tử <div> cha
+   					const divContainer = document.createElement('div'); // cấp 2
+   					divContainer.style.position = 'relative';
+   					divContainer.style.display = 'inline-block';
+   					divContainer.style.width = '100%';
+
+   					// Tạo phần tử <input>
+   					const input = document.createElement('input');
+   					input.type = 'text';
+   					input.value = result.content; 
+   					input.id = 'editreply'+result.feedback+result.replyId;
+   					input.readOnly = true;
+   					input.style.marginLeft = '60px';
+   					input.style.border = '0px';
+   					input.style.background = 'transparent';
+   					input.style.outline = 'none';
+   					input.style.width = '90%';
+
+   					// Tạo phần tử <a>
+   					const anchor = document.createElement('a');
+   					anchor.id = 'edit'+result.feedback+result.replyId;
+   					anchor.style.position = 'absolute';
+   					anchor.style.right = '25px';
+   					anchor.style.top = '50%';
+   					anchor.style.transform = 'translateY(-50%)';
+   					anchor.style.color = '#dbcc8f';
+   					anchor.style.cursor = 'pointer';
+   					anchor.style.display = 'none';
+
+   					// Tạo phần tử <i> cho icon
+   					const icon = document.createElement('i');
+   					icon.classList.add('fa', 'fa-paper-plane');
+   					// Gắn <i> vào <a>
+   					anchor.appendChild(icon);
+
+   					// Gắn <input> và <a> vào <div> cha
+   					divContainer.appendChild(input);
+   					divContainer.appendChild(anchor);
+   					// tạo 1 div bao quanh nút chỉnh sửa và xóa
+   					const divEditDelete = document.createElement('div'); 
+   					divEditDelete.style.dispaly="flex";
+   					// tạo các nút sửa (kích hoạt thẻ input hoạt động) 
+   					const Edit = document.createElement('a'); 
+   					Edit.textContent = 'Chỉnh sửa';
+   					Edit.id="clickEdit"+result.feedback+result.replyId;
+   					Edit.style.marginLeft="60px";
+   					Edit.style.color="#dbcc8f";
+   					Edit.style.cursor="pointer";
+   					Edit.setAttribute('onclick','editReply(this)')
+   					divEditDelete.appendChild(Edit);
+   					// tạo thẻ input ẩn để xác định id của reply <input type="hidden" value="${reply.replyId }" id="repyId${item.reviewId }${reply.replyId }"> 		 
+   					const replyId = document.createElement('input'); 
+   					replyId.type="hidden";
+   					replyId.id="repyId"+result.feedback+result.replyId;
+   					replyId.value=result.replyId;
+   					// gán cấp 2 vào cấp 1
+   					divReply.appendChild(divAvtName);
+   					divReply.appendChild(divContainer);
+   					divReply.appendChild(divEditDelete);
+   					divReply.appendChild(replyId);
+   					// xóa cmt đã nhập 
+   					var cmt = document.getElementById("content"+result.feedback);
+   					cmt.value ="";
    				},
    				error: function (error) {
    					//showToast("Edit request failed","danger");
@@ -361,33 +470,47 @@
    			});
 	};
 	//phần chỉnh sửa cmt
-	 $('a[id^="clickEdit"]').click(function () {
-		var index=$(this).attr('id').replace('clickEdit','');
+	// vì phần cmt sẽ được thêm động vào DOM nên các phần tử đó sẽ không thể gọi trực tiếp $('a[id^="edit"]').click(function () {
+	// => cần sử dụng event delegation thông qua một phần tử cha( document hoặc có thể hay bằng phần tử cha gần nhất) đã có sẵn từ đầu 
+	$(document).on('click', 'a[id^="edit"]', function() { 
+		var index=$(this).attr('id').replace('edit','');
 		var content=$('#editreply'+index).val();
 		var customerName=$('#customer').val();
 		var customer={
 				customerName:customerName
 		}
 		var replyId=$('#repyId'+index).val();
-		sendEditReply({content:content,customer:customer,replyId:replyId})
+		/* sendEditReply({content:content,customer:customer,replyId:replyId}) */
+		$.ajax({
+			url:'${ApiUrl}',
+			type:'post',
+			data: JSON.stringify({content:content,customer:customer,replyId:replyId}) ,
+			contentType :'application/json',
+			dataType: 'json',
+			success: function (result) {
+				 // lấy ô nhập đó trả về readonly và thay đổi bằng giá trị mơis
+				var content = document.getElementById("editreply"+index);
+				content.textContent=result.content;
+				var time = document.getElementById("time"+index);
+				time.textContent=result.date;
+				content.readOnly = true;
+				// bỏ khung bỏ viền
+				// Thay đổi CSS cho ô input
+		        content.style.border = "0px"; // ẩn viền
+		        content.style.padding = "0px"; // Thay đổi padding
+		        // Lấy ID của thẻ <a>
+		        var editLinkId = "edit" + index;
+		     // ẩn nút mũi tên để gửi bình luận đi bằng ID và hiển thị nó
+		        var editLink = document.getElementById(editLinkId);
+		        editLink.style.display = "none";
+			},
+			error: function (error) {
+				//showToast("Edit request failed","danger");
+				console.log(error);
+			}
+		});
 	});
-	function sendEditReply(data) {
-			$.ajax({
-				url:'${ApiUrl}',
-				type:'post',
-				data: JSON.stringify(data) ,
-				contentType :'application/json',
-				dataType: 'json',
-				success: function (result) {
-					 window.location.href=window.location.href;
-				},
-				error: function (error) {
-					//showToast("Edit request failed","danger");
-					 window.location.href=window.location.href;
-					console.log(error);
-				}
-			});
-	} 
+	
 	// hàm thêm vào giỏ hàng
     $('button[id^="addToCart"]').click(function () {
    	 		var index = $(this).attr('id').replace('addToCart', '');

@@ -12,6 +12,7 @@ public class ProductDTO {
 	private int quantity;
 	private float prince;
 	private String image;
+	private int sold;
 	private int page;
 	private int totalItem;// lấy bao nhiêu đối tượng trên 1 trang
 	private int totalPage;// tổng số trang
@@ -140,6 +141,12 @@ public class ProductDTO {
 	}
 	public void setListColor(List<String> listColor) {
 		this.listColor = listColor;
+	}
+	public int getSold() {
+		return sold;
+	}
+	public void setSold(int sold) {
+		this.sold = sold;
 	}
 	
 }
