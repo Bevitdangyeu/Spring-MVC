@@ -94,11 +94,18 @@ public class MessageService implements IMessageService{
 		}
 		// chuyển từ dto sang entity
 		MessageEntity messageEntity=new MessageEntity();
-		messageEntity.setContent(mess.getContent());
-		messageEntity.setTime(currentDateTime);
-		customerEntity sender=customerRepository.findByCustomerId(mess.getSender().getCustomerId());
-		messageEntity.setSenderId(sender);
-		messageEntity.setConversationId(conversationEntity);
+		if(mess.getIdMessenge()!=0) {
+			messageEntity=messageRepository.findByMessageId(mess.getIdMessenge());
+			messageEntity.setContent(mess.getContent());
+			messageEntity.setTime(currentDateTime);
+		}
+		else {
+			messageEntity.setContent(mess.getContent());
+			messageEntity.setTime(currentDateTime);
+			customerEntity sender=customerRepository.findByCustomerId(mess.getSender().getCustomerId());
+			messageEntity.setSenderId(sender);
+			messageEntity.setConversationId(conversationEntity);
+		}
 		MessageEntity messEntity=messageRepository.save(messageEntity);
 		conversationEntity.setLastMessage(messageEntity);
 		conversationRepository.save(conversationEntity);

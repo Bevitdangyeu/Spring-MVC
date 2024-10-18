@@ -80,4 +80,10 @@ public class ChatController1 {
 		
 		 return list;
 	 }
+	 @PostMapping("/edit")
+	 @ResponseBody
+	 public MessageDTO editMessage(@RequestBody MessageDTO mess) {
+		 MessageDTO message=messageService.save(mess);
+		 return message;
+	 }
 }
